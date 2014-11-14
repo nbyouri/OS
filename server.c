@@ -17,30 +17,45 @@ void cleanup(int fd) {
         }
         exit(EXIT_FAILURE);
     }
-
-    // exit anyway
     exit(EXIT_SUCCESS);
 }
 
 int main(int argc, char const **argv)
 {
-    int inputFifo;
+    // fifo file descriptor number
+    int input = 0;
+    // message to read
     char message[BUFSIZ];
+
+    // setup signal, so if programs exits 
+    // abruptly, the fifo still gets cleanup up
     sigset(SIGINT, &cleanup);
 
-    if(mkfifo(FIFO_FILE, 0777) != 0) {
+    // create the fifo
+    if (mkfifo(FIFO_FILE, 0777) == -1) {
         printf("Was unable to create input fifo\n");
         return -1;
     }
 
-    if ((inputFifo = open(FIFO_FILE, O_RDONLY)) == -1) {
+    // open the fifo
+    if ((input = open(FIFO_FILE, O_RDONLY)) == -1) {
         printf("Was unable to open the server's fifo\n");
+        cleanup(input);
         return -1;
     }
 
-    // write the message
-    read(inputFifo, message, BUFSIZ);
-    write(0, message, BUFSIZ);
+    // read and write the message
+    if (read(input, message, BUFSIZ) == -1) {
+        printf("Was unable to read the message\n");
+        cleanup(input);
+    } else {
+        if (write(STDOUT_FILENO, message, BUFSIZ) == -1) {
+            printf("Was unable to write the message\n");
+            cleanup(input);
+            return -1;
+        }
+    }
 
-    return EXIT_SUCCESS;
+    // exit gracefully
+    cleanup(input);
 }
