@@ -1,18 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h> //Required by mkfifo - 
-#include <sys/stat.h> //Required by mkfifo - 
-#include <unistd.h> //Required by write - close - read
-#include <fcntl.h> //Required by open
-#include <signal.h>
-
 #include "global.h"
 
-void cleanup(int inputFifo) {
+void cleanup(int fd) {
     struct stat info;
 
     // close the fifo file
-    if (close(inputFifo) == -1) {
+    if (close(fd) == -1) {
         printf("Couldn't close fifo.\n");
     }
 

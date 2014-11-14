@@ -1,10 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h> //Required by mkfifo - 
-#include <sys/stat.h> //Required by mkfifo - 
-#include <unistd.h> //Required by write - 
-#include <fcntl.h> //Required by open
-
 #include "global.h"
 
 int main(int argc, char const *argv[])
