@@ -49,10 +49,12 @@ int main(int argc, char const **argv)
         printf("Was unable to read the message\n");
         cleanup(input);
     } else {
-        if (write(STDOUT_FILENO, message, BUFSIZ) == -1) {
-            printf("Was unable to write the message\n");
-            cleanup(input);
-            return -1;
+        if (strncmp(message, PILOT_REQUEST, BUFSIZ) == 0) {
+            if (write(STDOUT_FILENO, message, strlen(message)) == -1) {
+                printf("Was unable to write the message\n");
+                cleanup(input);
+                return -1;
+            }
         }
     }
 
