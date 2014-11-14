@@ -11,7 +11,13 @@
 
 void cleanup(int inputFifo) {
     struct stat info;
-    close(inputFifo);
+
+    // close the fifo file
+    if (close(inputFifo) == -1) {
+        printf("Couldn't close fifo: %s\n");
+    }
+
+    // delete the fifo file if it exists
     if (unlink(FIFO) < 0) {
         if (stat(FIFO, &info) == -1) {
             printf("The fifo file doesn't exist\n");
@@ -20,6 +26,8 @@ void cleanup(int inputFifo) {
         }
         exit(EXIT_FAILURE);
     }
+
+    // exit anyway
     exit(EXIT_SUCCESS);
 }
 
