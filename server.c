@@ -25,7 +25,7 @@ int main(int argc, char const **argv)
     // fifo file descriptor number
     int input = 0;
     // message to read
-    char message[BUFSIZ];
+    struct request req;
 
     // setup signal, so if programs exits 
     // abruptly, the fifo still gets cleanup up
@@ -45,16 +45,22 @@ int main(int argc, char const **argv)
     }
 
     // read and write the message
-    if (read(input, message, BUFSIZ) == -1) {
+    if (read(input, &req, BUFSIZ) == -1) {
         printf("Was unable to read the message\n");
         cleanup(input);
     } else {
-        if (strncmp(message, PILOT_REQUEST, BUFSIZ) == 0) {
-            if (write(STDOUT_FILENO, message, strlen(message)) == -1) {
+        if (strncmp(req.msg, PILOT_REQUEST, BUFSIZ) == 0) {
+            /*if (write(STDOUT_FILENO, req.msg, strlen(req.msg)) == -1) {
                 printf("Was unable to write the message\n");
                 cleanup(input);
                 return -1;
             }
+            if (write(STDOUT_FILENO, &req.pid, sizeof(req.pid)) == -1) {
+                printf("Was unable to get the pid\n");
+                cleanup(input);
+                return -1;
+            }*/
+            printf("REQ from %s : %s\n", req.pid, req.msg);
         }
     }
 
