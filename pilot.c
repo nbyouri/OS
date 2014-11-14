@@ -6,24 +6,18 @@
 #include <fcntl.h> //Required by open
 
 #define MSG 256
+#define FIFO "server.fifo"
 
 int main(int argc, char const *argv[])
 {
-	int serverFifo;
-	char serverName[] = "server.fifo";
+    int serverFifo;
 
-	char message[MSG] = "You see me rollin \n"; //test message
+    char message[MSG] = "You see me rollin \n"; //test message
 
-	while(1) //horrible loop
-	{
-
-		if((serverFifo = open(serverName, O_WRONLY)) == -1)
-		{
-			printf("Was unable to open the fifo\n");
-		}
-		write(serverFifo, message, MSG);
-		close(serverFifo);
-	}
-
-	return 0;
+    if((serverFifo = open(FIFO, O_WRONLY)) == -1) {
+        printf("Was unable to open the fifo\n");
+    }
+    write(serverFifo, message, MSG);
+    close(serverFifo);
+    return 0;
 }
