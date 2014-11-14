@@ -6,8 +6,7 @@
 #include <fcntl.h> //Required by open
 #include <signal.h>
 
-#define MSG 256
-#define FIFO "server.fifo"
+#include "global.h"
 
 void cleanup(int inputFifo) {
     struct stat info;
@@ -18,8 +17,8 @@ void cleanup(int inputFifo) {
     }
 
     // delete the fifo file if it exists
-    if (unlink(FIFO) < 0) {
-        if (stat(FIFO, &info) == -1) {
+    if (unlink(FIFO_FILE) < 0) {
+        if (stat(FIFO_FILE, &info) == -1) {
             printf("The fifo file doesn't exist\n");
         } else {
             printf("Couldn't delete fifo\n");
@@ -31,26 +30,25 @@ void cleanup(int inputFifo) {
     exit(EXIT_SUCCESS);
 }
 
-int main(int argc, char const *argv[])
+int main(int argc, char const **argv)
 {
     int inputFifo;
-    char message[MSG];
+    char message[BUFSIZ];
     sigset(SIGINT, &cleanup);
 
-    if(mkfifo(FIFO, 0777) != 0) {
+    if(mkfifo(FIFO_FILE, 0777) != 0) {
         printf("Was unable to create input fifo\n");
         return -1;
     }
 
-    if ((inputFifo = open(FIFO, O_RDONLY)) == -1) {
+    if ((inputFifo = open(FIFO_FILE, O_RDONLY)) == -1) {
         printf("Was unable to open the server's fifo\n");
         return -1;
     }
 
-    while(1) {
-        read(inputFifo, message, MSG);
-        printf("%s", message);
-    }
+    // write the message
+    read(inputFifo, message, BUFSIZ);
+    write(0, message, BUFSIZ);
 
-    return 0;
+    return EXIT_SUCCESS;
 }
