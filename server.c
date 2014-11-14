@@ -14,7 +14,7 @@ void cleanup(int inputFifo) {
 
     // close the fifo file
     if (close(inputFifo) == -1) {
-        printf("Couldn't close fifo: %s\n");
+        printf("Couldn't close fifo.\n");
     }
 
     // delete the fifo file if it exists
