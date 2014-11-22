@@ -1,4 +1,4 @@
-CC=	clang -Wall
+CC=	clang -Weverything -Wno-padded -Wno-missing-noreturn
 
 all:
 	> pilot
