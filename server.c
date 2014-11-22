@@ -1,54 +1,8 @@
 #include "global.h"
 
-static bool listen = true;
-
-bool checkyesno(const char *msg) {
-    char        input[BUFSIZ];
-    char        res;
-
-    do {
-
-        printf("%s %s", msg, " ? ([o]ui/[n]on) : ");
-        fgets(input, sizeof(input), stdin);
-        sscanf(input, "%c", &res);
-
-    } while (res != 'n' && res != 'o');
-
-    if (res == 'n') {
-        listen = false;
-    }
-    
-    return listen;
-}
-
-void cleanup(int fd) {
-    struct stat         info;
-
-    printf("\ncleaning up...\n");
-
-    // close the fifo file
-    if (close(fd) == FAIL) {
-        printf("Couldn't close fifo.\n");
-    }
-
-    // delete the fifo file if it exists
-    if (unlink(FIFO_FILE) < 0) {
-        if (stat(FIFO_FILE, &info) == FAIL) {
-            printf("The fifo file doesn't exist\n");
-        } else {
-            printf("Couldn't delete fifo\n");
-        }
-        exit(EXIT_FAILURE);
-    }
-
-    // exit nicely
-    exit(EXIT_SUCCESS);
-
-}
-
 int main(void) {
     // fifo file descriptor number
-    int                 input;
+    int                 input = 0;
 
     // message to read
     fd_set              readset;
@@ -62,15 +16,12 @@ int main(void) {
 
     // create the fifo
     if (mkfifo(FIFO_FILE, S_IRUSR | S_IWUSR) == FAIL) {
-        printf("Was unable to create input fifo\n");
-        return FAIL;
+        fatal(input, "Was unable to create input fifo\n");
     }
 
     // open the fifo
     if ((input = open(FIFO_FILE, O_RDONLY)) == FAIL) {
-        printf("Was unable to open the server's fifo\n");
-        cleanup(input);
-        return FAIL;
+        fatal(input, "Was unable to open the server's fifo\n");
     }
 
     // refresh the loop every second
@@ -85,10 +36,8 @@ int main(void) {
 
             // read and write the message
             if (read(input, &size, sizeof(ssize_t)) == FAIL) {
-
-                printf("Nothing to read...\n");
-                cleanup(input);
-                return FAIL;
+                fatal(input, "Nothing to read...\n");
+                
             } else {
                 int packet = (int)read(input, msg, MSG_SIZE);
 

@@ -14,25 +14,25 @@ int main(void) {
     sprintf(msg, "REQ: %d :: %s (size=%zu)\n", req1->pid, req1->msg, req1->siz);
 
     if((server = open(FIFO_FILE, O_WRONLY)) == FAIL) {
-        printf("Was unable to open the fifo\n");
+        fatal(server, "Was unable to open the fifo\n");
     } else {
-        // write the structure
+
         printf("Sending REQUEST...\n");
+
         write(server, &req1->siz, sizeof(req1->siz));
+
         if (write(server, msg, strlen(msg)) == FAIL) {
-            printf("Failed to write pid\n");
+            fatal(server, "Failed to write pid\n");
         }
 
         // close the fifo
         if (close(server) == FAIL) {
-            printf("Failed to close the fifo\n");
+            fatal(server, "Failed to close the fifo\n");
         }
     }
     
-    if (req1 != NULL) {
-        free(req1);
-        req1 = NULL;
-    }
+    req1 = clean_ptr(req1);
 
     return EXIT_SUCCESS;
 }
+

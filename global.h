@@ -5,6 +5,7 @@
 #include <signal.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdarg.h>
 #include <sys/stat.h>
 
 /*
@@ -30,6 +31,9 @@ struct request {
     ssize_t siz;
 };
 
+static bool listen = true;
+
 bool checkyesno(const char *);
 void cleanup(int);
-
+void * clean_ptr(void *);
+void fatal(int, const char *, ...);
