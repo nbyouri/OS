@@ -7,21 +7,29 @@
 #include <stdbool.h>
 #include <sys/stat.h>
 
+/*
+ *
+ * TODO : XMALLOC, ERROR FUNCTION
+ *
+ */
 #define SUCCESS 0
 #define FAIL -1
+#define FIFO_EOF 0
 #define FIFO_FILE "watchtower.fifo"
 #define PILOT_REQUEST "Meteo please?"
 #define MSG_SIZE 100
 
 struct ATIS {
-    size_t length;
+    ssize_t length;
     char msg[MSG_SIZE];
 };
 
 struct request {
     pid_t pid;
     char msg[MSG_SIZE];
-    size_t siz;
+    ssize_t siz;
 };
 
-void cleanup(int fd);
+bool checkyesno(const char *);
+void cleanup(int);
+

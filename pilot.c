@@ -8,7 +8,7 @@ int main(void) {
 
     req1->pid = getpid();
     strncpy(req1->msg, PILOT_REQUEST, strnlen(PILOT_REQUEST, BUFSIZ));
-    req1->siz = strlen(req1->msg);
+    req1->siz = (ssize_t)strlen(req1->msg);
 
     char msg[MSG_SIZE];
     sprintf(msg, "REQ: %d :: %s (size=%zu)\n", req1->pid, req1->msg, req1->siz);
@@ -18,6 +18,7 @@ int main(void) {
     } else {
         // write the structure
         printf("Sending REQUEST...\n");
+        write(server, &req1->siz, sizeof(req1->siz));
         if (write(server, msg, strlen(msg)) == FAIL) {
             printf("Failed to write pid\n");
         }
@@ -27,8 +28,11 @@ int main(void) {
             printf("Failed to close the fifo\n");
         }
     }
+    
+    if (req1 != NULL) {
+        free(req1);
+        req1 = NULL;
+    }
 
-    free(req1);
-    req1 = NULL;
     return EXIT_SUCCESS;
 }

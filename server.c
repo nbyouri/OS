@@ -2,8 +2,27 @@
 
 static bool listen = true;
 
+bool checkyesno(const char *msg) {
+    char        input[BUFSIZ];
+    char        res;
+
+    do {
+
+        printf("%s %s", msg, " ? ([o]ui/[n]on) : ");
+        fgets(input, sizeof(input), stdin);
+        sscanf(input, "%c", &res);
+
+    } while (res != 'n' && res != 'o');
+
+    if (res == 'n') {
+        listen = false;
+    }
+    
+    return listen;
+}
+
 void cleanup(int fd) {
-    struct stat info;
+    struct stat         info;
 
     printf("\ncleaning up...\n");
 
@@ -29,12 +48,13 @@ void cleanup(int fd) {
 
 int main(void) {
     // fifo file descriptor number
-    int input = 0;
-    int result = 0;
+    int                 input;
+
     // message to read
-    fd_set      readset;
-    struct timeval   tv;
-    char msg[80];
+    fd_set              readset;
+    struct timeval      tv;
+    ssize_t             size;
+    char                msg[MSG_SIZE];
 
     // setup signal, so if programs exits 
     // abruptly, the fifo still gets cleanup up
@@ -53,24 +73,38 @@ int main(void) {
         return FAIL;
     }
 
+    // refresh the loop every second
     tv.tv_sec = 1;
     tv.tv_usec = 0;
 
     while (listen) {
+        // zero readset and set it to input
         FD_ZERO(&readset);
         FD_SET(input, &readset);
-        result = select (input+1, &readset, NULL, NULL, &tv);
+        if (select (input+1, &readset, NULL, NULL, &tv) > 0) {
 
-        if (result > 0) {
             // read and write the message
-            if (read(input, msg, strlen(msg)) == FAIL) {
-                printf("Was unable to read the message\n");
+            if (read(input, &size, sizeof(ssize_t)) == FAIL) {
+
+                printf("Nothing to read...\n");
                 cleanup(input);
+                return FAIL;
             } else {
-                if (strnstr(msg, PILOT_REQUEST, MSG_SIZE) == NULL) {
-                    write(STDOUT_FILENO, msg, strlen(msg));
+                int packet = (int)read(input, msg, MSG_SIZE);
+
+                if (packet == FAIL) {
+
+                    printf("couldn't read message\n");
+                    // all data has been received
+                } else if (packet == FIFO_EOF) {
+
+                    listen = checkyesno("Keep listening");
+                    // message actions
                 } else {
-                    printf("Meaningless message intercepted, skipping...\n");
+
+                    if (strnstr(msg, PILOT_REQUEST, MSG_SIZE) != NULL)  {
+                        write(STDOUT_FILENO, msg, strlen(msg));
+                    }
                 }
             }
         }
@@ -79,3 +113,4 @@ int main(void) {
     // exit gracefully
     cleanup(input);
 }
+
