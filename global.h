@@ -8,11 +8,7 @@
 #include <stdarg.h>
 #include <sys/stat.h>
 
-/*
- *
- * TODO : XMALLOC, ERROR FUNCTION
- *
- */
+
 #define SUCCESS 0
 #define FAIL -1
 #define FIFO_EOF 0

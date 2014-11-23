@@ -43,9 +43,7 @@ bool checkyesno(const char *msg) {
     } while (res != 'n' && res != 'o');
 
     if (res == 'n') {
-
         listen = false;
-
     }
     
     return listen;
@@ -64,7 +62,7 @@ void cleanup(int fd) {
     }
 
     // delete the fifo file if it exists
-    if (unlink(FIFO_FILE) < 0) {
+    if (unlink(FIFO_FILE) == FAIL) {
         if (stat(FIFO_FILE, &info) == FAIL) {
             printf("The fifo file doesn't exist\n");
         } else {
