@@ -16,6 +16,6 @@ clean: delete_objs
 
 delete_objs:
 	for file in ${OBJECTS}; do	\
-	test -f $$fie && rm $$file;	\
+	test -f $$file && rm $$file;	\
 	done
 
