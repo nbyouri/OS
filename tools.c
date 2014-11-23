@@ -59,17 +59,18 @@ void cleanup(int fd) {
         if (close(fd) == FAIL) {
             printf("Couldn't close file descriptor %d\n", fd);
         }
-    }
 
-    // delete the fifo file if it exists
-    if (unlink(FIFO_FILE) == FAIL) {
-        if (stat(FIFO_FILE, &info) == FAIL) {
-            printf("The fifo file doesn't exist\n");
-        } else {
-            printf("Couldn't delete fifo\n");
+
+        // delete the fifo file if it exists
+        if (unlink(FIFO_FILE) == FAIL) {
+            if (stat(FIFO_FILE, &info) == FAIL) {
+                printf("The fifo file doesn't exist\n");
+            } else {
+                printf("Couldn't delete fifo\n");
+            }
+            exit(EXIT_FAILURE);
         }
-        exit(EXIT_FAILURE);
-    }
+}
 
     // actually exit
     exit(EXIT_SUCCESS);
