@@ -80,8 +80,10 @@ void fatal(int fd, const char * restrict format, ...) {
     va_list     args;
 
     va_start(args, format);
+
     fprintf(stderr, RED"FATAL: "NOR);
     vfprintf(stderr, format, args);
+    
     va_end(args);
 
     cleanup(fd);
