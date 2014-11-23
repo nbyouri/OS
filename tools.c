@@ -6,10 +6,27 @@
  */
 #include "global.h"
 
+void * xmalloc(int fd, size_t size) {
+    void *ptr;
+
+    if (size == 0) {
+         fatal(fd, "xmalloc: zero size\n");
+    }
+
+    ptr = malloc(size);
+
+    if (ptr == NULL) {
+        fatal(fd, "xmalloc: out of memory (allocating %zu bytes)", size);
+    }
+
+    return ptr;
+}
+
 void * clean_ptr(void * pointer) {
     if (pointer != NULL) {
         free(pointer);
     }
+
     return pointer = NULL;
 }
 
@@ -26,7 +43,9 @@ bool checkyesno(const char *msg) {
     } while (res != 'n' && res != 'o');
 
     if (res == 'n') {
+
         listen = false;
+
     }
     
     return listen;

@@ -2,7 +2,7 @@
 
 int main(void) {
     // fifo file descriptor number
-    int                 input = 0;
+    int                 input = -1;
 
     // message to read
     fd_set              readset;

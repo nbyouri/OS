@@ -1,10 +1,10 @@
 #include "global.h"
 
 int main(void) {
-    int server;
+    int server = -1;
 
     struct request * req1 = NULL;
-    req1 = malloc(sizeof(*req1));
+    req1 = xmalloc(server, sizeof(*req1));
 
     req1->pid = getpid();
     strncpy(req1->msg, PILOT_REQUEST, strnlen(PILOT_REQUEST, BUFSIZ));

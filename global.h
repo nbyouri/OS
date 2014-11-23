@@ -37,5 +37,6 @@ static bool listen = true;
 
 bool checkyesno(const char *);
 void cleanup(int);
+void * xmalloc(int, size_t);
 void * clean_ptr(void *);
 void fatal(int, const char *, ...);
