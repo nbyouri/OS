@@ -14,7 +14,9 @@ int main(void) {
     sprintf(msg, "REQ: %d :: %s (size=%zu)\n", req1->pid, req1->msg, req1->siz);
 
     if((server = open(FIFO_FILE, O_WRONLY)) == FAIL) {
-        fatal(server, "Was unable to open the fifo\n");
+
+        fatal(server, "Couldn't open fifo %s\n", FIFO_FILE);
+
     } else {
 
         printf("Sending REQUEST...\n");
@@ -22,12 +24,16 @@ int main(void) {
         write(server, &req1->siz, sizeof(req1->siz));
 
         if (write(server, msg, strlen(msg)) == FAIL) {
-            fatal(server, "Failed to write pid\n");
+
+            fatal(server, "Failed to write message\n");
+
         }
 
         // close the fifo
         if (close(server) == FAIL) {
+
             fatal(server, "Failed to close the fifo\n");
+            
         }
     }
     

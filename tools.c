@@ -37,9 +37,11 @@ void cleanup(int fd) {
 
     printf("\ncleaning up...\n");
 
-    // close the fifo file
-    if (close(fd) == FAIL) {
-        printf("Couldn't close fifo.\n");
+    // close the file descriptor
+    if (fd != FAIL) {
+        if (close(fd) == FAIL) {
+            printf("Couldn't close file descriptor %d\n", fd);
+        }
     }
 
     // delete the fifo file if it exists
@@ -57,11 +59,12 @@ void cleanup(int fd) {
 
 }
 
-void fatal(int fd, const char *format, ...) {
+void fatal(int fd, const char * restrict format, ...) {    
     va_list     args;
 
     va_start(args, format);
-    fprintf(stderr, format, args);
+    fprintf(stderr, RED"FATAL: "NOR);
+    vfprintf(stderr, format, args);
     va_end(args);
 
     cleanup(fd);

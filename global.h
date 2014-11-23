@@ -19,6 +19,8 @@
 #define FIFO_FILE "watchtower.fifo"
 #define PILOT_REQUEST "Meteo please?"
 #define MSG_SIZE 100
+#define RED "\033[22;31m"
+#define NOR "\033[00;0m"
 
 struct ATIS {
     ssize_t length;
