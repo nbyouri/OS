@@ -3,15 +3,17 @@
 int main(void) {
     int server = -1;
 
-    struct request * req1 = NULL;
-    req1 = xmalloc(server, sizeof(*req1));
+    struct request req;
 
-    req1->pid = getpid();
-    strncpy(req1->msg, PILOT_REQUEST, strnlen(PILOT_REQUEST, BUFSIZ));
-    req1->siz = (ssize_t)strlen(req1->msg);
+    req.pid = getpid();
+    //strncpy(req.msg, PILOT_REQUEST, strlen(PILOT_REQUEST));
+    memcpy(req.msg, PILOT_REQUEST, MSG_SIZE);
+    req.siz = strlen(req.msg);
 
-    char msg[MSG_SIZE];
-    sprintf(msg, "REQ: %d :: %s (size=%zu)\n", req1->pid, req1->msg, req1->siz);
+    printf("REQ :: %d => %s (%zu)\n", req.pid, req.msg, req.siz);
+
+    //char msg[MSG_SIZE];
+    //sprintf(msg, "REQ: %d :: %s (size=%zu)\n", req1->pid, req1->msg, req1->siz);
 
     if((server = open(FIFO_FILE, O_WRONLY)) == FAIL) {
 
@@ -21,9 +23,7 @@ int main(void) {
 
         printf("Sending REQUEST...\n");
 
-        write(server, &req1->siz, sizeof(req1->siz));
-
-        if (write(server, msg, strlen(msg)) == FAIL) {
+        if (write(server, &req, sizeof(req)) == FAIL) {
 
             fatal(server, "Failed to write message\n");
 
@@ -36,8 +36,6 @@ int main(void) {
             
         }
     }
-    
-    req1 = clean_ptr(req1);
 
     return EXIT_SUCCESS;
 }

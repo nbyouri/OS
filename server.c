@@ -7,8 +7,8 @@ int main(void) {
     // message to read
     fd_set              readset;
     struct timeval      tv;
-    ssize_t             size;
-    char                msg[MSG_SIZE];
+    struct request *    req = NULL;
+    unsigned int        req_n = 0;
 
     // setup signal, so if programs exits 
     // abruptly, the fifo still gets cleanup up
@@ -39,14 +39,8 @@ int main(void) {
 
         if (select (input+1, &readset, NULL, NULL, &tv) > 0) {
 
-            // read and write the message
-            if (read(input, &size, sizeof(ssize_t)) == FAIL) {
-
-                fatal(input, "Nothing to read...\n");
-
-            } else {
-
-                int packet = (int)read(input, msg, MSG_SIZE);
+                struct request req_packet;
+                int packet = (int)read(input, &req_packet, sizeof(req_packet));
 
                 if (packet == FAIL) {
 
@@ -54,20 +48,25 @@ int main(void) {
 
                 } else if (packet == FIFO_EOF) {
 
-                    listen = checkyesno("Keep listening");
+                    //listen = checkyesno("Keep listening");
 
                 } else {
+                    req = xrealloc(input, req, req_n+1, sizeof(struct request *));
+                    req[req_n] = req_packet;
 
-                    if (strnstr(msg, PILOT_REQUEST, MSG_SIZE) != NULL)  {
-                        write(STDOUT_FILENO, msg, strlen(msg));
+                    if (strnstr(req[req_n].msg, PILOT_REQUEST, req[req_n].siz) != NULL)  {
+                        printf("req[%d] = %d -> %s :: %zu\n", req_n, req[req_n].pid, req[req_n].msg, req[req_n].siz);
+                        req_n++;
                     }
 
                 }
-            }
         }
     }
 
-    // exit gracefully
+    clean_ptr(req);
+
     cleanup(input);
 }
+
+
 

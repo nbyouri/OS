@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <stdarg.h>
 #include <sys/stat.h>
+#include <sys/param.h>
 
 
 #define SUCCESS 0
@@ -18,15 +19,15 @@
 #define RED "\033[22;31m"
 #define NOR "\033[00;0m"
 
-struct ATIS {
-    ssize_t length;
+struct ATIS{
+    size_t length;
     char msg[MSG_SIZE];
 };
 
 struct request {
     pid_t pid;
     char msg[MSG_SIZE];
-    ssize_t siz;
+    size_t siz;
 };
 
 static bool listen = true;
@@ -34,5 +35,6 @@ static bool listen = true;
 bool checkyesno(const char *);
 void cleanup(int);
 void * xmalloc(int, size_t);
+void * xrealloc(int, void *, size_t, size_t);
 void * clean_ptr(void *);
 void fatal(int, const char * restrict, ...);
