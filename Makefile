@@ -1,6 +1,6 @@
-CC=	clang -Weverything -Wno-padded -Wno-missing-noreturn -Wno-format-nonliteral
+CC=	clang -Weverything -Wno-missing-noreturn -Wno-format-nonliteral
 
-SERVER_SRCS=	server.c tools.c
+SERVER_SRCS=	server.c tools.c meteo.c
 SERVER_OUT=	server
 CLIENT_SRCS=	pilot.c tools.c
 CLIENT_OUT=	pilot

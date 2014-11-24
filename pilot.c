@@ -2,18 +2,13 @@
 
 int main(void) {
     int server = -1;
+    int out_server = -1;
 
     struct request req;
 
     req.pid = getpid();
-    //strncpy(req.msg, PILOT_REQUEST, strlen(PILOT_REQUEST));
     memcpy(req.msg, PILOT_REQUEST, MSG_SIZE);
     req.siz = strlen(req.msg);
-
-    printf("REQ :: %d => %s (%zu)\n", req.pid, req.msg, req.siz);
-
-    //char msg[MSG_SIZE];
-    //sprintf(msg, "REQ: %d :: %s (size=%zu)\n", req1->pid, req1->msg, req1->siz);
 
     if((server = open(FIFO_FILE, O_WRONLY)) == FAIL) {
 
@@ -27,16 +22,28 @@ int main(void) {
 
             fatal(server, "Failed to write message\n");
 
+        } else {
+            char response[MSG_SIZE];
+
+            if ((out_server = open(FIFO_FILE_OUT, O_RDONLY)) == FAIL) {
+                fatal(out_server, "Couldn't open output file...\n");
+            } else {
+                if (read(out_server, response, MSG_SIZE) == FAIL) {
+                    fatal(out_server, "Failed to read response from output fifo\n");
+                } else {
+                    printf("Got response ! => %s\n", response);
+                }
+            }
+
+            // close the fifo
+            if (close(server) == FAIL) {
+
+                fatal(server, "Failed to close the fifo\n");
+
+            }
         }
 
-        // close the fifo
-        if (close(server) == FAIL) {
-
-            fatal(server, "Failed to close the fifo\n");
-            
-        }
+        return EXIT_SUCCESS;
     }
-
-    return EXIT_SUCCESS;
 }
 

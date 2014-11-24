@@ -13,25 +13,28 @@
 #define SUCCESS 0
 #define FAIL -1
 #define FIFO_EOF 0
-#define FIFO_FILE "watchtower.fifo"
+#define FIFO_FILE "watchtower_listen.fifo"
+#define FIFO_FILE_OUT "watchtower_send.fifo"
 #define PILOT_REQUEST "Meteo please?"
 #define MSG_SIZE 100
 #define RED "\033[22;31m"
 #define NOR "\033[00;0m"
 
 struct ATIS{
-    size_t length;
-    char msg[MSG_SIZE];
+    size_t siz;			// 8 bytes 
+    char msg[MSG_SIZE]; // 100 bytes
 };
 
 struct request {
-    pid_t pid;
-    char msg[MSG_SIZE];
-    size_t siz;
+    pid_t pid;			// 4 bytes
+    char msg[MSG_SIZE]; // 100 bytes
+    size_t siz;			// 8 bytes
 };
 
 static bool listen = true;
 
+int gen_atis(void);
+char * atis(struct request);
 bool checkyesno(const char *);
 void cleanup(int);
 void * xmalloc(int, size_t);

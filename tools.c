@@ -1,6 +1,6 @@
 /*
  *
- * Utility functions.
+ * Utility functions mostly taken from OpenBSD.
  * Author: Youri Mouton.
  *
  */
@@ -89,7 +89,7 @@ void cleanup(int fd) {
             }
             exit(EXIT_FAILURE);
         }
-}
+    }
 
     // actually exit
     exit(EXIT_SUCCESS);
