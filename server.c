@@ -35,7 +35,9 @@ int main(void) {
     }
 
     if (mkfifo(FIFO_FILE_OUT, S_IRUSR | S_IWUSR) == FAIL) {
+
         fatal("Unable to create output fifo\n");
+
     }
 
     // open the fifos in read/write mode
@@ -49,7 +51,9 @@ int main(void) {
     }
 
     if ((output = open(FIFO_FILE_OUT, O_WRONLY)) == FAIL) {
+
         fatal("Unable to open server ouput fifo %s\n", FIFO_FILE_OUT);
+
     } else {
 
         printf("FD output = %d\n", output);
@@ -81,7 +85,7 @@ int main(void) {
 
                 } else if (packet == FIFO_EOF) {
 
-                    listen = checkyesno("Keep listening");
+                    //listen = checkyesno("Keep listening");
                 
                 } else {
 

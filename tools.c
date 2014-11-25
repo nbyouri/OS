@@ -79,7 +79,7 @@ void cleanup(int state) {
     printf("Files to be deleted : %s, %s\n", FIFO_FILE, FIFO_FILE_OUT);
 
     // close the file descriptors
-    //if (input != FAIL && output != FAIL) {
+    if (input != FAIL && output != FAIL) {
         if (close(input) == FAIL) {
             printf("Couldn't close input file descriptor %d\n", input);
         } else {
@@ -89,13 +89,13 @@ void cleanup(int state) {
         if (close(output) == FAIL) {
             printf("Couldn't close output file descriptor %d\n", output);
         } else {
-            printf("Successfully cloded %d\n", output);
+            printf("Successfully closed %d\n", output);
         }
 
         // delete the fifo input file if it exists
         if (unlink(FIFO_FILE) == FAIL) {
             if (stat(FIFO_FILE, &info) == FAIL) {
-                printf("The fifo file doesn't exist\n");
+                printf("The fifo file doesn't exist %s\n", FIFO_FILE);
             } else {
                 printf("Couldn't delete fifo %s\n", FIFO_FILE);
             }
@@ -107,7 +107,7 @@ void cleanup(int state) {
         // delete the fifo output file if it exists
         if (unlink(FIFO_FILE_OUT) == FAIL) {
             if (stat(FIFO_FILE_OUT, &info) == FAIL) {
-                printf("The output fifo file doesn't exist\n");
+                printf("The output fifo file doesn't exist %s\n", FIFO_FILE_OUT);
             } else {
                 printf("Couldn't delete fifo %s\n", FIFO_FILE_OUT);
             }
@@ -115,7 +115,7 @@ void cleanup(int state) {
         } else {
             printf("Successfully removed %s\n", FIFO_FILE_OUT);
         }
-   // }
+    }
 
     // actually exit
     exit(state);

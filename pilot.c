@@ -1,13 +1,13 @@
 #include "global.h"
 
-int input; 
-int output;
+// TODO: add local cleanup
 
 int main(void) {
     int server = -1;
     int out_server = -1;
 
     struct request req;
+    char response[MSG_SIZE];
 
     req.pid = getpid();
     memcpy(req.msg, PILOT_REQUEST, MSG_SIZE);
@@ -19,6 +19,7 @@ int main(void) {
 
     } else {
 
+        printf("Successfully opened %d\n", server);
         printf("Sending REQUEST...\n");
 
         if (write(server, &req, sizeof(req)) == FAIL) {
@@ -26,15 +27,23 @@ int main(void) {
             printf("Failed to write message\n");
 
         } else {
-            char response[MSG_SIZE];
 
             if ((out_server = open(FIFO_FILE_OUT, O_RDONLY)) == FAIL) {
-                fatal("Couldn't open output file...\n");
+
+                printf("Couldn't open output file...\n");
+
             } else {
+
+                printf("Successfully opened %d\n", out_server);
+
                 if (read(out_server, response, MSG_SIZE) == FAIL) {
+
                     printf("Failed to read response from output fifo\n");
+
                 } else {
+
                     printf("Got response ! => %s\n", response);
+
                 }
             }
 
@@ -43,12 +52,20 @@ int main(void) {
 
                 printf("Failed to close the fifo\n");
 
+            } else {
+
+                printf("Successfully closed fd %d\n", server);
+
             }
 
             if (close(out_server) == FAIL) {
 
                 printf("Failed to close the output fifo\n");
                 
+            } else {
+
+                printf("Successfully closed fd %d\n", out_server);
+
             }
         }
 
