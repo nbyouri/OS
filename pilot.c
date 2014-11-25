@@ -1,5 +1,8 @@
 #include "global.h"
 
+int input; 
+int output;
+
 int main(void) {
     int server = -1;
     int out_server = -1;
@@ -12,7 +15,7 @@ int main(void) {
 
     if((server = open(FIFO_FILE, O_WRONLY)) == FAIL) {
 
-        fatal("Couldn't open fifo %s\n", FIFO_FILE);
+        printf("Couldn't open fifo %s\n", FIFO_FILE);
 
     } else {
 
@@ -20,7 +23,7 @@ int main(void) {
 
         if (write(server, &req, sizeof(req)) == FAIL) {
 
-            fatal("Failed to write message\n");
+            printf("Failed to write message\n");
 
         } else {
             char response[MSG_SIZE];
@@ -29,7 +32,7 @@ int main(void) {
                 fatal("Couldn't open output file...\n");
             } else {
                 if (read(out_server, response, MSG_SIZE) == FAIL) {
-                    fatal("Failed to read response from output fifo\n");
+                    printf("Failed to read response from output fifo\n");
                 } else {
                     printf("Got response ! => %s\n", response);
                 }
@@ -38,13 +41,13 @@ int main(void) {
             // close the fifo
             if (close(server) == FAIL) {
 
-                fatal("Failed to close the fifo\n");
+                printf("Failed to close the fifo\n");
 
             }
 
             if (close(out_server) == FAIL) {
 
-                fatal("Failed to close the output fifo\n");
+                printf("Failed to close the output fifo\n");
                 
             }
         }

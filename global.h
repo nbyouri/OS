@@ -31,9 +31,9 @@ struct request {
     size_t siz;			// 8 bytes
 };
 
-static bool listen = true;
-static int  input  = -1;
-static int  output = -1;
+extern bool listen;
+extern int  input;
+extern int  output;
 
 int gen_atis(void);
 void atis(char *, struct request);

@@ -6,6 +6,9 @@
  */
 #include "global.h"
 
+ int input;
+ int output;
+
 void * xmalloc(size_t size) {
     void *ptr;
 

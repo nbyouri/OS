@@ -1,5 +1,9 @@
 #include "global.h"
 
+int input = -1;
+int output = -1;
+bool listen = true;
+
 void atis(char * atis_msg, struct request rq) {
 
     snprintf(atis_msg, MSG_SIZE, "%d :> (ATIS_DATA)", rq.pid);
