@@ -12,7 +12,7 @@ int main(void) {
 
     if((server = open(FIFO_FILE, O_WRONLY)) == FAIL) {
 
-        fatal(server, "Couldn't open fifo %s\n", FIFO_FILE);
+        fatal("Couldn't open fifo %s\n", FIFO_FILE);
 
     } else {
 
@@ -20,16 +20,16 @@ int main(void) {
 
         if (write(server, &req, sizeof(req)) == FAIL) {
 
-            fatal(server, "Failed to write message\n");
+            fatal("Failed to write message\n");
 
         } else {
             char response[MSG_SIZE];
 
             if ((out_server = open(FIFO_FILE_OUT, O_RDONLY)) == FAIL) {
-                fatal(out_server, "Couldn't open output file...\n");
+                fatal("Couldn't open output file...\n");
             } else {
                 if (read(out_server, response, MSG_SIZE) == FAIL) {
-                    fatal(out_server, "Failed to read response from output fifo\n");
+                    fatal("Failed to read response from output fifo\n");
                 } else {
                     printf("Got response ! => %s\n", response);
                 }
@@ -38,8 +38,14 @@ int main(void) {
             // close the fifo
             if (close(server) == FAIL) {
 
-                fatal(server, "Failed to close the fifo\n");
+                fatal("Failed to close the fifo\n");
 
+            }
+
+            if (close(out_server) == FAIL) {
+
+                fatal("Failed to close the output fifo\n");
+                
             }
         }
 

@@ -32,12 +32,14 @@ struct request {
 };
 
 static bool listen = true;
+static int  input  = -1;
+static int  output = -1;
 
 int gen_atis(void);
-char * atis(struct request);
+void atis(char *, struct request);
 bool checkyesno(const char *);
 void cleanup(int);
-void * xmalloc(int, size_t);
-void * xrealloc(int, void *, size_t, size_t);
+void * xmalloc(size_t);
+void * xrealloc(void *, size_t, size_t);
 void * clean_ptr(void *);
-void fatal(int, const char * restrict, ...);
+void fatal(const char * restrict, ...);
