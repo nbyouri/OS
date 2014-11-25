@@ -13,7 +13,9 @@ void atis(char * atis_msg, struct request rq) {
 int main(void) {
     // message to read
     fd_set              readset;
+    fd_set              readaction;
     struct timeval      tv;
+    struct timeval      tv_read;
 
     // requests
     struct request *    req = NULL;
@@ -68,52 +70,59 @@ int main(void) {
         FD_ZERO(&readset);
         FD_SET(input, &readset);
 
-        int fifo_actions = select (input+1, &readset, NULL, NULL, &tv);
+        int fifo_actions = select(input+1, &readset, NULL, NULL, &tv);
 
-        if (fifo_actions == -1) {
-            fatal("select failed\n");
+        if (fifo_actions == FAIL) {
+            fatal("main stream select failed\n");
         } else if (fifo_actions == 0) {
             printf("En écoute...\n");
         } else {
+            // read every microsecond
+                tv_read.tv_sec = 0;
+                tv_read.tv_usec = 1;
+                FD_ZERO(&readaction);
+                FD_SET(fifo_actions, &readaction);
 
-                struct request req_packet;
-                int packet = (int)read(input, &req_packet, sizeof(req_packet));
+                select(fifo_actions+1, &readset, NULL, NULL, &tv_read);
 
-                if (packet == FAIL) {
+                    struct request req_packet;
+                    int packet = (int)read(input, &req_packet, sizeof(req_packet));
 
-                    printf("couldn't read message\n");
+                    if (packet == FAIL) {
 
-                } else if (packet == FIFO_EOF) {
+                        printf("couldn't read message\n");
 
-                    //listen = checkyesno("Keep listening");
-                
-                } else {
+                    } else if (packet == FIFO_EOF) {
 
-                    // assign read structure
-                    req = xrealloc(req, req_n+1, sizeof(struct request));
-                    req[req_n] = req_packet;
-
-                    if (strnstr(req[req_n].msg, PILOT_REQUEST, req[req_n].siz) != NULL)  {
-
-                        snprintf(request_string, MSG_SIZE, 
-                                "Got Request ! : req[%02d] = %d -> %s :: %zu\n", 
-                                req_n, req[req_n].pid, req[req_n].msg, req[req_n].siz);
-
-                        if (write(STDOUT_FILENO, request_string, strnlen(request_string, MSG_SIZE)) == FAIL) {
-                            fatal("Failed to write request string...\n");
-                        }
-
-                        atis(atis_msg, req[req_n]);
-                        printf("Sending Packet \"%s\"...\n", atis_msg);
-                        if (write(output, atis_msg, strnlen(atis_msg, MSG_SIZE)) == FAIL) {
-                            fatal("Failed to send message...\n");
-                        }
-
-                        req_n++;
+                        //listen = checkyesno("Keep listening");
+                    
                     } else {
-                        fatal("No valid messages intercepted\n");
-                    }
-                }
+
+                        // assign read structure
+                        req = xrealloc(req, req_n+1, sizeof(struct request));
+                        req[req_n] = req_packet;
+
+                        if (strnstr(req[req_n].msg, PILOT_REQUEST, req[req_n].siz) != NULL)  {
+
+                            snprintf(request_string, MSG_SIZE, 
+                                    "Got Request ! : req[%02d] = %d -> %s :: %zu\n", 
+                                    req_n, req[req_n].pid, req[req_n].msg, req[req_n].siz);
+
+                            if (write(STDOUT_FILENO, request_string, strnlen(request_string, MSG_SIZE)) == FAIL) {
+                                fatal("Failed to write request string...\n");
+                            }
+
+                            atis(atis_msg, req[req_n]);
+                            printf("Sending Packet \"%s\"...\n", atis_msg);
+                            if (write(output, atis_msg, strnlen(atis_msg, MSG_SIZE)) == FAIL) {
+                                fatal("Failed to send message...\n");
+                            }
+
+                            req_n++;
+                        } else {
+                            fatal("No valid messages intercepted\n");
+                        }
+            }
         }
     }
 
