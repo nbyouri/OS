@@ -30,9 +30,9 @@ int gen_atis(void){
     
     close(fichierLock);
 
-    if(unlink(FICHIERLOCK) == FAIL){
+    /*if(unlink(FICHIERLOCK) == FAIL){
 			fatal("Impossible de detruire le fichier lock");
-    }
+    }*/
 
     return SUCCESS;
 }

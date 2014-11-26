@@ -6,11 +6,12 @@ bool listen = true;
 
 int atis(char * atis_msg) {
     int fichierMeteo = 0;
+    int fichierLock = 0;
     int tailleMessage = 0;
 
     char dataAtis [MSG_SIZE];
 
-    if (open(FICHIERLOCK, O_RDONLY) == FAIL) {
+    if ((fichierLock = open(FICHIERLOCK, O_RDONLY)) == FAIL) {
 
         fatal("Failed to open fichier lock\n");
 
@@ -31,8 +32,10 @@ int atis(char * atis_msg) {
 
     tailleMessage = (int)read(fichierMeteo, dataAtis, MSG_SIZE);
 
-    if(tailleMessage == FAIL){
+    if(tailleMessage == FAIL) {
+        
         fatal("Impossible de lire le fichier meteo.txt");
+    
     }
 
     memcpy(atis_msg, dataAtis, MSG_SIZE);
