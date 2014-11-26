@@ -83,20 +83,14 @@ int delete(const char * pathname) {
 void cleanup(int state) {
 
     printf("\ncleaning up... \n");
-    printf("Files to be closed : %d, %d\n", input, output);
-    printf("Files to be deleted : %s, %s\n", FIFO_FILE, FIFO_FILE_OUT);
 
     // close the file descriptors
     if (close(input) == FAIL) {
         printf("Couldn't close input file descriptor %d\n", input);
-    } else {
-        printf("Successfully closed %d\n", input);
     }
 
     if (close(output) == FAIL) {
         printf("Couldn't close output file descriptor %d\n", output);
-    } else {
-        printf("Successfully closed %d\n", output);
     }
 
     // delete the fifo input file if it exists

@@ -29,9 +29,9 @@ int atis(char * atis_msg) {
     tailleMessage = (int)read(fichierMeteo, dataAtis, MSG_SIZE);
 
     if (tailleMessage == FAIL) {
-        
+
         fatal("Impossible de lire le fichier meteo.txt");
-    
+
     }
 
     memcpy(atis_msg, dataAtis, MSG_SIZE);
@@ -44,7 +44,6 @@ int main(void) {
     fd_set              readset;
     fd_set              readaction;
     struct timeval      tv;
-    struct timeval      tv_read;
 
     // requests
     struct request *    req = NULL;
@@ -82,25 +81,19 @@ int main(void) {
 
         fatal("Unable to open the server's fifo\n");
 
-    } else {
-
-        printf("FD input = %d\n", input);
     }
 
     if ((output = open(FIFO_FILE_OUT, O_WRONLY)) == FAIL) {
 
         fatal("Unable to open server ouput fifo %s\n", FIFO_FILE_OUT);
 
-    } else {
-
-        printf("FD output = %d\n", output);
     }
 
-    // refresh the loop every second
-    tv.tv_sec = 1;
-    tv.tv_usec = 0;
-
     while (listen) {
+        // set listen timeout
+        tv.tv_sec = 1;
+        tv.tv_usec = 0;
+
         // zero readset and set it to input
         FD_ZERO(&readset);
         FD_SET(input, &readset);
@@ -113,16 +106,16 @@ int main(void) {
 
         } else if (fifo_actions == 0) {
 
-            printf("En écoute...\n");
+            printf("- listening...\n");
 
         } else {
             // read every microsecond
-            tv_read.tv_sec = 0;
-            tv_read.tv_usec = 1;
+            tv.tv_sec = 0;
+            tv.tv_usec = 1;
             FD_ZERO(&readaction);
             FD_SET(fifo_actions, &readaction);
 
-            select(fifo_actions+1, &readset, NULL, NULL, &tv_read);
+            select(fifo_actions+1, &readset, NULL, NULL, &tv);
 
             struct request req_packet;
             int packet = (int)read(input, &req_packet, sizeof(req_packet));
@@ -143,11 +136,11 @@ int main(void) {
 
                 if (strnstr(req[req_n].msg, PILOT_REQUEST, req[req_n].siz) != NULL)  {
 
-                    printf("Got Request ! : req[%02d] = %d -> %s :: %zu\n",
+                    printf("< Got Request ! req[%02d] = %d -> %s :: %zu\n",
                             req_n, req[req_n].pid, req[req_n].msg, req[req_n].siz);
 
                     size_t tailleMsg = (size_t)atis(atis_msg);
-                    printf("Sending Packet \"%s\"...\n", atis_msg);
+                    printf("> Sending Packet \"%s\"...\n", atis_msg);
 
                     if (write(output, atis_msg, tailleMsg) == FAIL) {
 
