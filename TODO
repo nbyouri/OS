@@ -1,5 +1,5 @@
-rewrite cleanup function to handle output file as well but never delete anything from the client.
 
-cleanup the main 
+create procedures to cleanup main.
+
 
 
