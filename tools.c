@@ -115,6 +115,30 @@ void cleanup(int state) {
         printf("Successfully removed %s\n", FIFO_FILE_OUT);
     }
 
+    // delete meteo.txt
+    if (unlink(FICHIERMETEO) == FAIL) {
+        if (stat(FICHIERMETEO, &info) == FAIL) {
+            printf("The file %s doesn't exist.\n", FICHIERMETEO);
+        } else {
+            printf("couldn't delete %s\n", FICHIERMETEO);
+        }
+        exit(EXIT_FAILURE);
+    } else {
+        printf("Successfully removed %s\n", FICHIERMETEO);
+    }
+
+    // delete lock file
+    if (unlink(FICHIERLOCK) == FAIL) {
+        if (stat(FICHIERLOCK, &info) == FAIL) {
+            printf("The file %s doesn't exist.\n", FICHIERLOCK);
+        } else {
+            printf("couldn't delete %s\n", FICHIERLOCK);
+        }
+        exit(EXIT_FAILURE);
+    } else {
+        printf("Successfully removed %s\n", FICHIERLOCK);
+    }
+
     // actually exit
     exit(state);
 

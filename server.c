@@ -4,10 +4,43 @@ int input = -1;
 int output = -1;
 bool listen = true;
 
-void atis(char * atis_msg, struct request rq) {
+int atis(char * atis_msg) {
+    int fichierMeteo = 0;
+    int fichierLock = 0;
+    int tailleMessage = 0;
 
-    snprintf(atis_msg, MSG_SIZE, "%d :> (ATIS_DATA)", rq.pid);
+    char dataAtis [MSG_SIZE];
 
+    if ((fichierLock = open(FICHIERLOCK, O_RDONLY)) == FAIL) {
+
+        fatal("Failed to open fichier lock\n");
+
+    } else {
+
+        fichierMeteo = open(FICHIERMETEO, O_RDONLY);
+
+        if (fichierMeteo == FAIL) {
+
+            fatal("Impossible d'ouvrir le fichier meteo");
+
+        } else {
+
+            printf("OK LOAD fichierMeteo\n");
+            
+        }
+    }
+
+    tailleMessage = (int)read(fichierMeteo, dataAtis, MSG_SIZE);
+
+    if(tailleMessage == FAIL) {
+        
+        fatal("Impossible de lire le fichier meteo.txt");
+    
+    }
+
+    memcpy(atis_msg, dataAtis, MSG_SIZE);
+
+    return tailleMessage;
 }
 
 int main(void) {
@@ -20,14 +53,20 @@ int main(void) {
     // requests
     struct request *    req = NULL;
     unsigned int        req_n = 0;
-    char                request_string[MSG_SIZE];
 
     // atis
     char                atis_msg[MSG_SIZE];
 
-    // setup signal, so if programs exits 
+    // setup signal, so if programs exits
     // abruptly, the fifo still gets cleanup up
     sigset(SIGINT, &cleanup);
+
+    // generate ATIS messages
+    if (gen_atis() == FAIL) {
+
+        fatal("Failed to load ATIS messages\n");
+
+    }
 
     // create the fifos
     if (mkfifo(FIFO_FILE, S_IRUSR | S_IWUSR) == FAIL) {
@@ -73,9 +112,13 @@ int main(void) {
         int fifo_actions = select(input+1, &readset, NULL, NULL, &tv);
 
         if (fifo_actions == FAIL) {
+
             fatal("main stream select failed\n");
+
         } else if (fifo_actions == 0) {
+
             printf("En écoute...\n");
+
         } else {
             // read every microsecond
             tv_read.tv_sec = 0;
@@ -104,23 +147,23 @@ int main(void) {
 
                 if (strnstr(req[req_n].msg, PILOT_REQUEST, req[req_n].siz) != NULL)  {
 
-                    snprintf(request_string, MSG_SIZE, 
-                            "Got Request ! : req[%02d] = %d -> %s :: %zu\n", 
+                    printf("Got Request ! : req[%02d] = %d -> %s :: %zu\n",
                             req_n, req[req_n].pid, req[req_n].msg, req[req_n].siz);
 
-                    if (write(STDOUT_FILENO, request_string, strnlen(request_string, MSG_SIZE)) == FAIL) {
-                        fatal("Failed to write request string...\n");
-                    }
-
-                    atis(atis_msg, req[req_n]);
+                    size_t tailleMsg = (size_t)atis(atis_msg);
                     printf("Sending Packet \"%s\"...\n", atis_msg);
-                    if (write(output, atis_msg, strnlen(atis_msg, MSG_SIZE)) == FAIL) {
+
+                    if (write(output, atis_msg, tailleMsg) == FAIL) {
+
                         fatal("Failed to send message...\n");
+
                     }
 
                     req_n++;
                 } else {
+
                     fatal("No valid messages intercepted\n");
+
                 }
             }
         }

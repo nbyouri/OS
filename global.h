@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -17,11 +18,14 @@
 #define FIFO_FILE_OUT "watchtower_send.fifo"
 #define PILOT_REQUEST "Meteo please?"
 #define MSG_SIZE 100
+#define NBMAXATIS 20
 #define RED "\033[22;31m"
 #define NOR "\033[00;0m"
+#define FICHIERLOCK "lock"
+#define FICHIERMETEO "meteo.txt"
 
 struct ATIS{
-    size_t siz;			// 8 bytes 
+    size_t siz;			// 8 bytes
     char msg[MSG_SIZE]; // 100 bytes
 };
 
@@ -36,7 +40,7 @@ extern int  input;
 extern int  output;
 
 int gen_atis(void);
-void atis(char *, struct request);
+int atis(char *);
 bool checkyesno(const char *);
 void cleanup(int);
 void * xmalloc(size_t);
