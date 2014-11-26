@@ -23,16 +23,12 @@ int atis(char * atis_msg) {
 
             fatal("Impossible d'ouvrir le fichier meteo");
 
-        } else {
-
-            printf("OK LOAD fichierMeteo\n");
-            
         }
     }
 
     tailleMessage = (int)read(fichierMeteo, dataAtis, MSG_SIZE);
 
-    if(tailleMessage == FAIL) {
+    if (tailleMessage == FAIL) {
         
         fatal("Impossible de lire le fichier meteo.txt");
     
