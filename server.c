@@ -51,8 +51,9 @@ int main(void) {
     // atis
     char                atis_msg[MSG_SIZE];
 
-    // setup signal, so if programs exits
-    // abruptly, the fifo still gets cleanup up
+    // setup signal, so if programs gets 
+    // interrupted, files can still be 
+    // cleaned up and FIFOs removed.
     sigset(SIGINT, &cleanup);
 
     // generate ATIS messages
