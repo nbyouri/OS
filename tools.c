@@ -25,8 +25,7 @@ void * xmalloc(size_t size) {
     return ptr;
 }
 
-void * xrealloc(void *ptr, size_t nmemb, size_t size)
-{
+void * xrealloc(void *ptr, size_t nmemb, size_t size) {
     void *new_ptr;
     size_t new_size = nmemb * size;
 
@@ -71,8 +70,17 @@ bool checkyesno(const char *msg) {
     return listen;
 }
 
-void cleanup(int state) {
+int delete(const char * pathname) {
     struct stat         info;
+
+    if (stat(pathname, &info) == FAIL) {
+        return fatal("File %s doesn't exist!\n", pathname);
+    } else {
+        return unlink(pathname);
+    }
+}
+
+void cleanup(int state) {
 
     printf("\ncleaning up... \n");
     printf("Files to be closed : %d, %d\n", input, output);
@@ -92,50 +100,22 @@ void cleanup(int state) {
     }
 
     // delete the fifo input file if it exists
-    if (unlink(FIFO_FILE) == FAIL) {
-        if (stat(FIFO_FILE, &info) == FAIL) {
-            printf("The fifo file doesn't exist %s\n", FIFO_FILE);
-        } else {
-            printf("Couldn't delete fifo %s\n", FIFO_FILE);
-        }
-        exit(EXIT_FAILURE);
-    } else {
+    if (delete(FIFO_FILE)) {
         printf("Successfully removed %s\n", FIFO_FILE);
     }
 
     // delete the fifo output file if it exists
-    if (unlink(FIFO_FILE_OUT) == FAIL) {
-        if (stat(FIFO_FILE_OUT, &info) == FAIL) {
-            printf("The output fifo file doesn't exist %s\n", FIFO_FILE_OUT);
-        } else {
-            printf("Couldn't delete fifo %s\n", FIFO_FILE_OUT);
-        }
-        exit(EXIT_FAILURE);
-    } else {
+    if (delete(FIFO_FILE_OUT)) {
         printf("Successfully removed %s\n", FIFO_FILE_OUT);
     }
 
     // delete meteo.txt
-    if (unlink(FICHIERMETEO) == FAIL) {
-        if (stat(FICHIERMETEO, &info) == FAIL) {
-            printf("The file %s doesn't exist.\n", FICHIERMETEO);
-        } else {
-            printf("couldn't delete %s\n", FICHIERMETEO);
-        }
-        exit(EXIT_FAILURE);
-    } else {
+    if (delete(FICHIERMETEO)) {
         printf("Successfully removed %s\n", FICHIERMETEO);
     }
 
     // delete lock file
-    if (unlink(FICHIERLOCK) == FAIL) {
-        if (stat(FICHIERLOCK, &info) == FAIL) {
-            printf("The file %s doesn't exist.\n", FICHIERLOCK);
-        } else {
-            printf("couldn't delete %s\n", FICHIERLOCK);
-        }
-        exit(EXIT_FAILURE);
-    } else {
+    if (delete(FICHIERLOCK)) {
         printf("Successfully removed %s\n", FICHIERLOCK);
     }
 
@@ -144,7 +124,7 @@ void cleanup(int state) {
 
 }
 
-void fatal(const char * restrict format, ...) {    
+int fatal(const char * restrict format, ...) {    
     va_list     args;
 
     va_start(args, format);
@@ -156,4 +136,7 @@ void fatal(const char * restrict format, ...) {
 
     // delete the fifo files
     cleanup(EXIT_FAILURE);
+
+    // shouldn't be reached
+    return EXIT_SUCCESS;
 }
