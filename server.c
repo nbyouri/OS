@@ -53,7 +53,6 @@ int main(void) {
     // requests
     struct request *    req = NULL;
     unsigned int        req_n = 0;
-    char                request_string[MSG_SIZE];
 
     // atis
     char                atis_msg[MSG_SIZE];
@@ -64,9 +63,9 @@ int main(void) {
 
     // generate ATIS messages
     if (gen_atis() == FAIL) {
+
         fatal("Failed to load ATIS messages\n");
-    } else {
-        printf("Successfully loaded ATIS\n");
+
     }
 
     // create the fifos
@@ -113,9 +112,13 @@ int main(void) {
         int fifo_actions = select(input+1, &readset, NULL, NULL, &tv);
 
         if (fifo_actions == FAIL) {
+
             fatal("main stream select failed\n");
+
         } else if (fifo_actions == 0) {
+
             printf("En écoute...\n");
+
         } else {
             // read every microsecond
             tv_read.tv_sec = 0;
@@ -144,23 +147,23 @@ int main(void) {
 
                 if (strnstr(req[req_n].msg, PILOT_REQUEST, req[req_n].siz) != NULL)  {
 
-                    snprintf(request_string, MSG_SIZE,
-                            "Got Request ! : req[%02d] = %d -> %s :: %zu\n",
+                    printf("Got Request ! : req[%02d] = %d -> %s :: %zu\n",
                             req_n, req[req_n].pid, req[req_n].msg, req[req_n].siz);
-
-                    if (write(STDOUT_FILENO, request_string, strnlen(request_string, MSG_SIZE)) == FAIL) {
-                        fatal("Failed to write request string...\n");
-                    }
 
                     size_t tailleMsg = (size_t)atis(atis_msg);
                     printf("Sending Packet \"%s\"...\n", atis_msg);
+
                     if (write(output, atis_msg, tailleMsg) == FAIL) {
+
                         fatal("Failed to send message...\n");
+
                     }
 
                     req_n++;
                 } else {
+
                     fatal("No valid messages intercepted\n");
+
                 }
             }
         }
