@@ -6,14 +6,14 @@
  */
 #include "global.h"
 
- int input;
- int output;
+int input;
+int output;
 
 void * xmalloc(size_t size) {
     void *ptr;
 
     if (size == 0) {
-         fatal("xmalloc: zero size\n");
+        fatal("xmalloc: zero size\n");
     }
 
     ptr = malloc(size);
@@ -40,7 +40,7 @@ void * xrealloc(void *ptr, size_t nmemb, size_t size)
         new_ptr = realloc(ptr, new_size);
     if (new_ptr == NULL)
         fatal("xrealloc: out of memory (new_size %zu bytes)",
-            new_size);
+                new_size);
     return new_ptr;
 }
 
@@ -67,7 +67,7 @@ bool checkyesno(const char *msg) {
     if (res == 'n') {
         listen = false;
     }
-    
+
     return listen;
 }
 
@@ -79,42 +79,40 @@ void cleanup(int state) {
     printf("Files to be deleted : %s, %s\n", FIFO_FILE, FIFO_FILE_OUT);
 
     // close the file descriptors
-    if (input != FAIL && output != FAIL) {
-        if (close(input) == FAIL) {
-            printf("Couldn't close input file descriptor %d\n", input);
-        } else {
-            printf("Successfully closed %d\n", input);
-        }
+    if (close(input) == FAIL) {
+        printf("Couldn't close input file descriptor %d\n", input);
+    } else {
+        printf("Successfully closed %d\n", input);
+    }
 
-        if (close(output) == FAIL) {
-            printf("Couldn't close output file descriptor %d\n", output);
-        } else {
-            printf("Successfully closed %d\n", output);
-        }
+    if (close(output) == FAIL) {
+        printf("Couldn't close output file descriptor %d\n", output);
+    } else {
+        printf("Successfully closed %d\n", output);
+    }
 
-        // delete the fifo input file if it exists
-        if (unlink(FIFO_FILE) == FAIL) {
-            if (stat(FIFO_FILE, &info) == FAIL) {
-                printf("The fifo file doesn't exist %s\n", FIFO_FILE);
-            } else {
-                printf("Couldn't delete fifo %s\n", FIFO_FILE);
-            }
-            exit(EXIT_FAILURE);
+    // delete the fifo input file if it exists
+    if (unlink(FIFO_FILE) == FAIL) {
+        if (stat(FIFO_FILE, &info) == FAIL) {
+            printf("The fifo file doesn't exist %s\n", FIFO_FILE);
         } else {
-            printf("Successfully removed %s\n", FIFO_FILE);
+            printf("Couldn't delete fifo %s\n", FIFO_FILE);
         }
+        exit(EXIT_FAILURE);
+    } else {
+        printf("Successfully removed %s\n", FIFO_FILE);
+    }
 
-        // delete the fifo output file if it exists
-        if (unlink(FIFO_FILE_OUT) == FAIL) {
-            if (stat(FIFO_FILE_OUT, &info) == FAIL) {
-                printf("The output fifo file doesn't exist %s\n", FIFO_FILE_OUT);
-            } else {
-                printf("Couldn't delete fifo %s\n", FIFO_FILE_OUT);
-            }
-            exit(EXIT_FAILURE);
+    // delete the fifo output file if it exists
+    if (unlink(FIFO_FILE_OUT) == FAIL) {
+        if (stat(FIFO_FILE_OUT, &info) == FAIL) {
+            printf("The output fifo file doesn't exist %s\n", FIFO_FILE_OUT);
         } else {
-            printf("Successfully removed %s\n", FIFO_FILE_OUT);
+            printf("Couldn't delete fifo %s\n", FIFO_FILE_OUT);
         }
+        exit(EXIT_FAILURE);
+    } else {
+        printf("Successfully removed %s\n", FIFO_FILE_OUT);
     }
 
     // actually exit
@@ -129,7 +127,7 @@ void fatal(const char * restrict format, ...) {
 
     fprintf(stderr, RED"FATAL: "NOR);
     vfprintf(stderr, format, args);
-    
+
     va_end(args);
 
     // delete the fifo files

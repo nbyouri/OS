@@ -32,7 +32,7 @@ int main(void) {
     // create the fifos
     if (mkfifo(FIFO_FILE, S_IRUSR | S_IWUSR) == FAIL) {
 
-        fatal("Was unable to create input fifo\n");
+        fatal("Unable to create input fifo\n");
 
     }
 
@@ -45,7 +45,7 @@ int main(void) {
     // open the fifos in read/write mode
     if ((input = open(FIFO_FILE, O_RDONLY)) == FAIL) {
 
-        fatal("Was unable to open the server's fifo\n");
+        fatal("Unable to open the server's fifo\n");
 
     } else {
 
