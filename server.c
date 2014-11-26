@@ -42,7 +42,6 @@ int atis(char * atis_msg) {
 int main(void) {
     // message to read
     fd_set              readset;
-    fd_set              readaction;
     struct timeval      tv;
 
     // requests
@@ -112,8 +111,9 @@ int main(void) {
             // read every microsecond
             tv.tv_sec = 0;
             tv.tv_usec = 1;
-            FD_ZERO(&readaction);
-            FD_SET(fifo_actions, &readaction);
+
+            FD_ZERO(&readset);
+            FD_SET(fifo_actions, &readset);
 
             select(fifo_actions+1, &readset, NULL, NULL, &tv);
 
