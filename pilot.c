@@ -2,7 +2,7 @@
 
 // TODO: add local cleanup
 
-void pilot_cleanup(int in_serv, int out_serv);
+void pilot_cleanup(int, int, int);
 
 int main(void) {
     int server = -1;
@@ -27,14 +27,14 @@ int main(void) {
         if (write(server, &req, sizeof(req)) == FAIL) {
             
             printf("Failed to write message\n");
-            pilot_cleanup(server, out_server);
+            pilot_cleanup(server, out_server, FAIL);
             
         } else {
             
             if ((out_server = open(FIFO_FILE_OUT, O_RDONLY)) == FAIL) {
                 
                 printf("Couldn't open output file...\n");
-                pilot_cleanup(server, out_server);
+                pilot_cleanup(server, out_server, FAIL);
                 
             } else {
                 
@@ -43,7 +43,7 @@ int main(void) {
                 if (read(out_server, response, MSG_SIZE) == FAIL) {
                     
                     printf("Failed to read response from output fifo\n");
-                    pilot_cleanup(server, out_server);
+                    pilot_cleanup(server, out_server, FAIL);
                     
                 } else {
                     
@@ -51,8 +51,7 @@ int main(void) {
                     
                 }
             }
-            
-            pilot_cleanup(server, out_server);
+            pilot_cleanup(server, out_server, EXIT_SUCCESS);
         }
         
         return EXIT_SUCCESS;
@@ -60,11 +59,12 @@ int main(void) {
 }
 
 
-void pilot_cleanup(int in_serv, int out_serv, int ){
+void pilot_cleanup(int in_serv, int out_serv, int status){
     // close the file descriptors
     if (in_serv != FAIL) {
         if (close(in_serv) == FAIL) {
             printf("Couldn't close input file descriptor %d\n", in_serv);
+            exit(status);
         } else {
             printf("Successfully closed %d\n", in_serv);
         }
@@ -72,9 +72,11 @@ void pilot_cleanup(int in_serv, int out_serv, int ){
     if (out_serv != FAIL) {
         if (close(out_serv) == FAIL) {
             printf("Couldn't close output file descriptor %d\n", out_serv);
+            exit(status);
         } else {
             printf("Successfully closed %d\n", out_serv);
         }
     }
+    exit(EXIT_SUCCESS);
 }
 
