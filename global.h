@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -39,7 +40,7 @@ extern int  input;
 extern int  output;
 
 int gen_atis(void);
-void atis(char *);
+int atis(char *);
 bool checkyesno(const char *);
 void cleanup(int);
 void * xmalloc(size_t);

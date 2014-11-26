@@ -5,21 +5,38 @@ int output = -1;
 bool listen = true;
 
 int atis(char * atis_msg) {
-    int fichierMeteo, tailleMessage;
+    int fichierMeteo = 0;
+    int tailleMessage = 0;
+
     char dataAtis [MSG_SIZE];
-    if(open("look", O_RDONLY)== FAIL){
-        if((fichierTexte = open(FICHIERMETEO, O_RDONLY)) == FAIL){
-            fatal("Impossible d'ouvrir le fichier meteo");
-        }
+
+    if (open(FICHIERLOCK, O_RDONLY) == FAIL) {
+
+        fatal("Failed to open fichier lock\n");
+
     } else {
-       memcpy(dataAtis, "LE FICHIER meteo.txt EST DEJA UTILISE");
+
+        fichierMeteo = open(FICHIERMETEO, O_RDONLY);
+
+        if (fichierMeteo == FAIL) {
+
+            fatal("Impossible d'ouvrir le fichier meteo");
+
+        } else {
+
+            printf("OK LOAD fichierMeteo\n");
+            
+        }
     }
-    tailleMessage = read(fichierMeteo, dataAtis, MSG_SIZE);
+
+    tailleMessage = (int)read(fichierMeteo, dataAtis, MSG_SIZE);
+
     if(tailleMessage == FAIL){
-        fatal("Impossible de lire le fichier meteo.txt")
+        fatal("Impossible de lire le fichier meteo.txt");
     }
-    memcpy(atis_msg,dataAtis);
-    //snprintf(atis_msg, MSG_SIZE+sizeof(rq.pid), "%d :> %s", rq.pid,dataAtis);
+
+    memcpy(atis_msg, dataAtis, MSG_SIZE);
+
     return tailleMessage;
 }
 
@@ -41,6 +58,13 @@ int main(void) {
     // setup signal, so if programs exits
     // abruptly, the fifo still gets cleanup up
     sigset(SIGINT, &cleanup);
+
+    // generate ATIS messages
+    if (gen_atis() == FAIL) {
+        fatal("Failed to load ATIS messages\n");
+    } else {
+        printf("Successfully loaded ATIS\n");
+    }
 
     // create the fifos
     if (mkfifo(FIFO_FILE, S_IRUSR | S_IWUSR) == FAIL) {
@@ -125,7 +149,7 @@ int main(void) {
                         fatal("Failed to write request string...\n");
                     }
 
-                    int tailleMsg = atis(atis_msg);
+                    size_t tailleMsg = (size_t)atis(atis_msg);
                     printf("Sending Packet \"%s\"...\n", atis_msg);
                     if (write(output, atis_msg, tailleMsg) == FAIL) {
                         fatal("Failed to send message...\n");
