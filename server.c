@@ -128,8 +128,11 @@ int main(void) {
             } else if (packet == FIFO_EOF) {
 
                 //listen = checkyesno("Keep listening");
+                printf("- Finished transmission...\n");
 
             } else {
+
+                printf("- Starting transmission...\n");
 
                 // assign read structure
                 req = xrealloc(req, req_n+1, sizeof(struct request));
