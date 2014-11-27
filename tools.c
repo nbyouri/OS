@@ -43,7 +43,7 @@ void * xrealloc(void *ptr, size_t nmemb, size_t size) {
     return new_ptr;
 }
 
-void * clean_ptr(void * pointer) {
+void * cleanPtr(void * pointer) {
     if (pointer != NULL) {
         free(pointer);
     }

@@ -39,12 +39,15 @@ extern bool listen;
 extern int  input;
 extern int  output;
 
-int gen_atis(void);
+void genAtis(void);
 int atis(char *);
+void createFifos(void);
+void openFifos(void);
+void operations(void);
 bool checkyesno(const char *);
 int delete(const char *);
 void cleanup(int);
 void * xmalloc(size_t);
 void * xrealloc(void *, size_t, size_t);
-void * clean_ptr(void *);
+void * cleanPtr(void *);
 int fatal(const char * restrict, ...);

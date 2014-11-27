@@ -1,9 +1,10 @@
 #include "global.h"
 
 //Fichier C qui va mettre à jour le fichier texte meteo
-int gen_atis(void){
+void genAtis(void){
     char ATIS[NBMAXATIS][MSG_SIZE];
     int fichierTexte,fichierLock, nbATIS, i;
+    
     nbATIS = 2;
 
     strncpy(ATIS[0], "EBLG 1803 00000KT 0600 FG OVC008 BKN040 PROB40 2024 0300 DZ FG OVC002 BKN040", MSG_SIZE);
@@ -11,22 +12,20 @@ int gen_atis(void){
 
     if ((fichierLock = open(FICHIERLOCK, O_RDWR | O_CREAT, S_IRUSR | S_IRGRP | S_IROTH)) == FAIL) {
         printf("Impossible de faire le fichier lock");
-        return FAIL;
+        exit(EXIT_FAILURE);
     }
 
     //ouverture, ectriture et fermeture du fichier meteo.txt
     if ((fichierTexte = open(FICHIERMETEO, O_RDWR | O_CREAT, S_IRUSR | S_IRGRP | S_IROTH)) == FAIL) {
         printf("Impossible d'ouvrir le fichier meteo\n");
-        return FAIL;
+        exit(EXIT_FAILURE);
     }
 
-    for (i=0; i < nbATIS; i++){
-        write(fichierTexte,ATIS[i], sizeof ATIS[0]);
+    for (i = 0; i < nbATIS; i++){
+        write(fichierTexte, ATIS[i], sizeof(ATIS[0]));
     }
 
     close(fichierTexte);
 
     close(fichierLock);
-
-    return SUCCESS;
 }
