@@ -105,8 +105,9 @@ void operations(void) {
 
             } else if (packet == FIFO_EOF) {
 
-                printf("- Finished transmission...\n");
-                nanosleep((struct timespec[]){{0, 500000000}}, NULL);
+                //printf("- Finished transmission...\n");
+                continue;
+                //nanosleep((struct timespec[]){{0, 500000000}}, NULL);
                 //listen = checkyesno("Keep listening");
 
             } else {
