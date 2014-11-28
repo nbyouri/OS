@@ -116,7 +116,7 @@ void operations(void) {
                 req = xrealloc(req, reqNum+1, sizeof(struct request));
                 req[reqNum] = requestPacket;
 
-                if (strnstr(req[reqNum].msg, PILOT_REQUEST, req[reqNum].siz) != NULL)  {
+                if (strstr(req[reqNum].msg, PILOT_REQUEST) != NULL)  {
 
                     printf("< Got Request !\n");
 
@@ -145,7 +145,7 @@ int main(void) {
     // setup signal, so if programs gets 
     // interrupted, files can still be 
     // cleaned up and FIFOs removed.
-    sigset(SIGINT, &cleanup);
+    signal(SIGINT, &cleanup);
 
     genAtis();
 
