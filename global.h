@@ -24,6 +24,10 @@
 #define FICHIERLOCK "lock"
 #define FICHIERMETEO "meteo.txt"
 
+#ifdef __linux__
+#define SIZE_T_MAX (~((size_t) 0))
+#endif
+
 struct ATIS{
     size_t siz;			// 8 bytes
     char msg[MSG_SIZE]; // 100 bytes

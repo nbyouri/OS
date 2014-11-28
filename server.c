@@ -96,15 +96,6 @@ void operations(void) {
             printf("- listening...\n");
 
         } else {
-            // read every microsecond
-            tv.tv_sec = 0;
-            tv.tv_usec = 1;
-
-            FD_ZERO(&readset);
-            FD_SET(fifoActions, &readset);
-
-            select(fifoActions+1, &readset, NULL, NULL, &tv);
-
             struct request requestPacket;
             int packet = (int)read(input, &requestPacket, sizeof(requestPacket));
 
