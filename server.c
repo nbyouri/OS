@@ -106,6 +106,7 @@ void operations(void) {
             } else if (packet == FIFO_EOF) {
 
                 printf("- Finished transmission...\n");
+                nanosleep((struct timespec[]){{0, 500000000}}, NULL);
                 //listen = checkyesno("Keep listening");
 
             } else {
@@ -118,7 +119,7 @@ void operations(void) {
 
                 if (strstr(req[reqNum].msg, PILOT_REQUEST) != NULL)  {
 
-                    printf("< Got Request !\n");
+                    printf("< Got Request nr. %d\n", reqNum);
 
                     size_t tailleMsg = (size_t)atis(atisMsg);
                     printf("> Sending ATIS \"%s\"...\n", atisMsg);
