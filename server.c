@@ -69,7 +69,7 @@ void openFifos(void) {
 
 void operations(void) {
     struct pollfd       fd[1] = {
-        { input, POLLIN, 0 }
+        { input, POLLIN | POLLHUP, 0 }
     };
 
     // requests
@@ -101,12 +101,12 @@ void operations(void) {
 
                 if (fd[0].revents & POLLHUP) {
 
-                    printf("- Client disconnected\n");
                     close(input);
 
-                    if ((input = open(FIFO_FILE, O_RDONLY|O_NONBLOCK)) == FAIL) {
+                    if ((input = open(FIFO_FILE, O_RDWR)) == FAIL) {
 
                         fatal("Unable to open the input fifo.\n");
+
                     }
                 }
 
