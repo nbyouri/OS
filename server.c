@@ -68,8 +68,9 @@ void openFifos(void) {
 }
 
 void operations(void) {
-    fd_set              readset;
-    struct timeval      tv;
+    struct pollfd       fd[1] = {
+        { input, POLLIN | POLLPRI, 0 }
+    };
 
     // requests
     struct request *    req = NULL;
@@ -79,13 +80,8 @@ void operations(void) {
     char                atisMsg[MSG_SIZE];
 
     while (listen) {
-        tv.tv_sec = 1;
-        tv.tv_usec = 0;
 
-        FD_ZERO(&readset);
-        FD_SET(input, &readset);
-
-        int fifoActions = select(input+1, &readset, NULL, NULL, &tv);
+        int fifoActions = poll(fd, 1, 1000);
 
         if (fifoActions == FAIL) {
 
@@ -94,6 +90,7 @@ void operations(void) {
         } else if (fifoActions == 0) {
 
             printf("- listening...\n");
+            continue;
 
         } else {
             struct request requestPacket;
@@ -106,9 +103,9 @@ void operations(void) {
             } else if (packet == FIFO_EOF) {
 
                 //printf("- Finished transmission...\n");
-                continue;
                 //nanosleep((struct timespec[]){{0, 500000000}}, NULL);
                 //listen = checkyesno("Keep listening");
+                fifoActions = 0;
 
             } else {
 
