@@ -88,13 +88,27 @@ void operations(void) {
 
             fatal("poll failed\n");
 
+        } else if (fifoActions == 0) {
+
+            printf("- Listening...\n");
+
         } else {
+
             struct request requestPacket;
             int packet = (int)read(input, &requestPacket, sizeof(requestPacket));
 
             if (packet == FAIL) {
 
-                printf("couldn't read message\n");
+                if (fd[0].revents & POLLHUP) {
+
+                    printf("- Client disconnected\n");
+                    close(input);
+
+                    if ((input = open(FIFO_FILE, O_RDONLY|O_NONBLOCK)) == FAIL) {
+
+                        fatal("Unable to open the input fifo.\n");
+                    }
+                }
 
             } else {
 
