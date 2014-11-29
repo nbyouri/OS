@@ -7,7 +7,6 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdarg.h>
-#include <time.h>
 #include <poll.h>
 #include <sys/stat.h>
 #include <sys/param.h>

@@ -54,7 +54,7 @@ void createFifos(void) {
 }
 
 void openFifos(void) {
-    if ((input = open(FIFO_FILE, O_RDONLY)) == FAIL) {
+    if ((input = open(FIFO_FILE, O_RDONLY | O_RDWR)) == FAIL) {
 
         fatal("Unable to open the server's fifo\n");
 
@@ -69,7 +69,7 @@ void openFifos(void) {
 
 void operations(void) {
     struct pollfd       fd[1] = {
-        { input, POLLIN | POLLPRI, 0 }
+        { input, POLLIN, 0 }
     };
 
     // requests
@@ -81,16 +81,12 @@ void operations(void) {
 
     while (listen) {
 
+        // poll the input fifo every second
         int fifoActions = poll(fd, 1, 1000);
 
         if (fifoActions == FAIL) {
 
-            fatal("main stream select failed\n");
-
-        } else if (fifoActions == 0) {
-
-            printf("- listening...\n");
-            continue;
+            fatal("poll failed\n");
 
         } else {
             struct request requestPacket;
@@ -99,13 +95,6 @@ void operations(void) {
             if (packet == FAIL) {
 
                 printf("couldn't read message\n");
-
-            } else if (packet == FIFO_EOF) {
-
-                //printf("- Finished transmission...\n");
-                //nanosleep((struct timespec[]){{0, 500000000}}, NULL);
-                //listen = checkyesno("Keep listening");
-                fifoActions = 0;
 
             } else {
 
@@ -128,6 +117,7 @@ void operations(void) {
 
                     }
 
+                    printf("- Finishing transmission...\n");
                     reqNum++;
                 } else {
 
