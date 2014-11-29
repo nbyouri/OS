@@ -1,4 +1,4 @@
-CC=		@CC@
+CC=		@CC@ -std=c99
 
 SERVER_SRCS=	server.c tools.c meteo.c
 SERVER_OUT=	server
