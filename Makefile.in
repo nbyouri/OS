@@ -1,4 +1,4 @@
-CC=	clang -Weverything -Wno-missing-noreturn -Wno-format-nonliteral
+CC=		@CC@
 
 SERVER_SRCS=	server.c tools.c meteo.c
 SERVER_OUT=	server
