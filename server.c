@@ -54,13 +54,13 @@ void createFifos(void) {
 }
 
 void openFifos(void) {
-    if ((input = open(FIFO_FILE, O_RDONLY | O_RDWR)) == FAIL) {
+    if ((input = open(FIFO_FILE, O_RDWR)) == FAIL) {
 
         fatal("Unable to open the server's fifo\n");
 
     }
 
-    if ((output = open(FIFO_FILE_OUT, O_WRONLY)) == FAIL) {
+    if ((output = open(FIFO_FILE_OUT, O_RDWR)) == FAIL) {
 
         fatal("Unable to open server ouput fifo %s\n", FIFO_FILE_OUT);
 
