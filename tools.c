@@ -84,9 +84,11 @@ void cleanup(int state) {
 
     printf("\ncleaning up... \n");
 
-    // close the file descriptors
-    if (close(input) == FAIL) {
-        printf("Couldn't close input file descriptor %d\n", input);
+    if (input != -1 || output != -1) {
+        // close the file descriptors
+        if (close(input) == FAIL) {
+            printf("Couldn't close input file descriptor %d\n", input);
+        }
     }
 
     if (close(output) == FAIL) {
