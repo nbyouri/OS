@@ -88,7 +88,7 @@ void operations(void) {
 
         if (fifoActions == FAIL) {
 
-            fatal("poll failed\n");
+            printf("polling again...\n");
 
         } else if (fifoActions == 0) {
 
