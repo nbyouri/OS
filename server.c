@@ -73,7 +73,7 @@ void operations(void) {
     };
 
     // requests
-    struct request *    req = NULL;
+    char                **requests = NULL;
     unsigned int        reqNum = 0;
 
     // atis
@@ -94,8 +94,8 @@ void operations(void) {
 
         } else {
 
-            struct request requestPacket;
-            int packet = (int)read(input, &requestPacket, sizeof(requestPacket));
+            char requestPacket[MSG_SIZE];
+            int packet = (int)read(input, requestPacket, sizeof(requestPacket));
 
             if (packet == FAIL) {
 
@@ -115,10 +115,10 @@ void operations(void) {
                 printf("- Starting transmission...\n");
 
                 // assign read structure
-                req = xrealloc(req, reqNum+1, sizeof(struct request));
-                req[reqNum] = requestPacket;
+                requests = xrealloc(requests, reqNum+1, sizeof(*requests));
+                requests[reqNum] = requestPacket;
 
-                if (strstr(req[reqNum].msg, PILOT_REQUEST) != NULL)  {
+                if (strstr(requests[reqNum], PILOT_REQUEST) != NULL)  {
 
                     printf("< Got Request nr. %d\n", reqNum);
 
@@ -141,7 +141,7 @@ void operations(void) {
             }
         }
     }
-    cleanPtr(req);
+    cleanPtr(requests);
 }
 
 int main(void) {

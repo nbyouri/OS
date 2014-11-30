@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -28,17 +27,6 @@
 #ifdef __linux__
 #define SIZE_T_MAX (~((size_t) 0))
 #endif
-
-struct ATIS{
-    size_t siz;			// 8 bytes
-    char msg[MSG_SIZE]; // 100 bytes
-};
-
-struct request {
-    pid_t pid;			// 4 bytes
-    char msg[MSG_SIZE]; // 100 bytes
-    size_t siz;			// 8 bytes
-};
 
 extern bool listen;
 extern int  input;

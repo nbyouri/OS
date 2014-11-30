@@ -6,12 +6,10 @@ int main(void) {
     int server = -1;
     int out_server = -1;
 
-    struct request req;
+    char request[MSG_SIZE];
     char response[MSG_SIZE];
 
-    req.pid = getpid();
-    memcpy(req.msg, PILOT_REQUEST, MSG_SIZE);
-    req.siz = strlen(req.msg);
+    memcpy(request, PILOT_REQUEST, MSG_SIZE);
 
     if((server = open(FIFO_FILE, O_WRONLY)) == FAIL) {
 
@@ -22,7 +20,7 @@ int main(void) {
         printf("Successfully opened %d\n", server);
         printf("Sending REQUEST...\n");
 
-        if (write(server, &req, sizeof(req)) == FAIL) {
+        if (write(server, request, sizeof(request)) == FAIL) {
 
             printf("Failed to write message\n");
             pilot_cleanup(server, out_server, FAIL);
