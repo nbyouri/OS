@@ -17,7 +17,6 @@ int main(void) {
 
     } else {
 
-        printf("Successfully opened %d\n", server);
         printf("Sending REQUEST...\n");
 
         if (write(server, request, sizeof(request)) == FAIL) {
@@ -33,8 +32,6 @@ int main(void) {
                 pilot_cleanup(server, out_server, FAIL);
 
             } else {
-
-                printf("Successfully opened %d\n", out_server);
 
                 if (read(out_server, response, MSG_SIZE) == FAIL) {
 
@@ -59,16 +56,12 @@ void pilot_cleanup(int in_serv, int out_serv, int status){
         if (close(in_serv) == FAIL) {
             printf("Couldn't close input file descriptor %d\n", in_serv);
             exit(status);
-        } else {
-            printf("Successfully closed %d\n", in_serv);
         }
     }
     if (out_serv != FAIL) {
         if (close(out_serv) == FAIL) {
             printf("Couldn't close output file descriptor %d\n", out_serv);
             exit(status);
-        } else {
-            printf("Successfully closed %d\n", out_serv);
         }
     }
     exit(EXIT_SUCCESS);
