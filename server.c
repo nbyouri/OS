@@ -76,7 +76,7 @@ void operations(void) {
     struct pollfd       fd[1] = {
         { input, POLLIN | POLLHUP, 0 }
     };
-    
+
     // request packet
     char                requestPacket[MSG_SIZE];
     requests=           NULL;
@@ -93,7 +93,9 @@ void operations(void) {
 
         if (fifoActions == FAIL) {
 
-            printf("%s\n", listen ? "polling again..." : "stopped polling.");
+            if (listen) {
+                printf("%s\n", "polling again...");
+            }
 
         } else if (fifoActions == 0) {
 
