@@ -10,7 +10,6 @@
 #include <sys/stat.h>
 #include <sys/param.h>
 
-
 #define SUCCESS 0
 #define FAIL -1
 #define FIFO_EOF 0
@@ -28,9 +27,14 @@
 #define SIZE_T_MAX (~((size_t) 0))
 #endif
 
+// servers and state
 extern bool listen;
 extern int  input;
 extern int  output;
+
+// requests and number of requests
+extern int  nb;
+extern char **requests;
 
 void genAtis(void);
 int atis(char *);
@@ -42,5 +46,5 @@ int delete(const char *);
 void cleanup(int);
 void * xmalloc(size_t);
 void * xrealloc(void *, size_t, size_t);
-void * cleanPtr(void *);
+void * cleanPtr(int, char **);
 int fatal(const char * restrict, ...);

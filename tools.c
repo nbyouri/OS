@@ -6,8 +6,11 @@
  */
 #include "global.h"
 
+bool listen;
 int input;
 int output;
+int nb;
+char **requests;
 
 void * xmalloc(size_t size) {
     void *ptr;
@@ -43,12 +46,22 @@ void * xrealloc(void *ptr, size_t nmemb, size_t size) {
     return new_ptr;
 }
 
-void * cleanPtr(void * pointer) {
-    if (pointer != NULL) {
-        free(pointer);
+void * cleanPtr(int count, char ** array) {
+
+    for (int i = 0; i < count; i++) {
+
+        if (array[i] != NULL) {
+
+            free(array[i]);
+            array[i] = NULL;
+        }
     }
 
-    return pointer = NULL;
+    if (array != NULL) {
+        free(array);
+    }
+
+    return array = NULL;
 }
 
 bool checkyesno(const char *msg) {
@@ -57,7 +70,7 @@ bool checkyesno(const char *msg) {
 
     do {
 
-        printf("\n%s %s", msg, " ? (["RED"y"NOR"]es/["RED"n"NOR"]o) : ");
+        printf("\n%s%s", msg, " ? (["RED"y"NOR"]es/["RED"n"NOR"]o) : ");
         fgets(inp, sizeof(inp), stdin);
         sscanf(inp, "%c", &res);
 
@@ -107,6 +120,8 @@ void cleanup(int state) {
 
         delete(FICHIERLOCK);
 
+        requests = cleanPtr(nb, requests);
+        
         exit(state);
     }
 

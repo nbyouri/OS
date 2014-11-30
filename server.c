@@ -3,6 +3,8 @@
 int input = -1;
 int output = -1;
 bool listen = true;
+int nb = 0;
+char **requests = NULL;
 
 int atis(char * atisMsg) {
     int fichierMeteo = 0;
@@ -68,13 +70,15 @@ void openFifos(void) {
 }
 
 void operations(void) {
+    // poll in the input server
+    // for incomind data and for 
+    // client disconnects.
     struct pollfd       fd[1] = {
         { input, POLLIN | POLLHUP, 0 }
     };
-
-    // requests
-    char                **requests = NULL;
-    unsigned int        reqNum = 0;
+    
+    // request packet
+    char                *requestPacket = xmalloc(MSG_SIZE);
 
     // atis
     char                atisMsg[MSG_SIZE];
@@ -88,7 +92,7 @@ void operations(void) {
 
         if (fifoActions == FAIL) {
 
-            printf("polling again...\n");
+            printf("%s\n", listen ? "polling again..." : "stopped polling.");
 
         } else if (fifoActions == 0) {
 
@@ -96,8 +100,7 @@ void operations(void) {
 
         } else {
 
-            char requestPacket[MSG_SIZE];
-            int packet = (int)read(input, requestPacket, sizeof(requestPacket));
+            int packet = (int)read(input, requestPacket, MSG_SIZE);
 
             if (packet == FAIL) {
 
@@ -115,12 +118,12 @@ void operations(void) {
             } else {
 
                 // assign read structure
-                requests = xrealloc(requests, reqNum+1, sizeof(*requests));
-                requests[reqNum] = requestPacket;
+                requests = xrealloc(requests, nb+1, sizeof(*requests));
+                requests[nb] = requestPacket;
 
-                if (strstr(requests[reqNum], PILOT_REQUEST) != NULL)  {
+                if (strstr(requests[nb], PILOT_REQUEST) != NULL)  {
 
-                    printf("< Got Request nr. %d\n", reqNum);
+                    printf("< Got Request nr. %d\n", nb);
 
                     size_t tailleMsg = (size_t)atis(atisMsg);
                     printf("> Sending ATIS \"%s\"...\n", atisMsg);
@@ -131,7 +134,7 @@ void operations(void) {
 
                     }
 
-                    reqNum++;
+                    nb++;
                 } else {
 
                     fatal("No valid messages intercepted\n");
@@ -140,9 +143,12 @@ void operations(void) {
             }
         }
     }
-    // XXX: this will never be executed 
-    // since we exit the loop with SIGINT.
-    cleanPtr(requests);
+
+    if (requestPacket != NULL) {
+        printf("cleaning up requestPacket...\n");
+        free(requestPacket);
+        requestPacket = NULL;
+    }
 }
 
 int main(void) {
@@ -158,6 +164,4 @@ int main(void) {
     openFifos();
 
     operations();
-
-    cleanup(EXIT_SUCCESS);
 }

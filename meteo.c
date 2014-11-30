@@ -15,7 +15,6 @@ void genAtis(void){
         exit(EXIT_FAILURE);
     }
 
-    //ouverture, ectriture et fermeture du fichier meteo.txt
     if ((fichierTexte = open(FICHIERMETEO, O_RDWR | O_CREAT, S_IRUSR | S_IRGRP | S_IROTH)) == FAIL) {
         printf("Impossible d'ouvrir le fichier meteo\n");
         exit(EXIT_FAILURE);
