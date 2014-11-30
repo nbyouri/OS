@@ -123,9 +123,13 @@ void operations(void) {
                 // assign read string
                 requests = xrealloc(requests, nb+1, MSG_SIZE);
                 requests[nb] = xmalloc(MSG_SIZE);
-                strncpy(requests[nb], requestPacket, MSG_SIZE);
+                memcpy(requests[nb], requestPacket, packet);
 
-                if (strstr(requests[nb], PILOT_REQUEST) != NULL)  {
+                printf("requestPacket = %s = %d\n", requestPacket, strnlen(requestPacket, MSG_SIZE));
+                printf("PILOT_REQUEST = %s = %d\n", PILOT_REQUEST, MSG_SIZE);
+                printf("requestPackt (%s) != PILOT_REQUEST (%s) (memcmp = %d)\n", requestPacket, PILOT_REQUEST, memcmp(requestPacket, PILOT_REQUEST, packet));
+
+                if (memcmp(requests[nb], PILOT_REQUEST, packet) == 0)  {
 
                     printf("< Got Request nr. %d\n", nb);
 

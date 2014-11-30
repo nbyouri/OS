@@ -92,7 +92,11 @@ int delete(const char * pathname) {
 
 void cleanup(int state) {
 
-    listen = checkyesno("Really quit");
+    if (state == EXIT_SUCCESS) {
+        listen = checkyesno("Really quit");
+    } else if (state == EXIT_FAILURE) {
+        listen = false;
+    }
 
     if (!listen) {
 
@@ -123,6 +127,7 @@ void cleanup(int state) {
 }
 
 int fatal(const char * format, ...) {    
+
     va_list     args;
 
     va_start(args, format);
