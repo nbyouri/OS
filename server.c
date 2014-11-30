@@ -123,7 +123,7 @@ void operations(void) {
                 // assign read string
                 requests = xrealloc(requests, nb+1, MSG_SIZE);
                 requests[nb] = xmalloc(MSG_SIZE);
-                strlcpy(requests[nb], requestPacket, MSG_SIZE);
+                strncpy(requests[nb], requestPacket, MSG_SIZE);
 
                 if (strstr(requests[nb], PILOT_REQUEST) != NULL)  {
 
