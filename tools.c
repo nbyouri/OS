@@ -89,31 +89,20 @@ void cleanup(int state) {
         if (close(input) == FAIL) {
             printf("Couldn't close input file descriptor %d\n", input);
         }
-    }
 
-    if (close(output) == FAIL) {
-        printf("Couldn't close output file descriptor %d\n", output);
+        if (close(output) == FAIL) {
+            printf("Couldn't close output file descriptor %d\n", output);
+        }
     }
 
     // delete the fifo input file if it exists
-    if (delete(FIFO_FILE)) {
-        printf("Successfully removed %s\n", FIFO_FILE);
-    }
+    delete(FIFO_FILE);
 
-    // delete the fifo output file if it exists
-    if (delete(FIFO_FILE_OUT)) {
-        printf("Successfully removed %s\n", FIFO_FILE_OUT);
-    }
+    delete(FIFO_FILE_OUT);
 
-    // delete meteo.txt
-    if (delete(FICHIERMETEO)) {
-        printf("Successfully removed %s\n", FICHIERMETEO);
-    }
+    delete(FICHIERMETEO);
 
-    // delete lock file
-    if (delete(FICHIERLOCK)) {
-        printf("Successfully removed %s\n", FICHIERLOCK);
-    }
+    delete(FICHIERLOCK);
 
     // actually exit
     exit(state);
