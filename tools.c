@@ -46,22 +46,17 @@ void * xrealloc(void *ptr, size_t nmemb, size_t size) {
     return new_ptr;
 }
 
-void * cleanPtr(int count, char ** array) {
+void cleanPtr(int count, char ** array) {
 
     for (int i = 0; i < count; i++) {
-
-        if (array[i] != NULL) {
-
-            free(array[i]);
-            array[i] = NULL;
-        }
+        free(array[i]);
+        array[i] = NULL;
     }
 
     if (array != NULL) {
         free(array);
+        array = NULL;
     }
-
-    return array = NULL;
 }
 
 bool checkyesno(const char *msg) {
@@ -120,14 +115,12 @@ void cleanup(int state) {
 
         delete(FICHIERLOCK);
 
-        requests = cleanPtr(nb, requests);
-        
-        exit(state);
+        cleanPtr(nb, requests);
     }
 
 }
 
-int fatal(const char * restrict format, ...) {    
+int fatal(const char * format, ...) {    
     va_list     args;
 
     va_start(args, format);
@@ -137,9 +130,7 @@ int fatal(const char * restrict format, ...) {
 
     va_end(args);
 
-    // delete the fifo files
     cleanup(EXIT_FAILURE);
 
-    // shouldn't be reached
-    return EXIT_SUCCESS;
+    exit(EXIT_FAILURE);
 }

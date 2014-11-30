@@ -78,12 +78,13 @@ void operations(void) {
     };
     
     // request packet
-    char                *requestPacket = xmalloc(MSG_SIZE);
+    char                requestPacket[MSG_SIZE];
+    requests=           NULL;
 
     // atis
     char                atisMsg[MSG_SIZE];
 
-    printf("- Listening...\n");
+    printf("^C to exit\n- Listening...\n");
 
     while (listen) {
 
@@ -117,9 +118,10 @@ void operations(void) {
 
             } else {
 
-                // assign read structure
-                requests = xrealloc(requests, nb+1, sizeof(*requests));
-                requests[nb] = requestPacket;
+                // assign read string
+                requests = xrealloc(requests, nb+1, MSG_SIZE);
+                requests[nb] = xmalloc(MSG_SIZE);
+                strlcpy(requests[nb], requestPacket, MSG_SIZE);
 
                 if (strstr(requests[nb], PILOT_REQUEST) != NULL)  {
 
@@ -143,12 +145,6 @@ void operations(void) {
             }
         }
     }
-
-    if (requestPacket != NULL) {
-        printf("cleaning up requestPacket...\n");
-        free(requestPacket);
-        requestPacket = NULL;
-    }
 }
 
 int main(void) {
@@ -164,4 +160,6 @@ int main(void) {
     openFifos();
 
     operations();
+
+    return EXIT_SUCCESS;
 }

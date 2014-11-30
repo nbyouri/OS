@@ -46,5 +46,5 @@ int delete(const char *);
 void cleanup(int);
 void * xmalloc(size_t);
 void * xrealloc(void *, size_t, size_t);
-void * cleanPtr(int, char **);
-int fatal(const char * restrict, ...);
+void cleanPtr(int, char **);
+int fatal(const char *, ...);
