@@ -79,6 +79,8 @@ void operations(void) {
     // atis
     char                atisMsg[MSG_SIZE];
 
+    printf("- Listening...\n");
+
     while (listen) {
 
         // poll the input fifo every second
@@ -112,8 +114,6 @@ void operations(void) {
 
             } else {
 
-                printf("- Starting transmission...\n");
-
                 // assign read structure
                 requests = xrealloc(requests, reqNum+1, sizeof(*requests));
                 requests[reqNum] = requestPacket;
@@ -131,7 +131,6 @@ void operations(void) {
 
                     }
 
-                    printf("- Finishing transmission...\n");
                     reqNum++;
                 } else {
 
@@ -141,6 +140,8 @@ void operations(void) {
             }
         }
     }
+    // XXX: this will never be executed 
+    // since we exit the loop with SIGINT.
     cleanPtr(requests);
 }
 
