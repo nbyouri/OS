@@ -49,8 +49,10 @@ void * xrealloc(void *ptr, size_t nmemb, size_t size) {
 void cleanPtr(int count, char ** array) {
 
     for (int i = 0; i < count; i++) {
-        free(array[i]);
-        array[i] = NULL;
+        if (array[i] != NULL) {
+            free(array[i]);
+            array[i] = NULL;
+        }
     }
 
     if (array != NULL) {
