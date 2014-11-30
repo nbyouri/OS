@@ -57,13 +57,13 @@ bool checkyesno(const char *msg) {
 
     do {
 
-        printf("%s %s", msg, " ? ([o]ui/[n]on) : ");
+        printf("\n%s %s", msg, " ? (["RED"y"NOR"]es/["RED"n"NOR"]o) : ");
         fgets(inp, sizeof(inp), stdin);
         sscanf(inp, "%c", &res);
 
-    } while (res != 'n' && res != 'o');
+    } while (res != 'y' && res != 'n');
 
-    if (res == 'n') {
+    if (res == 'y') {
         listen = false;
     }
 
@@ -82,30 +82,33 @@ int delete(const char * pathname) {
 
 void cleanup(int state) {
 
-    printf("\ncleaning up... \n");
+    listen = checkyesno("Really quit");
 
-    if (input != -1 || output != -1) {
-        // close the file descriptors
-        if (close(input) == FAIL) {
-            printf("Couldn't close input file descriptor %d\n", input);
+    if (!listen) {
+
+        printf("\ncleaning up... \n");
+
+        if (input != -1 || output != -1) {
+
+            if (close(input) == FAIL) {
+                printf("Couldn't close input file descriptor %d\n", input);
+            }
+
+            if (close(output) == FAIL) {
+                printf("Couldn't close output file descriptor %d\n", output);
+            }
         }
 
-        if (close(output) == FAIL) {
-            printf("Couldn't close output file descriptor %d\n", output);
-        }
+        delete(FIFO_FILE);
+
+        delete(FIFO_FILE_OUT);
+
+        delete(FICHIERMETEO);
+
+        delete(FICHIERLOCK);
+
+        exit(state);
     }
-
-    // delete the fifo input file if it exists
-    delete(FIFO_FILE);
-
-    delete(FIFO_FILE_OUT);
-
-    delete(FICHIERMETEO);
-
-    delete(FICHIERLOCK);
-
-    // actually exit
-    exit(state);
 
 }
 
