@@ -94,7 +94,8 @@ void cleanup(int state) {
 
     if (state == EXIT_SUCCESS) {
         listen = checkyesno("Really quit");
-    } else if (state == EXIT_FAILURE) {
+    } else if (state == EXIT_FAILURE 
+            || state == SIGINT) {
         listen = false;
     }
 
