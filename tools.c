@@ -92,10 +92,9 @@ int delete(const char * pathname) {
 
 void cleanup(int state) {
 
-    if (state == EXIT_SUCCESS) {
+    if (state == EXIT_SUCCESS || state == SIGINT) {
         listen = checkyesno("Really quit");
-    } else if (state == EXIT_FAILURE 
-            || state == SIGINT) {
+    } else if (state == EXIT_FAILURE) {
         listen = false;
     }
 
