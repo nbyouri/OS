@@ -1,16 +1,20 @@
 CC=		@CC@ -std=c99
 
-SERVER_SRCS=	server.c tools.c meteo.c
+SERVER_SRCS=	server.c tools.c
 SERVER_OUT=	server
+METEO_SRCS=	meteo.c
+METEO_OUT=	meteo
 CLIENT_SRCS=	pilot.c tools.c
 CLIENT_OUT=	pilot
-OBJECTS=	${SERVER_OUT} ${CLIENT_OUT}
+OBJECTS=	${SERVER_OUT} ${CLIENT_OUT} ${METEO}
 
 all:
 	> pilot
 	@${CC} ${CLIENT_SRCS} -o ${CLIENT_OUT}
 	> server
 	@${CC} ${SERVER_SRCS} -o ${SERVER_OUT}
+	> meteo
+	@${CC} ${METEO_SRCS} -o ${METEO_OUT}
 
 clean: delete_objs
 
