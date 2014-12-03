@@ -150,13 +150,15 @@ void operations(void) {
     }
 }
 
+void interceptKill(int status) {
+    fatal("Intercepter Kill");
+}
+
 int main(void) {
     // setup signal, so if programs gets 
     // interrupted, files can still be 
     // cleaned up and FIFOs removed.
     signal(SIGINT, &cleanup);
-
-    genAtis();
 
     createFifos();
 
