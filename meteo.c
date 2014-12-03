@@ -4,6 +4,15 @@
 
 static int fichierTexte = -1;
 static int fichierLock = -1;
+char *ATIS[] = {
+    
+    "1ONE EBLG 1803 00000KT 0600 FG OVC008 BKN040 PROB40 2024 0300 DZ FG OVC002 BKN040",
+    "2TOW EBBR 0615 20015KT 8000 RA SCT010 OVC015 TEMPO 0608 5000 RA BKN005 BECMG 0810 9999 NSW BKN025",
+    "3TRHE METAR VHHH 231830Z 06008KT 7000 FEW010SCT022 20/17 Q1017 NOSIG 5000 RA BKN005",
+    "4FRUO 20015KT 8000 RA SCT010 OVC015 2024 0300 DZ FG 0810 9999 NSW BKN025",
+    "5VEFI KT 7000 FEW010SCT02 EMPO 0608 5000 RA BKN005 EMPO 0608 5000 RA BKN005"
+    
+};
 
 void genLock(void) {
     if ((fichierLock = open(FICHIERLOCK, O_CREAT | O_WRONLY | O_SYNC | O_APPEND, S_IRUSR | S_IWUSR | S_IRGRP)) == FAIL) {
@@ -26,16 +35,10 @@ void deleteLock(void) {
 
 int genAtis(void){
     
-    int msg = 0;
+    while (1) {
+        
     
-    char *ATIS[] = {
-        
-            "EBLG 1803 00000KT 0600 FG OVC008 BKN040 PROB40 2024 0300 DZ FG OVC002 BKN040",
-            "EBBR 0615 20015KT 8000 RA SCT010 OVC015 TEMPO 0608 5000 RA BKN005 BECMG 0810 9999 NSW BKN025",
-            "METAR VHHH 231830Z 06008KT 7000 FEW010SCT022 20/17 Q1017 NOSIG 5000 RA BKN005",
-            "20015KT 8000 RA SCT010 OVC015 2024 0300 DZ FG 0810 9999 NSW BKN025"
-        
-    };
+    int msg = 0;
     
     unsigned int nbATIS = sizeof(ATIS) / sizeof(ATIS[0]);
 
@@ -44,6 +47,8 @@ int genAtis(void){
     } else {
         return EXIT_FAILURE;
     }
+        
+        printf("%s\n", ATIS[msg]);
     
     genLock();
     
@@ -54,6 +59,10 @@ int genAtis(void){
     close(fichierTexte);
 
     deleteLock();
+        
+    sleep(3);
+    
+    }
     
     return EXIT_SUCCESS;
 }
