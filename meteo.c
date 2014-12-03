@@ -37,30 +37,31 @@ int genAtis(void){
     
     while (1) {
         
+        int msg = 0;
     
-    int msg = 0;
-    
-    unsigned int nbATIS = sizeof(ATIS) / sizeof(ATIS[0]);
+        unsigned int nbATIS = sizeof(ATIS) / sizeof(ATIS[0]);
 
-    if (nbATIS > 0) {
-        msg = rand() % nbATIS;
-    } else {
-        return EXIT_FAILURE;
-    }
+        if (nbATIS > 0) {
+            msg = rand() % nbATIS;
+        } else {
+            return EXIT_FAILURE;
+        }
         
         printf("%s\n", ATIS[msg]);
     
-    genLock();
+        genLock();
     
-    openMeteo();
+        openMeteo();
     
-    write(fichierTexte, ATIS[msg], strlen(ATIS[msg]));
+        if(write(fichierTexte, ATIS[msg], strlen(ATIS[msg])) < 0) {
+            exit(EXIT_FAILURE);
+        }
 
-    close(fichierTexte);
+        close(fichierTexte);
 
-    deleteLock();
+        deleteLock();
         
-    sleep(3);
+        sleep(3);
     
     }
     
