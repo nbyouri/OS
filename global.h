@@ -42,7 +42,7 @@ void createFifos(void);
 void openFifos(void);
 void operations(void);
 bool checkyesno(const char *);
-int delete(const char *);
+void delete(const char *);
 void cleanup(int);
 void * xmalloc(size_t);
 void * xrealloc(void *, size_t, size_t);
