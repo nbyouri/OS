@@ -1,5 +1,7 @@
 #include "global.h"
 
+#define WAIT_TIME 3
+
 //Fichier C qui va mettre à jour le fichier texte meteo
 
 static int fichierTexte = -1;
@@ -35,7 +37,7 @@ void deleteLock(void) {
 
 int genAtis(void){
     
-    while (1) {
+    while (true) {
         
         int msg = 0;
     
@@ -61,7 +63,7 @@ int genAtis(void){
 
         deleteLock();
         
-        sleep(3);
+        sleep(WAIT_TIME);
     
     }
     
