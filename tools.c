@@ -80,13 +80,15 @@ bool checkyesno(const char *msg) {
     return listen;
 }
 
-int delete(const char * pathname) {
+void delete(const char * pathname) {
     struct stat         info;
 
     if (stat(pathname, &info) == FAIL) {
-        return fatal("File %s doesn't exist!\n", pathname);
+        fatal("File %s doesn't exist!\n", pathname);
     } else {
-        return unlink(pathname);
+        if (unlink(pathname) == -1) {
+            fatal("Failed to delete %s !\n", pathname);
+        }
     }
 }
 
