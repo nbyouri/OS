@@ -22,6 +22,7 @@
 #define NOR "\033[00;0m"
 #define FICHIERLOCK "lock"
 #define FICHIERMETEO "meteo.txt"
+#define WAIT_TIME 3
 
 #ifdef __linux__
 #define SIZE_T_MAX (~((size_t) 0))
