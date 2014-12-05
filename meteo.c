@@ -4,6 +4,7 @@
 
 static int fichierTexte = -1;
 static int fichierLock = -1;
+
 char *ATIS[] = {
 
     "1ONE EBLG 1803 00000KT 0600 FG OVC008 BKN040 PROB40 2024 0300 DZ FG OVC002 BKN040",
@@ -16,21 +17,28 @@ char *ATIS[] = {
 
 void genLock(void) {
     if ((fichierLock = open(FICHIERLOCK, O_CREAT | O_WRONLY | O_SYNC | O_APPEND, S_IRUSR | S_IWUSR | S_IRGRP)) == FAIL) {
-        printf("Unable to create the lock file");
+        printf("Unable to create the lock file\n");
         exit(EXIT_FAILURE);
     }
 }
 
 void openMeteo(void) {
     if ((fichierTexte = open(FICHIERMETEO, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR | S_IRGRP)) == FAIL) {
-        printf("Unable to open/create the meteo file");
+        printf("Unable to open/create the meteo file\n");
         exit(EXIT_FAILURE);
     }
 }
 
 void deleteLock(void) {
-    close(fichierLock);
-    unlink(FICHIERLOCK);
+    if (close(fichierLock) == FAIL) {
+        printf("Unable to close the lock file\n");
+        exit(EXIT_FAILURE);
+    } else {
+        if (unlink(FICHIERLOCK) == FAIL) {
+            printf("Unable to delete the lock file\n");
+            exit(EXIT_FAILURE);
+        }
+    }
 }
 
 int genAtis(void){
@@ -54,10 +62,13 @@ int genAtis(void){
         openMeteo();
 
         if(write(fichierTexte, ATIS[msg], strlen(ATIS[msg])) < 0) {
-            exit(EXIT_FAILURE);
+            return EXIT_FAILURE;
         }
 
-        close(fichierTexte);
+        if (close(fichierTexte) == FAIL) {
+            printf("Failed to close %s\n", FICHIERMETEO);
+            return EXIT_FAILURE;
+        }
 
         deleteLock();
 
@@ -80,4 +91,4 @@ int main(void) {
  * # Gen a new atis on the meteo.txt
  * # Close the meteo.txt and remove lock file
  *
-*/
+ */
