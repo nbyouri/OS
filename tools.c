@@ -119,9 +119,11 @@ void cleanup(int state) {
 
         delete(FIFO_FILE_OUT);
 
-        delete(FICHIERMETEO);
+        //Server must not modify these files
+        
+        //delete(FICHIERMETEO);
 
-        delete(FICHIERLOCK);
+        //delete(FICHIERLOCK);
 
         cleanPtr(nb, requests);
     }
