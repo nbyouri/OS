@@ -9,31 +9,31 @@ int nb = 0;
 char **requests = NULL;
 
 int checkLockFile() {
-    
+
     int fichierLock = 0;
     int locked = 0;
     int cpt = 0;
-    
+
     while (locked) {
-        
+
         if ((fichierLock = open(FICHIERLOCK, O_RDONLY)) == SUCCESS) {
-            
+
             printf("lll");
             close(fichierLock);
             cpt++;
-            
+
             if(cpt == MAX_TRY) {
-                
+
                 fatal("Lock is present for too long, must exit...\n");
-                
+
             }
         } else {
-            
+
             locked = -1;
-        
+
         }
     }
-    
+
     return SUCCESS;
 }
 
@@ -42,35 +42,35 @@ int atis(char * atisMsg) {
     int tailleMessage = 0;
 
     char dataAtis [MSG_SIZE];
-    
+
     checkLockFile();
     fichierMeteo = open(FICHIERMETEO, O_RDONLY);
     //Si ouvrture fail, fail
     if (fichierMeteo == FAIL) {
-        
+
         fatal("Impossible d'ouvrir le fichier meteo");
-        
+
     }
 
     /*
     //Si lock existe, on arrête
     if ((fichierLock = open(FICHIERLOCK, O_RDONLY)) == SUCCESS) {
-        
-        close(fichierLock);
-        fatal("Lock is present, cannot reach meteo file !!\n");
-        
+
+    close(fichierLock);
+    fatal("Lock is present, cannot reach meteo file !!\n");
+
     } else {
-        //Sinon ouverture meteo
-        fichierMeteo = open(FICHIERMETEO, O_RDONLY);
-        
-        //Si ouvrture fail, fail
-        if (fichierMeteo == FAIL) {
+    //Sinon ouverture meteo
+    fichierMeteo = open(FICHIERMETEO, O_RDONLY);
 
-            fatal("Impossible d'ouvrir le fichier meteo");
+    //Si ouvrture fail, fail
+    if (fichierMeteo == FAIL) {
 
-        }
+    fatal("Impossible d'ouvrir le fichier meteo");
+
     }
-     */
+    }
+    */
     //Ouverture meteo réussie, on  essaie de lire le message
     tailleMessage = (int)read(fichierMeteo, dataAtis, MSG_SIZE);
 
@@ -79,7 +79,7 @@ int atis(char * atisMsg) {
         fatal("Impossible de lire le fichier meteo.txt");
 
     }
-    
+
     //On envoie le message
     memcpy(atisMsg, dataAtis, MSG_SIZE);
 

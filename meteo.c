@@ -61,7 +61,7 @@ int genAtis(void){
 
         openMeteo();
 
-        if(write(fichierTexte, ATIS[msg], strlen(ATIS[msg])) < 0) {
+        if(write(fichierTexte, ATIS[msg], strlen(ATIS[msg])) == FAIL) {
             return EXIT_FAILURE;
         }
 
