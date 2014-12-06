@@ -145,6 +145,7 @@ bool checkyesno(const char *msg) {
  * we can't delete it.
  *
  * Author: Youri Mouton
+ *         Samuel Monroe
  */
 void delete(const char * pathname) {
     struct stat         info;
