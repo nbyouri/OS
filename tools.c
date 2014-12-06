@@ -1,7 +1,6 @@
 /*
  *
- * Utility functions mostly taken from OpenBSD.
- * Author: Youri Mouton.
+ * Utilities.
  *
  */
 #include "global.h"
