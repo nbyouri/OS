@@ -166,7 +166,7 @@ void delete(const char * pathname) {
  * cleanup will run checkyesno(msg) if the 
  * program returns normally or if the user 
  * interrups the program (ctrl+c, for example).
- * If the programs terminates abnormally, 
+ * If the program terminates abnormally, 
  * cleanup will be run directly.
  *
  * cleanup has a state parameter that can be 
@@ -226,9 +226,9 @@ void cleanup(int state) {
  * fatal is variadic, it can be used 
  * like any printf.
  *
- * fatal then cleanup and exits with a
- * failure state, so fatal should only
- * be used for error handling.
+ * fatal then calls cleanup and exits 
+ * with a failure state, so fatal should 
+ * only be used for error handling.
  * 
  * Author: Youri Mouton
  */
