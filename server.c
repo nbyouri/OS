@@ -118,7 +118,7 @@ void operations(void) {
     // poll in the input server
     // for incomind data and for 
     // client disconnects.
-    struct pollfd       fd[1] = {
+    struct pollfd       fd[] = {
         { input, POLLIN | POLLHUP, 0 }
     };
 
