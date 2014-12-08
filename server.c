@@ -51,9 +51,6 @@ int atis(char * atisMsg) {
         fatal("Impossible d'ouvrir le fichier meteo");
 
     }
-
-<<<<<<< HEAD
-=======
     /*
     //Si lock existe, on arrête
     if ((fichierLock = open(FICHIERLOCK, O_RDONLY)) == SUCCESS) {
@@ -74,7 +71,6 @@ int atis(char * atisMsg) {
     }
     */
     //Ouverture meteo réussie, on  essaie de lire le message
->>>>>>> e4d6ab066d7486e9bd0dff22f25d3474d2b7a6b7
     tailleMessage = (int)read(fichierMeteo, dataAtis, MSG_SIZE);
 
     if (tailleMessage == FAIL) {
@@ -82,12 +78,8 @@ int atis(char * atisMsg) {
         fatal("Impossible de lire le fichier meteo.txt");
 
     }
-<<<<<<< HEAD
-    
-=======
 
     //On envoie le message
->>>>>>> e4d6ab066d7486e9bd0dff22f25d3474d2b7a6b7
     memcpy(atisMsg, dataAtis, MSG_SIZE);
 
     return tailleMessage;
