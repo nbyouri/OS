@@ -2,8 +2,12 @@
 
 //Fichier C qui va mettre à jour le fichier texte meteo
 
+void delete(const char * pathname);
+bool exists(const char * pathname);
+
 static int fichierTexte = -1;
 static int fichierLock = -1;
+static bool cont = true;
 
 char *ATIS[] = {
 
@@ -15,7 +19,7 @@ char *ATIS[] = {
 
 };
 
-void genLock(void) {
+void openLock(void) {
     if ((fichierLock = open(FICHIERLOCK, O_CREAT | O_WRONLY | O_SYNC | O_APPEND, S_IRUSR | S_IWUSR | S_IRGRP)) == FAIL) {
         printf("Unable to create the lock file\n");
         exit(EXIT_FAILURE);
@@ -29,21 +33,38 @@ void openMeteo(void) {
     }
 }
 
-void deleteLock(void) {
+void closeLock(void) {
     if (close(fichierLock) == FAIL) {
         printf("Unable to close the lock file\n");
         exit(EXIT_FAILURE);
-    } else {
-        if (unlink(FICHIERLOCK) == FAIL) {
-            printf("Unable to delete the lock file\n");
-            exit(EXIT_FAILURE);
-        }
+    }
+}
+
+void closeMeteo(void) {
+    if (close(fichierTexte) == FAIL) {
+        printf("Unable to close the meteo file\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
+void pilotCleanup(int state) {
+    if (state == EXIT_SUCCESS || state == SIGINT) {
+        cont = checkyesno("Shutdown meteo");
+    } else if (state == EXIT_FAILURE) {
+        cont = false;
+    }
+
+    if (!cont) {
+
+        printf("files : %d, %d\n", fichierLock, fichierTexte);
+        printf("meteo : %s, lock : %s\n", exists(FICHIERMETEO) ? "yes" :"no", 
+                exists(FICHIERLOCK) ? "yes" : "no");
     }
 }
 
 int genAtis(void){
 
-    while (true) {
+    while (cont) {
 
         int msg = 0;
 
@@ -57,7 +78,7 @@ int genAtis(void){
 
         printf("ATIS Create : %s\n", ATIS[msg]);
 
-        genLock();
+        openLock();
 
         openMeteo();
 
@@ -65,12 +86,11 @@ int genAtis(void){
             return EXIT_FAILURE;
         }
 
-        if (close(fichierTexte) == FAIL) {
-            printf("Failed to close %s\n", FICHIERMETEO);
-            return EXIT_FAILURE;
-        }
 
-        deleteLock();
+        closeMeteo();
+
+        closeLock();
+        delete(FICHIERLOCK);
 
         sleep(WAIT_TIME);
 
@@ -80,15 +100,7 @@ int genAtis(void){
 }
 
 int main(void) {
+    signal(SIGINT, &pilotCleanup);
+
     return genAtis();
 }
-
-/*
- * Init a meteo.txt file, filled
- *
- * Enter the loop
- * # Create Lock file
- * # Gen a new atis on the meteo.txt
- * # Close the meteo.txt and remove lock file
- *
- */

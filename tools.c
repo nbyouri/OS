@@ -118,6 +118,7 @@ void cleanPtr(int count, char ** array) {
  * Author: Youri Mouton
  */
 bool checkyesno(const char *msg) {
+    bool        ans;
     char        inp[BUFSIZ];
     char        res;
 
@@ -129,11 +130,20 @@ bool checkyesno(const char *msg) {
 
     } while (res != 'y' && res != 'n');
 
-    if (res == 'y') {
-        listen = false;
-    }
 
-    return listen;
+    return res == 'y' ? false : true;
+}
+
+/*
+ * returns true or false depending on the 
+ * existence of the file designated by
+ * pathname in the parameters.
+ *
+ * Author: Youri Mouton
+ */
+bool exists(const char * pathname) {
+    struct stat         info;
+    return !stat(pathname, &info);
 }
 
 /*
@@ -147,13 +157,12 @@ bool checkyesno(const char *msg) {
  *         Samuel Monroe
  */
 void delete(const char * pathname) {
-    struct stat         info;
 
-    if (stat(pathname, &info) == FAIL) {
-        fatal("File %s doesn't exist!\n", pathname);
+    if (!exists(pathname)) {
+        printf("File %s doesn't exist!\n", pathname);
     } else {
         if (unlink(pathname) == -1) {
-            fatal("Failed to delete %s !\n", pathname);
+            printf("Failed to delete %s !\n", pathname);
         }
     }
 }
