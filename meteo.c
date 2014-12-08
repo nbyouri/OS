@@ -23,6 +23,8 @@ void openLock(void) {
     if ((fichierLock = open(FICHIERLOCK, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR | S_IRGRP)) == FAIL) {
         printf("Unable to create the lock file\n");
         exit(EXIT_FAILURE);
+    } else {
+        printf("opened lock file...\n");
     }
 }
 
@@ -30,6 +32,8 @@ void openMeteo(void) {
     if ((fichierTexte = open(FICHIERMETEO, O_CREAT | O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP)) == FAIL) {
         printf("Unable to open/create the meteo file\n");
         exit(EXIT_FAILURE);
+    } else {
+        printf("opened the meteo file...\n");
     }
 }
 
@@ -39,6 +43,8 @@ void closeLock(void) {
             printf("Unable to close the lock file\n");
             exit(EXIT_FAILURE);
         }
+    } else {
+        printf("closed the lock file...\n");
     }
 }
 
@@ -48,6 +54,8 @@ void closeMeteo(void) {
             printf("Unable to close the meteo file : %s\n", strerror(errno));
             exit(EXIT_FAILURE);
         }
+    } else {
+        printf("closed the meteo file...\n");
     }
 }
 
@@ -91,13 +99,14 @@ int genAtis(void){
         }
 
 
-        closeMeteo();
+        // virtual write wait time, to make the 
+        // meteo transmission latency more realistic :)
+        sleep(WRITE_TIME);
 
         closeLock();
         delete(FICHIERLOCK);
 
         sleep(WAIT_TIME);
-
     }
 
     return EXIT_SUCCESS;

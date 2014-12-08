@@ -23,7 +23,8 @@
 #define NOR "\033[00;0m"
 #define FICHIERLOCK "lock"
 #define FICHIERMETEO "meteo.txt"
-#define WAIT_TIME 3
+#define WAIT_TIME 2
+#define WRITE_TIME 1
 
 #ifdef __linux__
 #define SIZE_T_MAX (~((size_t) 0))
@@ -44,6 +45,7 @@ void createFifos(void);
 void openFifos(void);
 void operations(void);
 bool checkyesno(const char *);
+bool exists(const char *);
 void delete(const char *);
 void cleanup(int);
 void * xmalloc(size_t);

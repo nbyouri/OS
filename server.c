@@ -8,41 +8,12 @@ bool listen = true;
 int nb = 0;
 char **requests = NULL;
 
-//  !!! Not properly working yet
-int checkLockFile() {
-
-    int fichierLock = 0;
-    int locked = 0;
-    int cpt = 0;
-
-    while (locked) {
-
-        if ((fichierLock = open(FICHIERLOCK, O_RDONLY)) == SUCCESS) {
-
-            printf("lll");
-            close(fichierLock);
-            cpt++;
-
-            if(cpt == MAX_TRY) {
-
-                fatal("Lock is present for too long, must exit...\n");
-
-            }
-        } else {
-
-            locked = -1;
-
-        }
-    }
-
-    return SUCCESS;
-}
-
 int atis(char * atisMsg) {
     int fichierMeteo = 0;
     int atisSize = 0;
     char buf[MSG_SIZE];
     char noMeteoMsg[] = "the meteo server is unreachable...";
+    char busyMeteoMsg[] = "the meteo server is busy...";
 
     fichierMeteo = open(FICHIERMETEO, O_RDONLY);
 
@@ -51,6 +22,12 @@ int atis(char * atisMsg) {
         printf("Impossible d'ouvrir le fichier meteo\n");
         memcpy(atisMsg, noMeteoMsg, sizeof(noMeteoMsg));
         atisSize = sizeof(noMeteoMsg);
+
+    } else if (exists(FICHIERLOCK)) {
+
+        printf("The meteo server is busy\n");
+        memcpy(atisMsg, busyMeteoMsg, sizeof(busyMeteoMsg));
+        atisSize = sizeof(busyMeteoMsg);
 
     } else {
 
