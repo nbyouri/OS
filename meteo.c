@@ -27,7 +27,7 @@ void openLock(void) {
 }
 
 void openMeteo(void) {
-    if ((fichierTexte = open(FICHIERMETEO, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR | S_IRGRP)) == FAIL) {
+    if ((fichierTexte = open(FICHIERMETEO, O_CREAT | O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP)) == FAIL) {
         printf("Unable to open/create the meteo file\n");
         exit(EXIT_FAILURE);
     }

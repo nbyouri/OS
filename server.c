@@ -40,8 +40,8 @@ int checkLockFile() {
 
 int atis(char * atisMsg) {
     int fichierMeteo = 0;
-    int tailleMessage = 0;
-    char dataAtis [MSG_SIZE];
+    int atisSize = 0;
+    char buf[MSG_SIZE];
 
     checkLockFile();
     fichierMeteo = open(FICHIERMETEO, O_RDONLY);
@@ -69,18 +69,19 @@ int atis(char * atisMsg) {
     }
     */
     //Ouverture meteo réussie, on  essaie de lire le message
-    tailleMessage = (int)read(fichierMeteo, dataAtis, MSG_SIZE);
+    atisSize = (int)read(fichierMeteo, buf, sizeof(buf));
 
-    if (tailleMessage == FAIL) {
+    if (atisSize == FAIL) {
 
         fatal("Impossible de lire le fichier meteo.txt");
 
+    } else {
+
+        strlcpy(atisMsg, buf, atisSize + 1);
+
     }
 
-    //On envoie le message
-    memcpy(atisMsg, dataAtis, MSG_SIZE);
-
-    return tailleMessage;
+    return atisSize;
 }
 
 void createFifos(void) {
@@ -173,7 +174,8 @@ void operations(void) {
                     printf("< Got Request nr. %d\n", nb);
 
                     size_t tailleMsg = (size_t)atis(atisMsg);
-                    printf("> Sending ATIS \"%s\"...\n", atisMsg);
+
+                    printf("> Sending ATIS \"%s\" to %d\n", atisMsg, nb);
 
                     if (write(output, atisMsg, tailleMsg) == FAIL) {
 
