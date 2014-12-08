@@ -49,7 +49,6 @@ int atis(char * atisMsg) {
     if (fichierMeteo == FAIL) {
 
         fatal("Impossible d'ouvrir le fichier meteo");
-
     }
     /*
     //Si lock existe, on arrête
@@ -67,7 +66,6 @@ int atis(char * atisMsg) {
 
     fatal("Impossible d'ouvrir le fichier meteo");
 
-    }
     }
     */
     //Ouverture meteo réussie, on  essaie de lire le message
