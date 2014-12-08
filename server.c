@@ -10,31 +10,31 @@ char **requests = NULL;
 
 //  !!! Not properly working yet
 int checkLockFile() {
-    
+
     int fichierLock = 0;
     int locked = 0;
     int cpt = 0;
-    
+
     while (locked) {
-        
+
         if ((fichierLock = open(FICHIERLOCK, O_RDONLY)) == SUCCESS) {
-            
+
             printf("lll");
             close(fichierLock);
             cpt++;
-            
+
             if(cpt == MAX_TRY) {
-                
+
                 fatal("Lock is present for too long, must exit...\n");
-                
+
             }
         } else {
-            
+
             locked = -1;
-        
+
         }
     }
-    
+
     return SUCCESS;
 }
 
@@ -42,16 +42,39 @@ int atis(char * atisMsg) {
     int fichierMeteo = 0;
     int tailleMessage = 0;
     char dataAtis [MSG_SIZE];
-    
+
     checkLockFile();
     fichierMeteo = open(FICHIERMETEO, O_RDONLY);
 
     if (fichierMeteo == FAIL) {
-        
+
         fatal("Impossible d'ouvrir le fichier meteo");
-        
+
     }
 
+<<<<<<< HEAD
+=======
+    /*
+    //Si lock existe, on arrête
+    if ((fichierLock = open(FICHIERLOCK, O_RDONLY)) == SUCCESS) {
+
+    close(fichierLock);
+    fatal("Lock is present, cannot reach meteo file !!\n");
+
+    } else {
+    //Sinon ouverture meteo
+    fichierMeteo = open(FICHIERMETEO, O_RDONLY);
+
+    //Si ouvrture fail, fail
+    if (fichierMeteo == FAIL) {
+
+    fatal("Impossible d'ouvrir le fichier meteo");
+
+    }
+    }
+    */
+    //Ouverture meteo réussie, on  essaie de lire le message
+>>>>>>> e4d6ab066d7486e9bd0dff22f25d3474d2b7a6b7
     tailleMessage = (int)read(fichierMeteo, dataAtis, MSG_SIZE);
 
     if (tailleMessage == FAIL) {
@@ -59,7 +82,12 @@ int atis(char * atisMsg) {
         fatal("Impossible de lire le fichier meteo.txt");
 
     }
+<<<<<<< HEAD
     
+=======
+
+    //On envoie le message
+>>>>>>> e4d6ab066d7486e9bd0dff22f25d3474d2b7a6b7
     memcpy(atisMsg, dataAtis, MSG_SIZE);
 
     return tailleMessage;
@@ -97,7 +125,7 @@ void operations(void) {
     // poll in the input server
     // for incomind data and for 
     // client disconnects.
-    struct pollfd       fd[1] = {
+    struct pollfd       fd[] = {
         { input, POLLIN | POLLHUP, 0 }
     };
 

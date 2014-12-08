@@ -1,7 +1,6 @@
 /*
  *
- * Utility functions mostly taken from OpenBSD.
- * Author: Youri Mouton.
+ * Utilities.
  *
  */
 #include "global.h"
@@ -12,6 +11,18 @@ int output;
 int nb;
 char **requests;
 
+/*
+ * xmalloc is a wrapper around malloc that checks
+ * if the size parameter is greater than zero, and 
+ * if the returned pointer isn't null so the 
+ * programmer doesn't have to do it in other files.
+ *
+ * Source: OpenSSH 6.6.1, adapted to use a modified 
+ * fatal() function as we're not logging to syslog 
+ * like OpenSSH does.
+ *
+ * Author: Tatu Ylonen
+ */
 void * xmalloc(size_t size) {
     void *ptr;
 
@@ -28,6 +39,24 @@ void * xmalloc(size_t size) {
     return ptr;
 }
 
+/*
+ * xrealloc is a wrapper around xmalloc that checks
+ * if the number parameter is greater than zero and
+ * if the total size is smaller than SIZE_T_MAX per
+ * number.
+ *
+ * It also malloc's a new pointer if xreallocs pointer
+ * parameter is null and then actually reallocs a 
+ * pointer. It checks if the returning pointer is null
+ * so the programmer doesn't have to do it in other
+ * files.
+ *
+ * Source: OpenSSH 6.6.1, adapted to use a modified 
+ * fatal() function as we're not logging to syslog 
+ * like OpenSSH does.
+ *
+ * Author: Tatu Ylonen
+ */
 void * xrealloc(void *ptr, size_t nmemb, size_t size) {
     void *new_ptr;
     size_t new_size = nmemb * size;
@@ -46,6 +75,23 @@ void * xrealloc(void *ptr, size_t nmemb, size_t size) {
     return new_ptr;
 }
 
+/*
+ * cleaPtr frees a two dimensional array
+ * of characters (an array of strings) by
+ * looping through the char 2D array to 
+ * the count parameter, free the array
+ * content and set the content to NULL, 
+ * to avoid dangling pointer bugs.
+ *
+ * If a dangling pointer (a pointer pointing
+ * to nothing) is accessed after being freed, 
+ * you may overwrite random memory, but if a 
+ * NULL'ed pointer is accessed, a crash will 
+ * occur, with an appropriate error message 
+ * from the operating system.
+ *
+ * Author: Youri Mouton.
+ */
 void cleanPtr(int count, char ** array) {
 
     for (int i = 0; i < count; i++) {
@@ -61,6 +107,16 @@ void cleanPtr(int count, char ** array) {
     }
 }
 
+/*
+ * checkyesno asks for user input to decide 
+ * whether to keep the program running or not 
+ * and send a bool value accordingly. It will 
+ * loop until the user presses either 'y' or 
+ * 'n'. 'y' being yes, 'n' being no. The msg 
+ * parameter will be the question shown to the user.
+ *
+ * Author: Youri Mouton
+ */
 bool checkyesno(const char *msg) {
     char        inp[BUFSIZ];
     char        res;
@@ -80,6 +136,16 @@ bool checkyesno(const char *msg) {
     return listen;
 }
 
+/*
+ * delete is a procedure that will try to 
+ * remove file name after the pathname 
+ * parameter and throw an appropriate error
+ * message if the file doesn't exist or if 
+ * we can't delete it.
+ *
+ * Author: Youri Mouton
+ *         Samuel Monroe
+ */
 void delete(const char * pathname) {
     struct stat         info;
 
@@ -92,6 +158,31 @@ void delete(const char * pathname) {
     }
 }
 
+/*
+ * cleanup is a procedure that makes sure to 
+ * clean the file descriptors and to delete 
+ * the named pipes and the pointers used. 
+ *
+ * cleanup will run checkyesno(msg) if the 
+ * program returns normally or if the user 
+ * interrups the program (ctrl+c, for example).
+ * If the program terminates abnormally, 
+ * cleanup will be run directly.
+ *
+ * cleanup has a state parameter that can be 
+ * set to decide whether we're calling cleanup
+ * when the program is failing to make an 
+ * operation or if we're exiting normally.
+ *
+ * cleanup is called from the server's main
+ * on SIGINT, so when the user interrupts 
+ * the process, it is fine to call it from 
+ * signal() or sigset() from other places, 
+ * but be careful to not cleanup files needed
+ * by the other processes.
+ *
+ * Author: Youri Mouton
+ */
 void cleanup(int state) {
 
     if (state == EXIT_SUCCESS || state == SIGINT) {
@@ -124,6 +215,23 @@ void cleanup(int state) {
 
 }
 
+/*
+ * fatal is an error handling function,
+ * it wraps a printf function that will  
+ * display the error message set by the 
+ * programmer as parameter, prepended
+ * by a 'FATAL:' message printed in red.
+ *
+ * The error message set when calling
+ * fatal is variadic, it can be used 
+ * like any printf.
+ *
+ * fatal then calls cleanup and exits 
+ * with a failure state, so fatal should 
+ * only be used for error handling.
+ * 
+ * Author: Youri Mouton
+ */
 int fatal(const char * format, ...) {    
 
     va_list     args;
