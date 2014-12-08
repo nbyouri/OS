@@ -42,43 +42,29 @@ int atis(char * atisMsg) {
     int fichierMeteo = 0;
     int atisSize = 0;
     char buf[MSG_SIZE];
+    char noMeteoMsg[] = "the meteo server is unreachable...";
 
-    checkLockFile();
     fichierMeteo = open(FICHIERMETEO, O_RDONLY);
 
     if (fichierMeteo == FAIL) {
 
-        fatal("Impossible d'ouvrir le fichier meteo");
-    }
-    /*
-    //Si lock existe, on arrête
-    if ((fichierLock = open(FICHIERLOCK, O_RDONLY)) == SUCCESS) {
-
-    close(fichierLock);
-    fatal("Lock is present, cannot reach meteo file !!\n");
-
-    } else {
-    //Sinon ouverture meteo
-    fichierMeteo = open(FICHIERMETEO, O_RDONLY);
-
-    //Si ouvrture fail, fail
-    if (fichierMeteo == FAIL) {
-
-    fatal("Impossible d'ouvrir le fichier meteo");
-
-    }
-    */
-    //Ouverture meteo réussie, on  essaie de lire le message
-    atisSize = (int)read(fichierMeteo, buf, sizeof(buf));
-
-    if (atisSize == FAIL) {
-
-        fatal("Impossible de lire le fichier meteo.txt");
+        printf("Impossible d'ouvrir le fichier meteo\n");
+        memcpy(atisMsg, noMeteoMsg, sizeof(noMeteoMsg));
+        atisSize = sizeof(noMeteoMsg);
 
     } else {
 
-        strlcpy(atisMsg, buf, atisSize + 1);
+        atisSize = (int)read(fichierMeteo, buf, sizeof(buf));
 
+        if (atisSize == FAIL) {
+
+            fatal("Impossible de lire le fichier meteo.txt");
+
+        } else {
+
+            memcpy(atisMsg, buf, atisSize);
+
+        }
     }
 
     return atisSize;

@@ -9,7 +9,7 @@ static int fichierTexte = -1;
 static int fichierLock = -1;
 static bool cont = true;
 
-char *ATIS[] = {
+char ATIS[][MSG_SIZE] = {
 
     "1ONE EBLG 1803 00000KT 0600 FG OVC008 BKN040 PROB40 2024 0300 DZ FG OVC002 BKN040",
     "2TOW EBBR 0615 20015KT 8000 RA SCT010 OVC015 TEMPO 0608 5000 RA BKN005 BECMG 0810 9999 NSW BKN025",
@@ -86,7 +86,7 @@ int genAtis(void){
 
         openMeteo();
 
-        if (write(fichierTexte, ATIS[msg], strlen(ATIS[msg])) == FAIL) {
+        if (write(fichierTexte, ATIS[msg], sizeof(ATIS[msg])) == FAIL) {
             return EXIT_FAILURE;
         }
 
