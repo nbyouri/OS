@@ -8,6 +8,7 @@ bool listen = true;
 int nb = 0;
 char **requests = NULL;
 
+//  !!! Not properly working yet
 int checkLockFile() {
 
     int fichierLock = 0;
@@ -40,18 +41,16 @@ int checkLockFile() {
 int atis(char * atisMsg) {
     int fichierMeteo = 0;
     int tailleMessage = 0;
-
     char dataAtis [MSG_SIZE];
 
     checkLockFile();
     fichierMeteo = open(FICHIERMETEO, O_RDONLY);
-    //Si ouvrture fail, fail
+
     if (fichierMeteo == FAIL) {
 
         fatal("Impossible d'ouvrir le fichier meteo");
 
     }
-
     /*
     //Si lock existe, on arrête
     if ((fichierLock = open(FICHIERLOCK, O_RDONLY)) == SUCCESS) {
