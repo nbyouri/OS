@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <stdarg.h>
 #include <poll.h>
+#include <errno.h>
 #include <sys/stat.h>
 #include <sys/param.h>
 
