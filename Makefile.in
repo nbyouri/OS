@@ -2,7 +2,7 @@ CC=		@CC@ -std=c99
 
 SERVER_SRCS=	server.c tools.c
 SERVER_OUT=	server
-METEO_SRCS=	meteo.c
+METEO_SRCS=	meteo.c tools.c
 METEO_OUT=	meteo
 CLIENT_SRCS=	pilot.c tools.c
 CLIENT_OUT=	pilot
