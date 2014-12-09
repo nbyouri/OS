@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.12.8)  8 DEC 2014 17:59
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.12.8)  9 DEC 2014 11:23
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -312,42 +312,78 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 {/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [1
 
 ]
-./report.tex:18: Undefined control sequence.
-\thesection ->\Arabic 
-                      {section}
-l.18 	\section{Introduction}
-                            
+Underfull \hbox (badness 10000) in paragraph at lines 20--23
+
+ []
+
+
+Overfull \hbox (11.07971pt too wide) in paragraph at lines 24--26
+\T1/cmr/m/n/10 thé-ma-tique aé-ro-nau-tique, échan-geant des in-for-ma-tions en
+tre eux via di-vers moyens,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 24--26
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 39--42
+
+ []
+
+
+./report.tex:44: Package inputenc Error: Unicode char \u8:Â  not set up for use
+ with LaTeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.44 			\item Un ACK KO qui signifie \ogÂ 
+                                          informations mal comprises\fg et n...
+
 ? 
-./report.tex:18: Emergency stop.
-\thesection ->\Arabic 
-                      {section}
-l.18 	\section{Introduction}
-                            
-End of file on the terminal!
+[2] [3
 
- 
+] [4
+
+] [5
+
+] (./report.toc
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 3.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 3.
+)
+\tf@toc=\write3
+\openout3 = `report.toc'.
+
+ [6
+
+] (./report.aux) ) 
 Here is how much of TeX's memory you used:
- 1708 strings out of 493117
- 21122 string characters out of 6135433
- 81413 words of memory out of 5000000
- 5204 multiletter control sequences out of 15000+600000
- 11670 words of font info for 30 fonts, out of 8000000 for 9000
+ 1730 strings out of 493117
+ 21353 string characters out of 6135433
+ 85413 words of memory out of 5000000
+ 5216 multiletter control sequences out of 15000+600000
+ 15537 words of font info for 35 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 28i,6n,30p,160b,439s stack positions out of 5000i,500n,10000p,200000b,80000s
-./report.tex:18:  ==> Fatal error occurred, no output PDF file produced!
-mf-dist/fonts/type1/public/cm-super
-/sfbx1200.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/cm-super/s
-fbx1440.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfb
-x2074.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfbx2
-488.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfcc120
-0.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfrm1000.
-pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pf
-b></usr/local/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb>
-
-Output written on report.pdf (7 pages, 110271 bytes).
+ 28i,6n,30p,286b,439s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/cm-super/
+cm-super-t1.enc}</usr/local/texlive/2014/texmf-dist/fonts/type1/public/cm-super
+/sfbx1000.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/cm-super/s
+fbx1200.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfb
+x1440.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfbx2
+074.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfbx248
+8.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfcc1200.
+pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pf
+b></usr/local/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
+</usr/local/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb>
+Output written on report.pdf (7 pages, 130493 bytes).
 PDF statistics:
- 61 PDF objects out of 1000 (max. 8388607)
- 43 compressed objects within 1 object stream
+ 65 PDF objects out of 1000 (max. 8388607)
+ 46 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

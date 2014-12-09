@@ -17,21 +17,35 @@
 
 	\section{Introduction}
 
-		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-		consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-		cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		Le projet qui fait l'objet de ce rapport est un travail de programmation
+		en C système sous UNIX, dans le but d'exploiter de manière pratique les connaissances théoriques acquises au cours de Mme. Masson.
+		\newline
+
+		Ce travail consiste en l'écriture de trois programmes distincts autour d'une thématique aéronautique, échangeant des informations entre eux via divers moyens, ceci tout en gérant les éventuels conflits et erreurs liés à ces échanges.\newline
+		Ces trois programmes sont :\newline
+		\begin{description}
+			\item[Tour de controle : ]
+			Fait office de \textbf{serveur}, joue le rôle majeur en s'occupant de recevoir les demandes des pilotes, en allant chercher les informations météo fournies par le centre météo, et en renvoyant celles-ci en tant que réponses aux demandes des pilotes.
+
+			\item[Pilote : ]
+			Fait office de \textbf{client}, envoie une demande d'information ATIS à la tour de contrôle, récupère cette information et replace une demande si cette information n'est pas intègre.
+
+			\item[Le centre météo : ]
+			Programme \textbf{tiers} dans l'application, celui-ci se charge de générer automatiquement des informations ATIS différentes tout au long de son fonctionnement.
+		\end{description}
 
 	\section{Rappel de l'énoncé}
 
-		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-		consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-		cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		Des pilotes qui souhaitent décoller d’un aéroport non contrôlé ont besoin, pour ce faire, de connaître les informations ATIS. Celles-ci sont accessibles via un serveur.
+		Chaque pilote va envoyer au serveur une demande ATIS. Le serveur va lors répondre à cette demande en allant chercher les informations nécessaires dans un fichier ATIS.
+		Le pilote va recevoir ces informations et il doit alors obligatoirement répondre au serveur en lui envoyant soit :\newline
+		\begin{itemize}
+			\item Un ACK OK qui signifie \og informations bien reçues \fg et provoque la fin de la communication
+			\item Un ACK KO qui signifie \og informations mal comprises \fg et nécessite de renvoyer les informations.
+		\end{itemize}
+
+		Le serveur doit pouvoir gérer un nombre indéfini de pilotes (restons réalistes).
+		Le fichier ATIS contenant les informations nécessaires aux pilotes doit être régulièrement mis à jour par le gestionnaire météo.
 
 \part{Analyse - Plan de l'application}
 \part{Détails des élements techniques spécifiques}
