@@ -115,6 +115,12 @@ void cleanPtr(int count, char ** array) {
  * 'n'. 'y' being yes, 'n' being no. The msg 
  * parameter will be the question shown to the user.
  *
+ * Example:
+ * question: really exit ? 
+ * - yes returns false
+ * - no returns true
+ * for the loop variable
+ *
  * Author: Youri Mouton
  */
 bool checkyesno(const char *msg) {
@@ -143,7 +149,7 @@ bool checkyesno(const char *msg) {
  */
 bool exists(const char * pathname) {
     struct stat         info;
-    return !stat(pathname, &info);
+    return (stat(pathname, &info) == 0);
 }
 
 /*

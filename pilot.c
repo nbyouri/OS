@@ -7,7 +7,9 @@ int main(void) {
     int out_server = -1;
 
     char request[MSG_SIZE];
+    char buf[MSG_SIZE];
     char response[MSG_SIZE];
+    size_t responseSize = 0;
 
     memcpy(request, PILOT_REQUEST, MSG_SIZE);
 
@@ -33,12 +35,14 @@ int main(void) {
 
             } else {
 
-                if (read(out_server, response, MSG_SIZE) == FAIL) {
+                responseSize = read(out_server, buf, sizeof(buf));
+                if (responseSize == FAIL) {
 
                     printf("Failed to read response from output fifo\n");
                     pilot_cleanup(server, out_server, FAIL);
 
                 } else {
+                    memcpy(response, buf, responseSize);
 
                     printf("Got response ! => %s\n", response);
 

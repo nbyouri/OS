@@ -9,7 +9,7 @@ static int fichierTexte = -1;
 static int fichierLock = -1;
 static bool cont = true;
 
-char *ATIS[] = {
+char ATIS[][MSG_SIZE] = {
 
     "1ONE EBLG 1803 00000KT 0600 FG OVC008 BKN040 PROB40 2024 0300 DZ FG OVC002 BKN040",
     "2TOW EBBR 0615 20015KT 8000 RA SCT010 OVC015 TEMPO 0608 5000 RA BKN005 BECMG 0810 9999 NSW BKN025",
@@ -20,30 +20,42 @@ char *ATIS[] = {
 };
 
 void openLock(void) {
-    if ((fichierLock = open(FICHIERLOCK, O_CREAT | O_WRONLY | O_SYNC | O_APPEND, S_IRUSR | S_IWUSR | S_IRGRP)) == FAIL) {
+    if ((fichierLock = open(FICHIERLOCK, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR | S_IRGRP)) == FAIL) {
         printf("Unable to create the lock file\n");
         exit(EXIT_FAILURE);
+    } else {
+        printf("opened lock file...\n");
     }
 }
 
 void openMeteo(void) {
-    if ((fichierTexte = open(FICHIERMETEO, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR | S_IRGRP)) == FAIL) {
+    if ((fichierTexte = open(FICHIERMETEO, O_CREAT | O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP)) == FAIL) {
         printf("Unable to open/create the meteo file\n");
         exit(EXIT_FAILURE);
+    } else {
+        printf("opened the meteo file...\n");
     }
 }
 
 void closeLock(void) {
-    if (close(fichierLock) == FAIL) {
-        printf("Unable to close the lock file\n");
-        exit(EXIT_FAILURE);
+    if (exists(FICHIERLOCK)) {
+        if (close(fichierLock) == FAIL) {
+            printf("Unable to close the lock file\n");
+            exit(EXIT_FAILURE);
+        }
+    } else {
+        printf("closed the lock file...\n");
     }
 }
 
 void closeMeteo(void) {
-    if (close(fichierTexte) == FAIL) {
-        printf("Unable to close the meteo file\n");
-        exit(EXIT_FAILURE);
+    if (exists(FICHIERMETEO)) {
+        if (close(fichierTexte) == FAIL) {
+            printf("Unable to close the meteo file : %s\n", strerror(errno));
+            exit(EXIT_FAILURE);
+        }
+    } else {
+        printf("closed the meteo file...\n");
     }
 }
 
@@ -55,10 +67,10 @@ void pilotCleanup(int state) {
     }
 
     if (!cont) {
-
-        printf("files : %d, %d\n", fichierLock, fichierTexte);
-        printf("meteo : %s, lock : %s\n", exists(FICHIERMETEO) ? "yes" :"no", 
-                exists(FICHIERLOCK) ? "yes" : "no");
+        delete(FICHIERMETEO);
+        if (exists(FICHIERLOCK)) {
+            delete(FICHIERLOCK);
+        }
     }
 }
 
@@ -82,18 +94,19 @@ int genAtis(void){
 
         openMeteo();
 
-        if(write(fichierTexte, ATIS[msg], strlen(ATIS[msg])) == FAIL) {
+        if (write(fichierTexte, ATIS[msg], sizeof(ATIS[msg])) == FAIL) {
             return EXIT_FAILURE;
         }
 
 
-        closeMeteo();
+        // virtual write wait time, to make the 
+        // meteo transmission latency more realistic :)
+        sleep(WRITE_TIME);
 
         closeLock();
         delete(FICHIERLOCK);
 
         sleep(WAIT_TIME);
-
     }
 
     return EXIT_SUCCESS;
