@@ -27,6 +27,8 @@
 #define WRITE_TIME 1
 #define UNREACHABLE "the meteo server is unreachable..."
 #define BUSY "the meteo server is busy..."
+#define ACK "ACK"
+#define NAK "NAK"
 
 #ifdef __linux__
 #define SIZE_T_MAX (~((size_t) 0))

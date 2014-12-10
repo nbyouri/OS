@@ -1,5 +1,7 @@
 #include "global.h"
 
+#define VALID_ATIS "ATIS"
+#define VALID_LGT 4
 void pilot_cleanup(int, int, int);
 
 int main(void) {
@@ -7,6 +9,7 @@ int main(void) {
     int out_server = -1;
 
     char request[MSG_SIZE];
+    char confirm[MSG_SIZE];
     char buf[MSG_SIZE];
     char response[MSG_SIZE];
     size_t responseSize = 0;
@@ -42,10 +45,20 @@ int main(void) {
                     pilot_cleanup(server, out_server, FAIL);
 
                 } else {
+                    //Response received from the server
                     memcpy(response, buf, responseSize);
-
-                    printf("Got response ! => %s\n", response);
-
+                    
+                    //Is the response valid?
+                    if (memcmp(response, VALID_ATIS, VALID_LGT) == 0) {
+                        
+                        printf("Got response ! => %s\n", response);
+                        
+                    } else {
+                        
+                        printf(RED"ERROR : %s\n"NOR, response);
+                        printf("Sending NAK to the serveur, asking for ATIS again... \n");
+                        
+                    }
                 }
             }
         }
