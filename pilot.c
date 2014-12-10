@@ -55,7 +55,6 @@ int main(void) {
 
 
 void pilot_cleanup(int in_serv, int out_serv, int status) {
-    // close the file descriptors
     if (in_serv != FAIL) {
         if (close(in_serv) == FAIL) {
             printf("Couldn't close input file descriptor %d\n", in_serv);

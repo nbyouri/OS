@@ -1,12 +1,10 @@
 #include "global.h"
 
-//Fichier C qui va mettre à jour le fichier texte meteo
-
 void delete(const char * pathname);
 bool exists(const char * pathname);
 
-static int fichierTexte = -1;
-static int fichierLock = -1;
+static int meteo = -1;
+static int lock = -1;
 static bool cont = true;
 
 char ATIS[][MSG_SIZE] = {
@@ -20,42 +18,36 @@ char ATIS[][MSG_SIZE] = {
 };
 
 void openLock(void) {
-    if ((fichierLock = open(FICHIERLOCK, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR | S_IRGRP)) == FAIL) {
+    if ((lock = open(FICHIERLOCK, O_CREAT | O_WRONLY, S_IRUSR |
+                    S_IWUSR | S_IRGRP)) == FAIL) {
         printf("Unable to create the lock file\n");
         exit(EXIT_FAILURE);
-    } else {
-        printf("opened lock file...\n");
     }
 }
 
 void openMeteo(void) {
-    if ((fichierTexte = open(FICHIERMETEO, O_CREAT | O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP)) == FAIL) {
+    if ((meteo = open(FICHIERMETEO, O_CREAT | O_WRONLY |
+                    O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP)) == FAIL) {
         printf("Unable to open/create the meteo file\n");
         exit(EXIT_FAILURE);
-    } else {
-        printf("opened the meteo file...\n");
     }
 }
 
 void closeLock(void) {
     if (exists(FICHIERLOCK)) {
-        if (close(fichierLock) == FAIL) {
+        if (close(lock) == FAIL) {
             printf("Unable to close the lock file\n");
             exit(EXIT_FAILURE);
         }
-    } else {
-        printf("closed the lock file...\n");
     }
 }
 
 void closeMeteo(void) {
     if (exists(FICHIERMETEO)) {
-        if (close(fichierTexte) == FAIL) {
+        if (close(meteo) == FAIL) {
             printf("Unable to close the meteo file : %s\n", strerror(errno));
             exit(EXIT_FAILURE);
         }
-    } else {
-        printf("closed the meteo file...\n");
     }
 }
 
@@ -80,10 +72,10 @@ int genAtis(void){
 
         int msg = 0;
 
-        unsigned int nbATIS = sizeof(ATIS) / sizeof(ATIS[0]);
+        unsigned int nATIS = sizeof(ATIS) / sizeof(ATIS[0]);
 
-        if (nbATIS > 0) {
-            msg = rand() % nbATIS;
+        if (nATIS > 0) {
+            msg = rand() % nATIS;
         } else {
             return EXIT_FAILURE;
         }
@@ -94,10 +86,9 @@ int genAtis(void){
 
         openMeteo();
 
-        if (write(fichierTexte, ATIS[msg], sizeof(ATIS[msg])) == FAIL) {
+        if (write(meteo, ATIS[msg], sizeof(ATIS[msg])) == FAIL) {
             return EXIT_FAILURE;
         }
-
 
         // virtual write wait time, to make the 
         // meteo transmission latency more realistic :)
