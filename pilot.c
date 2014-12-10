@@ -3,6 +3,7 @@
 #define VALID_ATIS "ATIS"
 #define VALID_LGT 4
 #define MAX_TRY 10
+#define WAIT_RETRY 1
 void pilot_cleanup(int, int, int);
 
 int main(void) {
@@ -67,7 +68,7 @@ int main(void) {
                             
                             if (total_nak == MAX_TRY) {
                                 
-                                printf(RED"ERROR : ");
+                                printf(RED"ERROR : "NOR);
                                 printf("Server seems unable to treat requests anymore, quitting... \n");
                                 pilot_cleanup(server, out_server, EXIT_FAILURE);
                                 
@@ -81,7 +82,7 @@ int main(void) {
                                 }
                             
                                 total_nak++;
-                                sleep(2);
+                                sleep(WAIT_RETRY);
                             }
                         }
                     }
