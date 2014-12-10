@@ -41,7 +41,7 @@ int main(void) {
                 pilot_cleanup(server, out_server, FAIL);
 
             } else {
-                
+
                 while (not_received) {
                     responseSize = read(out_server, buf, sizeof(buf));
                     if (responseSize == FAIL) {
@@ -52,35 +52,35 @@ int main(void) {
                     } else {
                         //Response received from the server
                         memcpy(response, buf, responseSize);
-                    
+
                         //Is the response valid?
                         if (memcmp(response, VALID_ATIS, VALID_LGT) == 0) {
-                        
+
                             printf("Got response ! => %s\n", response);
-                        
+
                             if (write(server, ACK, sizeof(ACK)) == FAIL) {
                                 printf("Failed to send ACK");
                             }
-                        
+
                             not_received = 0;
-                        
+
                         } else {
-                            
+
                             if (total_nak == MAX_TRY) {
-                                
+
                                 printf(RED"ERROR : "NOR);
                                 printf("Server seems unable to treat requests anymore, quitting... \n");
                                 pilot_cleanup(server, out_server, EXIT_FAILURE);
-                                
+
                             } else {
-                        
+
                                 printf(RED"ERROR : %s\n"NOR, response);
                                 printf("Sending NAK to the serveur, asking for ATIS again... \n");
-                            
+
                                 if (write(server, NAK, sizeof(NAK)) == FAIL) {
                                     printf("FAILED to send NAK");
                                 }
-                            
+
                                 total_nak++;
                                 sleep(WAIT_RETRY);
                             }
