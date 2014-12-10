@@ -19,7 +19,7 @@ int atis(char * atisMsg) {
 
     if (fichierMeteo == FAIL) {
 
-        printf("Impossible d'ouvrir le fichier meteo\n");
+        printf("Unable to open meteo file\n");
         memcpy(atisMsg, noMeteoMsg, sizeof(noMeteoMsg));
         atisSize = sizeof(noMeteoMsg);
 
@@ -35,7 +35,7 @@ int atis(char * atisMsg) {
 
         if (atisSize == FAIL) {
 
-            fatal("Impossible de lire le fichier meteo.txt");
+            fatal("Unable to read from %s\n", FICHIERMETEO);
 
         } else {
 
