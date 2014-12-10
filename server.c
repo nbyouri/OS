@@ -129,8 +129,8 @@ void operations(void) {
                 requests[nb] = xmalloc(MSG_SIZE);
                 memcpy(requests[nb], requestPacket, packet);
 
-                if (memcmp(requests[nb], PILOT_REQUEST, 
-                            sizeof(PILOT_REQUEST)) == 0)  {
+                if ((memcmp(requests[nb], PILOT_REQUEST,
+                            sizeof(PILOT_REQUEST)) == 0) || (memcmp(requests[nb], NAK, sizeof(NAK)) ==0)) {
 
                     printf("< Got Request nr. %d\n", nb);
 
@@ -145,10 +145,12 @@ void operations(void) {
                     }
 
                     nb++;
+                } else if(memcmp(requests[nb], ACK, sizeof(ACK)) ==0) {
+
+                    printf(GRN"A pilot just acknwoledged the reception ! \n"NOR);
+
                 } else {
-
                     fatal("No valid messages intercepted\n");
-
                 }
             }
         }

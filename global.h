@@ -20,6 +20,7 @@
 #define MSG_SIZE 100
 #define NBMAXATIS 20
 #define RED "\033[22;31m"
+#define GRN "\033[22;32m"
 #define NOR "\033[00;0m"
 #define FICHIERLOCK "lock"
 #define FICHIERMETEO "meteo.txt"

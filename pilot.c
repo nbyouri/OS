@@ -69,6 +69,8 @@ int main(void) {
                             if (write(server, NAK, sizeof(NAK)) == FAIL) {
                                 printf("FAILED to send NAK");
                             }
+                            
+                            sleep(2);
                         }
                     }
                 }
