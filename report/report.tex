@@ -3,6 +3,25 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[francais]{babel}
+\usepackage{listings}
+\usepackage[a4paper]{geometry}
+
+\geometry{hscale=0.75,vscale=0.85,centering}
+
+\DeclareUnicodeCharacter{00A0}{ }
+
+\lstset{frame=tb,
+  language=C,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
 
 \renewcommand{\thesection}{\arabic{section}}
 \title{Projet OS}
@@ -40,7 +59,7 @@
 		Chaque pilote va envoyer au serveur une demande ATIS. Le serveur va lors répondre à cette demande en allant chercher les informations nécessaires dans un fichier ATIS.
 		Le pilote va recevoir ces informations et il doit alors obligatoirement répondre au serveur en lui envoyant soit :\newline
 		\begin{itemize}
-			\item Un ACK OK qui signifie \og informations bien reçues \fg et provoque la fin de la communication
+			\item Un NAK OK qui signifie \og informations bien reçues \fg et provoque la fin de la communication
 			\item Un ACK KO qui signifie \og informations mal comprises \fg et nécessite de renvoyer les informations.
 		\end{itemize}
 
@@ -50,7 +69,16 @@
 \part{Analyse - Plan de l'application}
 \part{Détails des élements techniques spécifiques}
 \part{Conclusion}
-
+\appendix
+\part{Annexe}
+\chapter{meteo.c}
+	\lstinputlisting[language=C]{../meteo.c}
+\chapter{pilot.c}
+	\lstinputlisting[language=C]{../pilot.c}
+\chapter{server.c}
+	\lstinputlisting[language=C]{../server.c}
+\chapter{tools.c}
+  \lstinputlisting[language=C]{../tools.c}
 \tableofcontents
 
 \end{document}
