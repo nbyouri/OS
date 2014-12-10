@@ -2,12 +2,14 @@
 
 #define VALID_ATIS "ATIS"
 #define VALID_LGT 4
+#define MAX_TRY 10
 void pilot_cleanup(int, int, int);
 
 int main(void) {
     int server = -1;
     int out_server = -1;
     int not_received = -1;
+    int total_nak = 0;
 
     char request[MSG_SIZE];
     char confirm[MSG_SIZE];
@@ -62,15 +64,25 @@ int main(void) {
                             not_received = 0;
                         
                         } else {
+                            
+                            if (total_nak == MAX_TRY) {
+                                
+                                printf(RED"ERROR : ");
+                                printf("Server seems unable to treat requests anymore, quitting... \n");
+                                pilot_cleanup(server, out_server, EXIT_FAILURE);
+                                
+                            } else {
                         
-                            printf(RED"ERROR : %s\n"NOR, response);
-                            printf("Sending NAK to the serveur, asking for ATIS again... \n");
+                                printf(RED"ERROR : %s\n"NOR, response);
+                                printf("Sending NAK to the serveur, asking for ATIS again... \n");
                             
-                            if (write(server, NAK, sizeof(NAK)) == FAIL) {
-                                printf("FAILED to send NAK");
+                                if (write(server, NAK, sizeof(NAK)) == FAIL) {
+                                    printf("FAILED to send NAK");
+                                }
+                            
+                                total_nak++;
+                                sleep(2);
                             }
-                            
-                            sleep(2);
                         }
                     }
                 }
