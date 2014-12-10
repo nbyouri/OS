@@ -18,7 +18,7 @@ int main(void) {
 
     if((server = open(FIFO_FILE, O_WRONLY)) == FAIL) {
 
-        printf("Couldn't open fifo %s\n", FIFO_FILE);
+        printf(RED"Server seems to have down syndrome...\n"NOR);
 
     } else {
 
@@ -52,6 +52,7 @@ int main(void) {
                     if (memcmp(response, VALID_ATIS, VALID_LGT) == 0) {
                         
                         printf("Got response ! => %s\n", response);
+                        
                         
                     } else {
                         
