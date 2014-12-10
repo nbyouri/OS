@@ -17,7 +17,9 @@ int main(void) {
     char buf[MSG_SIZE];
     char response[MSG_SIZE];
     size_t responseSize = 0;
+
     memcpy(request, PILOT_REQUEST, MSG_SIZE);
+
     if((server = open(FIFO_FILE, O_WRONLY)) == FAIL) {
         printf(RED"Server seems to be down...\n"NOR);
     } else {
@@ -31,6 +33,7 @@ int main(void) {
                 pilot_cleanup(server, out_server, FAIL);
             } else {
                 while (not_received) {
+
                     responseSize = read(out_server, buf, sizeof(buf));
                     if (responseSize == FAIL) {
                         printf("Failed to read response from output fifo\n");
@@ -93,20 +96,20 @@ int main(void) {
         }
     }
 
+}
 
-    void pilot_cleanup(int in_serv, int out_serv, int status) {
-        if (in_serv != FAIL) {
-            if (close(in_serv) == FAIL) {
-                printf("Couldn't close input file descriptor %d\n", in_serv);
-                exit(status);
-            }
+void pilot_cleanup(int in_serv, int out_serv, int status) {
+    if (in_serv != FAIL) {
+        if (close(in_serv) == FAIL) {
+            printf("Couldn't close input file descriptor %d\n", in_serv);
+            exit(status);
         }
-        if (out_serv != FAIL) {
-            if (close(out_serv) == FAIL) {
-                printf("Couldn't close output file descriptor %d\n", out_serv);
-                exit(status);
-            }
-        }
-        exit(EXIT_SUCCESS);
     }
-
+    if (out_serv != FAIL) {
+        if (close(out_serv) == FAIL) {
+            printf("Couldn't close output file descriptor %d\n", out_serv);
+            exit(status);
+        }
+    }
+    exit(EXIT_SUCCESS);
+}
