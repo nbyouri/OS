@@ -8,13 +8,11 @@ static int lock = -1;
 static bool cont = true;
 
 char ATIS[][MSG_SIZE] = {
-
     "ATIS 1ONE EBLG 1803 00000KT 0600 FG OVC008 BKN040 PROB40 2024 0300 DZ FG OVC002 BKN040",
     "ATIS 2TOW EBBR 0615 20015KT 8000 RA SCT010 OVC015 TEMPO 0608 5000 RA BKN005 BECMG 0810 NSW BKN025",
     "ATIS 3TRHE METAR VHHH 231830Z 06008KT 7000 FEW010SCT022 20/17 Q1017 NOSIG 5000 RA BKN005",
     "ATIS 4FRUO 20015KT 8000 RA SCT010 OVC015 2024 0300 DZ FG 0810 9999 NSW BKN025",
     "ATIS 5VEFI KT 7000 FEW010SCT02 EMPO 0608 5000 RA BKN005 EMPO 0608 5000 RA BKN005"
-
 };
 
 void openLock(void) {
@@ -57,7 +55,6 @@ void pilotCleanup(int state) {
     } else if (state == EXIT_FAILURE) {
         cont = false;
     }
-
     if (!cont) {
         delete(FICHIERMETEO);
         if (exists(FICHIERLOCK)) {
@@ -69,42 +66,30 @@ void pilotCleanup(int state) {
 int genAtis(void){
 
     while (cont) {
-
         int msg = 0;
-
         unsigned int nATIS = sizeof(ATIS) / sizeof(ATIS[0]);
-
         if (nATIS > 0) {
             msg = rand() % nATIS;
         } else {
             return EXIT_FAILURE;
         }
-
         printf("ATIS Create : %s\n", ATIS[msg]);
-
         openLock();
-
         openMeteo();
-
         if (write(meteo, ATIS[msg], sizeof(ATIS[msg])) == FAIL) {
             return EXIT_FAILURE;
         }
-
         // virtual write wait time, to make the 
         // meteo transmission latency more realistic :)
         sleep(WRITE_TIME);
-
         closeLock();
         delete(FICHIERLOCK);
-
         sleep(WAIT_TIME);
     }
-
     return EXIT_SUCCESS;
 }
 
 int main(void) {
     signal(SIGINT, &pilotCleanup);
-
     return genAtis();
 }

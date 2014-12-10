@@ -14,62 +14,40 @@ int main(void) {
     char buf[MSG_SIZE];
     char response[MSG_SIZE];
     size_t responseSize = 0;
-
     memcpy(request, PILOT_REQUEST, MSG_SIZE);
-
     if((server = open(FIFO_FILE, O_WRONLY)) == FAIL) {
-
         printf(RED"Server seems to be down...\n"NOR);
-
     } else {
-
         printf("Sending REQUEST...\n");
-
         if (write(server, request, sizeof(request)) == FAIL) {
-
             printf("Failed to write message\n");
             pilot_cleanup(server, out_server, FAIL);
-
         } else {
-
             if ((out_server = open(FIFO_FILE_OUT, O_RDONLY)) == FAIL) {
-
                 printf("Couldn't open output file...\n");
                 pilot_cleanup(server, out_server, FAIL);
-
             } else {
-                
                 while (not_received) {
                     responseSize = read(out_server, buf, sizeof(buf));
                     if (responseSize == FAIL) {
-
                         printf("Failed to read response from output fifo\n");
                         pilot_cleanup(server, out_server, FAIL);
-
                     } else {
                         //Response received from the server
                         memcpy(response, buf, responseSize);
-                    
                         //Is the response valid?
                         if (memcmp(response, VALID_ATIS, VALID_LGT) == 0) {
-                        
                             printf("Got response ! => %s\n", response);
-                        
                             if (write(server, ACK, sizeof(ACK)) == FAIL) {
                                 printf("Failed to send ACK");
                             }
-                        
                             not_received = 0;
-                        
                         } else {
-                        
                             printf(RED"ERROR : %s\n"NOR, response);
                             printf("Sending NAK to the serveur, asking for ATIS again... \n");
-                            
                             if (write(server, NAK, sizeof(NAK)) == FAIL) {
                                 printf("FAILED to send NAK");
                             }
-                            
                             sleep(2);
                         }
                     }
