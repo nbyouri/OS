@@ -25,6 +25,8 @@
 #define FICHIERMETEO "meteo.txt"
 #define WAIT_TIME 2
 #define WRITE_TIME 1
+#define UNREACHABLE "the meteo server is unreachable..."
+#define BUSY "the meteo server is busy..."
 
 #ifdef __linux__
 #define SIZE_T_MAX (~((size_t) 0))

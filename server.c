@@ -20,14 +20,14 @@ int atis(char * atisMsg) {
     if (fichierMeteo == FAIL) {
 
         printf("Impossible d'ouvrir le fichier meteo\n");
-        memcpy(atisMsg, noMeteoMsg, sizeof(noMeteoMsg));
-        atisSize = sizeof(noMeteoMsg);
+        memcpy(atisMsg, UNREACHABLE, sizeof(UNREACHABLE));
+        atisSize = sizeof(UNREACHABLE);
 
     } else if (exists(FICHIERLOCK)) {
 
         printf("The meteo server is busy\n");
-        memcpy(atisMsg, busyMeteoMsg, sizeof(busyMeteoMsg));
-        atisSize = sizeof(busyMeteoMsg);
+        memcpy(atisMsg, BUSY, sizeof(BUSY));
+        atisSize = sizeof(BUSY);
 
     } else {
 
