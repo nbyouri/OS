@@ -88,7 +88,8 @@ void operations(void) {
                 requests[nb] = xmalloc(MSG_SIZE);
                 memcpy(requests[nb], requestPacket, packet);
                 if ((memcmp(requests[nb], PILOT_REQUEST,
-                            sizeof(PILOT_REQUEST)) == 0) || (memcmp(requests[nb], NAK, sizeof(NAK)) ==0)) {
+                                sizeof(PILOT_REQUEST)) == 0) ||
+                        (memcmp(requests[nb], NAK, sizeof(NAK)) ==0)) {
                     printf("< Got Request nr. %d\n", nb);
                     size_t tailleMsg = (size_t)atis(atisMsg);
                     printf("> Sending ATIS \"%s\" to %d\n", atisMsg, nb);

@@ -59,12 +59,14 @@ int main(void) {
                             
                             if (total_nak == MAX_TRY) {
                                 printf(RED"ERROR : "NOR);
-                                printf("Server seems unable to treat requests anymore, quitting... \n");
+                                printf("Server seems unable to treat requests"
+                                       " anymore, quitting... \n");
                                 pilot_cleanup(server, out_server, EXIT_FAILURE);
                                 
                             } else {
                                 printf(RED"ERROR : %s\n"NOR, response);
-                                printf("Sending NAK to the serveur, asking for ATIS again... \n");
+                                printf("Sending NAK to the serveur, asking for"
+                                       " ATIS again... \n");
                             
                                 if (write(server, NAK, sizeof(NAK)) == FAIL) {
                                     printf("FAILED to send NAK");
