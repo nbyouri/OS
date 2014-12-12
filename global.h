@@ -55,4 +55,4 @@ void cleanup(int);
 void * xmalloc(size_t);
 void * xrealloc(void *, size_t, size_t);
 void cleanPtr(int, char **);
-int fatal(const char *, ...);
+int fatal(const char *, ...) __attribute__((format(printf, 1, 2)));

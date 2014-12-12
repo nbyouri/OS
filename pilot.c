@@ -5,7 +5,7 @@
 #define MAX_TRY 10
 #define WAIT_RETRY 1
 
-void pilot_cleanup(int, int, int);
+void pilot_cleanup(int, int, int) __attribute__((noreturn));
 
 int main(void) {
     int server = -1;
