@@ -44,7 +44,6 @@ extern int  output;
 extern int  nb;
 extern char **requests;
 
-int genAtis(void);
 int atis(char *);
 void createFifos(void);
 void openFifos(void);

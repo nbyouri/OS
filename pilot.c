@@ -4,6 +4,7 @@
 #define VALID_LGT 4
 #define MAX_TRY 10
 #define WAIT_RETRY 1
+
 void pilot_cleanup(int, int, int);
 
 int main(void) {
@@ -13,10 +14,9 @@ int main(void) {
     int total_nak = 0;
 
     char request[MSG_SIZE];
-    char confirm[MSG_SIZE];
     char buf[MSG_SIZE];
     char response[MSG_SIZE];
-    size_t responseSize = 0;
+    int  responseSize = 0;
 
     memcpy(request, PILOT_REQUEST, MSG_SIZE);
 
@@ -37,7 +37,7 @@ int main(void) {
             } else {
                 
                 while (not_received) {
-                    responseSize = read(out_server, buf, sizeof(buf));
+                    responseSize = (int)read(out_server, buf, sizeof(buf));
                     if (responseSize == FAIL) {
                         printf("Failed to read response from output fifo\n");
                         pilot_cleanup(server, out_server, FAIL);

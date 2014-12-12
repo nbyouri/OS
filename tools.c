@@ -124,7 +124,6 @@ void cleanPtr(int count, char ** array) {
  * Author: Youri Mouton
  */
 bool checkyesno(const char *msg) {
-    bool        ans;
     char        inp[BUFSIZ];
     char        res;
 

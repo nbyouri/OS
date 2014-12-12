@@ -1,7 +1,5 @@
 #include "global.h"
 
-#define MAX_TRY 20
-
 int input = -1;
 int output = -1;
 bool listen = true;
@@ -84,7 +82,7 @@ void operations(void) {
                 }
             } else {
                 // assign read string
-                requests = xrealloc(requests, nb+1, MSG_SIZE);
+                requests = xrealloc(requests, (size_t)nb+1, MSG_SIZE);
                 requests[nb] = xmalloc(MSG_SIZE);
                 memcpy(requests[nb], requestPacket, packet);
                 if ((memcmp(requests[nb], PILOT_REQUEST,
