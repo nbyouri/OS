@@ -5,6 +5,14 @@
 \usepackage[francais]{babel}
 \usepackage{listings}
 \usepackage[a4paper]{geometry}
+\usepackage{graphicx}
+\usepackage{titlesec}
+
+\titleformat{\chapter}[display]
+  {\centering\normalfont\huge\bfseries}
+  {\chaptertitlename\ \thechapter}
+  {20pt}
+  {\Huge}
 
 \geometry{hscale=0.75,vscale=0.85,centering}
 
@@ -32,7 +40,7 @@
 
 \maketitle
 
-\part{Introduction}
+\chapter{Introduction}
 
 	\section{Introduction}
 
@@ -66,11 +74,16 @@
 		Le serveur doit pouvoir gérer un nombre indéfini de pilotes (restons réalistes).
 		Le fichier ATIS contenant les informations nécessaires aux pilotes doit être régulièrement mis à jour par le gestionnaire météo.
 
-\part{Analyse - Plan de l'application}
-\part{Détails des élements techniques spécifiques}
-\part{Conclusion}
+\chapter{Analyse}
+ \section{Plan de l'application}
+	\includegraphics[width=450px]{schemasProjet.png}
+	
+\chapter{Détails des élements techniques spécifiques}
+\chapter{Conclusion}
 \appendix
-\part{Annexe}
+
+\chapter{global.h}
+	\lstinputlisting[language=C]{../global.h}
 \chapter{meteo.c}
 	\lstinputlisting[language=C]{../meteo.c}
 \chapter{pilot.c}

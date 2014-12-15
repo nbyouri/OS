@@ -1,7 +1,5 @@
 /*
- *
  * Utilities.
- *
  */
 #include "global.h"
 
@@ -198,35 +196,25 @@ void delete(const char * pathname) {
  * Author: Youri Mouton
  */
 void cleanup(int state) {
-
     if (state == EXIT_SUCCESS || state == SIGINT) {
         listen = checkyesno("Really quit");
     } else if (state == EXIT_FAILURE) {
         listen = false;
     }
-
     if (!listen) {
-
         printf("\ncleaning up... \n");
-
         if (input != -1 || output != -1) {
-
             if (close(input) == FAIL) {
                 printf("Couldn't close input file descriptor %d\n", input);
             }
-
             if (close(output) == FAIL) {
                 printf("Couldn't close output file descriptor %d\n", output);
             }
         }
-
         delete(FIFO_FILE);
-
         delete(FIFO_FILE_OUT);
-
         cleanPtr(nb, requests);
     }
-
 }
 
 /*
@@ -247,17 +235,11 @@ void cleanup(int state) {
  * Author: Youri Mouton
  */
 int fatal(const char * format, ...) {    
-
     va_list     args;
-
     va_start(args, format);
-
     fprintf(stderr, RED"FATAL: "NOR);
     vfprintf(stderr, format, args);
-
     va_end(args);
-
     cleanup(EXIT_FAILURE);
-
     exit(EXIT_FAILURE);
 }
