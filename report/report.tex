@@ -7,6 +7,11 @@
 \usepackage[a4paper]{geometry}
 \usepackage{graphicx}
 \usepackage{titlesec}
+\usepackage{color}
+
+\definecolor{xcodekw}{rgb}{0.75, 0.22, 0.60}
+\definecolor{xcodestr}{rgb}{0.89, 0.27, 0.30}
+\definecolor{xcodecmt}{rgb}{0.31, 0.73, 0.35}
 
 \titleformat{\chapter}[display]
   {\centering\normalfont\huge\bfseries}
@@ -18,7 +23,8 @@
 
 \DeclareUnicodeCharacter{00A0}{ }
 
-\lstset{frame=tb,
+\lstset{
+  frame=tb,
   language=C,
   aboveskip=3mm,
   belowskip=3mm,
@@ -28,7 +34,10 @@
   numbers=none,
   breaklines=true,
   breakatwhitespace=true,
-  tabsize=3
+  tabsize=3,
+  keywordstyle=\color{xcodekw},
+  stringstyle=\color{xcodestr},
+  commentstyle=\color{xcodecmt}
 }
 
 \renewcommand{\thesection}{\arabic{section}}
