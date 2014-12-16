@@ -11,7 +11,7 @@ char **requests = NULL;
  * returns an UNREACHABLE message if no meteo.txt
  * returns a BUSY message if lock file present
  * returns a ATIS message present in the file
-*/
+ */
 int atis(char * atisMsg) {
     int fichierMeteo = 0;
     int atisSize = 0;
@@ -48,6 +48,9 @@ void createFifos(void) {
     }
 }
 
+/*
+ * Open input and output fifos
+ */
 void openFifos(void) {
     if ((input = open(FIFO_FILE, O_RDWR)) == FAIL) {
         fatal("Unable to open the server's fifo\n");
