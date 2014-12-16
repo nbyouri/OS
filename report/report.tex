@@ -8,6 +8,7 @@
 \usepackage{graphicx}
 \usepackage{titlesec}
 \usepackage{color}
+\usepackage[toc, page]{appendix}
 
 \definecolor{xcodekw}{rgb}{0.75, 0.22, 0.60}
 \definecolor{xcodestr}{rgb}{0.89, 0.27, 0.30}
@@ -41,6 +42,10 @@
 }
 
 \renewcommand{\thesection}{\arabic{section}}
+\renewcommand\appendixtocname{Annexes}
+\renewcommand\appendixname{Annexes}
+\renewcommand\appendixpagename{Annexes}
+
 \title{Projet OS}
 \author{Youri \bsc{Mouton}, Rémy \bsc{Voet} et Samuel \bsc{Monroe}}
 \date{Janvier 2015}
@@ -61,13 +66,13 @@
 		Ces trois programmes sont :\newline
 		\begin{description}
 			\item[Tour de controle : ]
-			Fait office de \textbf{serveur}, joue le rôle majeur en s'occupant de recevoir les demandes des pilotes, en allant chercher les informations météo fournies par le centre météo, et en renvoyant celles-ci en tant que réponses aux demandes des pilotes.
+			Fait office de \textbf{serveur}, joue le rôle majeur en s'occupant de recevoir les demandes des pilotes, en allant chercher les informations météo fournies par le centre météo, et en renvoyant celles-ci en tant que réponses aux demandes des pilotes.\newline
 
 			\item[Pilote : ]
-			Fait office de \textbf{client}, envoie une demande d'information ATIS à la tour de contrôle, récupère cette information et replace une demande si cette information n'est pas intègre.
+			Fait office de \textbf{client}, envoie une demande d'information ATIS à la tour de contrôle, récupère cette information et replace une demande si cette information n'est pas intègre.\newline
 
 			\item[Le centre météo : ]
-			Programme \textbf{tiers} dans l'application, celui-ci se charge de générer automatiquement des informations ATIS différentes tout au long de son fonctionnement.
+			Programme \textbf{tiers} dans l'application, celui-ci se charge de générer automatiquement des informations ATIS différentes tout au long de son fonctionnement.\newline
 		\end{description}
 
 	\section{Rappel de l'énoncé}
@@ -89,18 +94,27 @@
 	
 \chapter{Détails des élements techniques spécifiques}
 \chapter{Conclusion}
-\appendix
 
-\chapter{global.h}
-	\lstinputlisting[language=C]{../global.h}
-\chapter{meteo.c}
-	\lstinputlisting[language=C]{../meteo.c}
-\chapter{pilot.c}
-	\lstinputlisting[language=C]{../pilot.c}
-\chapter{server.c}
-	\lstinputlisting[language=C]{../server.c}
-\chapter{tools.c}
-  \lstinputlisting[language=C]{../tools.c}
+\begin{appendices}
+
+\chapter{Code Source}
+	\section{global.h}
+		\lstinputlisting[language=C]{../global.h}
+		\clearpage
+	\section{meteo.c}
+		\lstinputlisting[language=C]{../meteo.c}
+		\clearpage
+	\section{pilot.c}
+		\lstinputlisting[language=C]{../pilot.c}
+		\clearpage
+	\section{server.c}
+		\lstinputlisting[language=C]{../server.c}
+		\clearpage
+	\section{tools.c}
+	  \lstinputlisting[language=C]{../tools.c}
+	  \clearpage
+\end{appendices}
+
 \tableofcontents
 
 \end{document}
