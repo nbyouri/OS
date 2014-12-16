@@ -90,55 +90,75 @@
 		Le fichier ATIS contenant les informations nécessaires aux pilotes doit être régulièrement mis à jour par le gestionnaire météo.
 
 \chapter{Analyse}
- \section{Plan global de l'application}
- 	Voici un schéma donnant un aperçu rapide des fichiers constituant l'application, et les interactions entre eux via des liens légendés : \newline
 
-	\includegraphics[width=\linewidth, frame]{schemasProjet.png} \newline
+	\section{Plan global de l'application}
+		Voici un schéma donnant un aperçu rapide des fichiers constituant l'application, et les interactions entre eux via des liens légendés : \newline
 
-	Nos trois programmes qui constituent le coeur de l'application se trouvent sur la ligne au {\textbf{milieu} du schéma, écrits dans les fichiers {\textbf{\color{red} server.c}}, {      \textbf{\color{red} pilot.c}} et {\textbf{\color{red} meteo.c}}.
+		\includegraphics[width=\linewidth, frame]{schemasProjet.png} \newline
 
- Ces programmes vont se servir d' \og outils \fg fonctionnalisés dans le fichier {\textbf{\color{red} tools.c}} et obtenir les librairies, déclarations des fonctions outils et constantes  via inclusion du fichier {\textbf{\color{black} global.h}}.
+		Nos trois programmes qui constituent le coeur de l'application se trouvent sur la ligne au {\textbf{milieu} du schéma, écrits dans les fichiers {\textbf{\color{red} server.c}}, {      \textbf{\color{red} pilot.c}} et {\textbf{\color{red} meteo.c}}.
 
-\section{meteo.c}
+		Ces programmes vont se servir d' \og outils \fg fonctionnalisés dans le fichier {\textbf{\color{red} tools.c}} et obtenir les librairies, déclarations des fonctions outils et constantes  via inclusion du fichier {\textbf{\color{black} global.h}}.
 
-	Lors de la mise en route de l'application, nous commençons par lancer le serveur Meteo.
-	Celui-ci possède en son sein un certain nombre d'informations ATIS différentes à utiliser.
-	Le serveur Meteo fonctionne sur une succession de boucles, dans lesquelles il va :
+	\section{meteo.c}
 
-	- Sélectionner aléatoirement une des informations ATIS qu'il possède en mémoire.
+		Lors de la mise en route de l'application, nous commençons par lancer le serveur Meteo.
+		Celui-ci possède en son sein un certain nombre d'informations ATIS différentes à utiliser.
+		Le serveur Meteo fonctionne sur une succession de boucles, dans lesquelles il va :
 
-	- Créer un fichier de verrouillage nommé "lock", afin de spécifier à son environnement qu'il est en train d'opérer.
+		- Sélectionner aléatoirement une des informations ATIS qu'il possède en mémoire.
 
-	- Le serveur ouvre ensuite le fichier "meteo.txt" qui va contenir l'information ATIS actuelle destinée aux autres programmes, si ce fichier n'existait pas, Meteo le crée.
+		- Créer un fichier de verrouillage nommé "lock", afin de spécifier à son environnement qu'il est en train d'opérer.
 
-	- Si l'ouverture est un succès, Meteo écrit l'ATIS généré précédemment sur le fichier, ceci en troncature de manière à élimier une autre information ATIS qui est le résultat d'une opération précédente. Cette écriture va durer une seconde, seconde définie par nos soins.
+		- Le serveur ouvre ensuite le fichier "meteo.txt" qui va contenir l'information ATIS actuelle destinée aux autres programmes, si ce fichier n'existait pas, Meteo le crée.
 
-	- Si l'écriture s'est bien déroulée, Meteo supprime le fichier de verrouillage "lock" pour spécifier à l'environnement que l'écriture est terminée et que "meteo.txt" est accessible, et termine la boucle après un repos défini de deux secondes.
+		- Si l'ouverture est un succès, Meteo écrit l'ATIS généré précédemment sur le fichier, ceci en troncature de manière à élimier une autre information ATIS qui est le résultat d'une opération précédente. Cette écriture va durer une seconde, seconde définie par nos soins.
+
+		- Si l'écriture s'est bien déroulée, Meteo supprime le fichier de verrouillage "lock" pour spécifier à l'environnement que l'écriture est terminée et que "meteo.txt" est accessible, et termine la boucle après un repos défini de deux secondes.
 
 	\section{server.c}
 
-Après l'ouverture du serveur Meteo, nous lançons la tour de contrôle(server.c) , c'est-à-dire le serveur qui prendra en charge les demandes des pilotes.
-Ce serveur fait divers opérations au lancement, il va : 
+		Après l'ouverture du serveur Meteo, nous lançons la tour de contrôle(server.c) , c'est-à-dire le serveur qui prendra en charge les demandes des pilotes.
+		Ce serveur fait divers opérations au lancement, il va : 
 
-- Créer les deux fichiers fifo : watchtower\_send.fifo (fifo Output) et watchtower\_listen.fifo (fifo Input).
+		- Créer les deux fichiers fifo : watchtower\_send.fifo (fifo Output) et watchtower\_listen.fifo (fifo Input).
 
-- Ouvrir ensuite les deux fichiers fifo.
+		- Ouvrir ensuite les deux fichiers fifo.
 
-- Si la création et l'ouverture des fifo est un succès, le serveur peut lancer les opérations. C'est-à-dire prendre en charge les différents pilotes grâce à une boucle.
-Chaque seconde le serveur lit le fichier fifo Input où les pilotes écrivent leur demande. Si il y a une demande ATIS d'un pilote, le serveur lit le fichier meteo.txt qui contient l'ATIS correspondant. Il écrit ensuite cet ATIS sur le fichier fifo Output à l'attention du pilote. Si le fichier meteo.txt est occupé par le serveur Meteo ou qu'il n'existe pas, le serveur renverra un message d'erreur correspondant au pilote qui pourra reformuler sa demande.
+		- Si la création et l'ouverture des fifo est un succès, le serveur peut lancer les opérations. C'est-à-dire prendre en charge les différents pilotes grâce à une boucle.
+		Chaque seconde le serveur lit le fichier fifo Input où les pilotes écrivent leur demande. Si il y a une demande ATIS d'un pilote, le serveur lit le fichier meteo.txt qui contient l'ATIS correspondant. Il écrit ensuite cet ATIS sur le fichier fifo Output à l'attention du pilote. Si le fichier meteo.txt est occupé par le serveur Meteo ou qu'il n'existe pas, le serveur renverra un message d'erreur correspondant au pilote qui pourra reformuler sa demande.
 
 	\section{pilot.c}
 		
-	Quand le serveur Meteo et le serveur de la tour de contrôle sont lancés, nous exécutons un certain nombre de pilote qui feront leur demande ATIS à la tour de contrôle.
-	Chaque pilote va : 
-	
-	- Vérifier si le serveur et l'écriture du fifo Input est accessible.
-	
-	- Après la vérification, écrire sa demande ATIS sur le fifo Input à l'attention de la tour de contrôle.
-	
-	- Attendre ensuite la réponse du serveur en lisant le fichier fifo Output chaque seconde. Si la réponse est correcte, le pilote envoie un message (ACK) au serveur de confirmation de réception et ensuite "s'auto-detruit".  Si la réponse du serveur n'est pas correcte, le pilote envoie un message (NAK) pour demander au serveur de renvoyer l'ATIS et continue d'attendre la réponse.
+		Quand le serveur Meteo et le serveur de la tour de contrôle sont lancés, nous exécutons un certain nombre de pilote qui feront leur demande ATIS à la tour de contrôle.
+		Chaque pilote va : 
 		
-\chapter{Détails des élements techniques spécifiques}
+		- Vérifier si le serveur et l'écriture du fifo Input est accessible.
+		
+		- Après la vérification, écrire sa demande ATIS sur le fifo Input à l'attention de la tour de contrôle.
+		
+		- Attendre ensuite la réponse du serveur en lisant le fichier fifo Output chaque seconde. Si la réponse est correcte, le pilote envoie un message (ACK) au serveur de confirmation de réception et ensuite "s'auto-detruit".  Si la réponse du serveur n'est pas correcte, le pilote envoie un message (NAK) pour demander au serveur de renvoyer l'ATIS et continue d'attendre la réponse.
+		
+\chapter{Détails et élements techniques spécifiques}
+
+	\section{Spécificités techniques de l'application}
+
+	\section{Makefile et fichiers de configurations}
+
+	\section{Organisation du travail}
+
+		Nous avons pris le parti d'appuyer, et ce dès les premières lignes de code, notre projet sur le système de versionning "Git" associé
+		à un repository en ligne sur le site "Github".
+		Cette méthode de travail nous a permis de développer en toute circonstance, en restant à tout moment conscient des nouveaux éléments 
+		implémentés par nos pairs et de les prendre immédiatement en considèration.
+		Le projet a été lançé aux alentours du 13 Novembre 2014, dans la foulée de l'obtention des consignes de ce travail par Madame Masson.
+
+		Le projet entier, de ses balbutiements à son aboutissement, est disponible à cette adresse : \url{https://github.com/yrmt/OS}
+
+		Concernant le rapport que vous tenez actuellement entre vos mains, nous avons opté pour une rédaction en Latex.
+		Nous étions tous trois peu initiés à ce "langage", mais prendre ce parti nous a également permis d'intègrer le rapport
+		dans le versionning et ainsi le soumettre aux modifications et améliorations rapides connues sur le projet en lui-même, mais de plus
+		ceci nous a permis de prendre de l'expérience avec Latex, atout non-négligeable.
 \chapter{Conclusion}
 
 \begin{appendices}
