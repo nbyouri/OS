@@ -1,15 +1,15 @@
+#include <sys/param.h>
+#include <sys/stat.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <poll.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <signal.h>
 #include <string.h>
-#include <stdbool.h>
-#include <stdarg.h>
-#include <poll.h>
-#include <errno.h>
-#include <sys/stat.h>
-#include <sys/param.h>
+#include <unistd.h>
 
 #define SUCCESS 0
 #define FAIL -1
@@ -31,6 +31,10 @@
 #define ACK "ACK"
 #define NAK "NAK"
 
+/*
+ * Maximum we can allocate to a pointer
+ * in Linux, taken from BSD Unix.
+ */
 #ifdef __linux__
 #define SIZE_T_MAX (~((size_t) 0))
 #endif
