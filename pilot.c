@@ -43,10 +43,8 @@ int main(void) {
                         pilot_cleanup(server, out_server, FAIL);
 
                     } else {
-                        //Response received from the server
+
                         memcpy(response, buf, responseSize);
-                    
-                        //Is the response valid?
                         if (memcmp(response, VALID_ATIS, VALID_LGT) == 0) {
                             printf("Got response ! => %s\n", response);
                         

@@ -6,6 +6,12 @@ bool listen = true;
 int nb = 0;
 char **requests = NULL;
 
+/*
+ * atis returns the result given by trying to read the meteo file.
+ * returns an UNREACHABLE message if no meteo.txt
+ * returns a BUSY message if lock file present
+ * returns a ATIS message present in the file
+*/
 int atis(char * atisMsg) {
     int fichierMeteo = 0;
     int atisSize = 0;
@@ -30,6 +36,9 @@ int atis(char * atisMsg) {
     return atisSize;
 }
 
+/*
+ * Create two fifos for inputs and outputs with pilots
+ */
 void createFifos(void) {
     if (mkfifo(FIFO_FILE, S_IRUSR | S_IWUSR) == FAIL) {
         fatal("Unable to create input fifo\n");
