@@ -91,8 +91,12 @@ void operations(void) {
                     printf("< Got Request nr. %d\n", nb);
                     size_t tailleMsg = (size_t)atis(atisMsg);
                     printf("> Sending ATIS \"%s\" to %d\n", atisMsg, nb);
-                    if (write(output, atisMsg, tailleMsg) == FAIL) {
+                    size_t written_b = 0;
+                    if ((written_b = write(output, atisMsg, tailleMsg)) == FAIL) {
                         fatal("Failed to send message...\n");
+                    }
+                    if (written_b != tailleMsg) {
+                        fatal("Bytes read have not been correctly written...\n");
                     }
                     nb++;
                 } else if(memcmp(requests[nb], ACK, sizeof(ACK)) ==0) {
