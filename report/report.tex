@@ -6,6 +6,7 @@
 \usepackage{listings}
 \usepackage[a4paper]{geometry}
 \usepackage{graphicx}
+\usepackage[export]{adjustbox}
 \usepackage{titlesec}
 \usepackage{color}
 \usepackage[toc, page]{appendix}
@@ -90,7 +91,14 @@
 
 \chapter{Analyse}
  \section{Plan de l'application}
-	\includegraphics[width=450px]{schemasProjet.png}
+ 	Voici un schéma donnant un aperçu rapide des fichiers constituant l'application, et les interactions entre eux via des liens légendés : \newline
+
+	\includegraphics[width=\linewidth, frame]{schemasProjet.png} \newline
+
+	Nos trois programmes qui constituent le coeur de l'application se trouvent sur la ligne au {\textbf{milieu} du schéma, écrits dans les fichiers {\textbf{\color{red} server.c}}, {\textbf{\color{red} pilot.c}} et {\textbf{\color{red} meteo.c}}.
+
+	Ces trois programmes vont se servir d' \og outils \fg fonctionnalisés dans le fichier {\textbf{\color{red} tools.c}} et obtenir les librairies, déclarations de fonctions et constantes via le fichier {\textbf{\color{black} global.h}}.
+
 	
 \chapter{Détails des élements techniques spécifiques}
 \chapter{Conclusion}
