@@ -97,7 +97,27 @@
 
 	Nos trois programmes qui constituent le coeur de l'application se trouvent sur la ligne au {\textbf{milieu} du schéma, écrits dans les fichiers {\textbf{\color{red} server.c}}, {\textbf{\color{red} pilot.c}} et {\textbf{\color{red} meteo.c}}.
 
-	Ces trois programmes vont se servir d' \og outils \fg fonctionnalisés dans le fichier {\textbf{\color{red} tools.c}} et obtenir les librairies, déclarations de fonctions et constantes via le fichier {\textbf{\color{black} global.h}}.
+	Ces programmes vont se servir d' \og outils \fg fonctionnalisés dans le fichier {\textbf{\color{red} tools.c}} et obtenir les librairies, déclarations des fonctions outils et constantes via inclusion du fichier {\textbf{\color{black} global.h}}.
+
+	%TODO : STRUCTURE
+	##METEO##
+
+	Lors de la mise en route de l'application, nous commençons par lancer le serveur Meteo.
+	Celui-ci possède en son sein un certain nombre d'informations ATIS différentes à utiliser.
+	Le serveur Meteo fonctionne sur une succession de boucles, dans lesquelles il va :
+
+	- Selectionner aléatoirement une des informations ATIS qu'il possède en mémoire.
+
+	- Créer un fichier de verrouillage nommé "lock", afin de spécifier à son environnement qu'il est en train d'opérer.
+
+	- Le serveur ouvre ensuite le fichier "meteo.txt" qui va contenir l'information ATIS actuelle destinée aux autres programmes, si ce fichier n'existait pas, Meteo le crée.
+
+	- Si l'ouverture est un succès, Meteo écrit l'ATIS généré précédemment sur le fichier, ceci en troncature de manière à élimier une autre information ATIS qui est le résultat d'une opération précédente. Cette écriture va durer une seconde, seconde définie par nos soins.
+
+	- Si l'écriture s'est bien déroulée, Meteo supprime le fichier de verrouillage "lock" pour spécifier à l'environnement que l'écriture est terminée et que "meteo.txt" est accessible, et termine la boucle après un repos défini de deux secondes.
+
+	%TODO : STRUCTURE
+	##SERVER##
 
 	
 \chapter{Détails des élements techniques spécifiques}
