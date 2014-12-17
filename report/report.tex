@@ -103,26 +103,26 @@
 
 	\section{meteo.c}
 
-		Lors de la mise en route de l'application, nous commençons par lancer le serveur Meteo.
+		Lors de la mise en route de l'application, nous commençons par lancer le contrôleur météo.
 		Celui-ci possède en son sein un certain nombre d'informations ATIS différentes à utiliser.
-		Le serveur Meteo fonctionne sur une succession de boucles, dans lesquelles il va :
+		Le contrôleur météo fonctionne sur une succession de boucles, dans lesquelles il va :
 
 		- Sélectionner aléatoirement une des informations ATIS qu'il possède en mémoire.
 
 		- Créer un fichier de verrouillage nommé "lock", afin de spécifier à son environnement qu'il est en train d'opérer.
 
-		- Le serveur ouvre ensuite le fichier "meteo.txt" qui va contenir l'information ATIS actuelle destinée aux autres programmes, si ce fichier n'existait pas, Meteo le crée.
+		- Le contrôleur ouvre ensuite le fichier "meteo.txt" qui va contenir l'information ATIS actuelle destinée aux autres programmes, si ce fichier n'existait pas, Meteo le crée.
 
-		- Si l'ouverture est un succès, Meteo écrit l'ATIS généré précédemment sur le fichier, ceci en troncature de manière à élimier une autre information ATIS qui est le résultat d'une opération précédente. Cette écriture va durer une seconde, seconde définie par nos soins.
+		- Si l'ouverture est un succès, météo écrit l'ATIS généré précédemment sur le fichier, ceci en troncature de manière à éliminer une autre information ATIS qui est le résultat d'une opération précédente. Cette écriture va durer une seconde, seconde définie par nos soins.
 
-		- Si l'écriture s'est bien déroulée, Meteo supprime le fichier de verrouillage "lock" pour spécifier à l'environnement que l'écriture est terminée et que "meteo.txt" est accessible, et termine la boucle après un repos défini de deux secondes.
+		- Si l'écriture s'est bien déroulée, météo supprime le fichier de verrouillage "lock" pour spécifier à l'environnement que l'écriture est terminée et que "meteo.txt" est accessible, et termine la boucle après un repos défini de deux secondes.
 
 	\section{server.c}
 
-		Après l'ouverture du serveur Meteo, nous lançons la tour de contrôle(server.c) ,c'est-à-dire le serveur qui prendra en charge les demandes des pilotes.
+		Après l'ouverture du contrôleur météo, nous lançons la tour de contrôle(server.c) ,c'est-à-dire le serveur qui prendra en charge les demandes des pilotes.
 		Ce serveur fait divers opérations au lancement, il va notamment : 
 
-		- Créer les deux fichiers fifo : watchtower_send.fifo (fifo Output) et watchtower_listen.fifo (fifo Input).
+		- Créer les deux fichiers fifo : watchtower\_send.fifo (fifo Output) et watchtower\_listen.fifo (fifo Input).
 		Ces deux fichiers sont en fait des points d'entrée et de sortie pour le serveur, l'entrée Input sera celle sur laquelle les pilotes viendront placer leurs requêtes.
 		Tandis que la sortie Output sera celle destinée aux envois des réponses à destination des pilotes.
 
@@ -134,16 +134,16 @@
 		- Les messages pilotes sont traités selon trois cas : requête, confirmation d'acquisition, message invalide.
 
 		- Dans le cas d'une requête ATIS, le serveur lit le fichier meteo.txt qui contient l'ATIS correspondant. Il écrit ensuite cet ATIS sur le fichier fifo Output à l'attention du pilote. 
-		Si le fichier meteo.txt est occupé par le serveur Meteo ou qu'il n'existe pas, le serveur renverra un message d'erreur correspondant au pilote qui pourra ensuite reformuler sa demande.
+		Si le fichier meteo.txt est occupé par le contrôleur météo ou qu'il n'existe pas, le serveur renverra un message d'erreur correspondant au pilote qui pourra ensuite reformuler sa demande.
 
-		- Dans le cas d'une confirmation d'acquisiton, le serveur affiche un message signalant qu'un pilote a bien réceptionné sa donnée ATIS, et continue son écoute.
+		- Dans le cas d'une confirmation d’acquisition, le serveur affiche un message signalant qu'un pilote a bien réceptionné sa donnée ATIS, et continue son écoute.
 
 		- Dernier cas, le message est invalide, provoquant une erreur.
  
 
 	\section{pilot.c}
 		
-		Quand le serveur Meteo et le serveur de la tour de contrôle sont lancés, nous exécutons un certain nombre de pilote qui feront leur demande ATIS à la tour de contrôle.
+		Quand le contrôleur météo et le serveur de la tour de contrôle sont lancés, nous exécutons un certain nombre de pilote qui feront leur demande ATIS à la tour de contrôle.
 		Chaque pilote va : 
 		
 		- Vérifier si le serveur et l'écriture du fifo Input est accessible.
@@ -152,12 +152,12 @@
 		
 		- Attendre ensuite la réponse du serveur en lisant le fichier fifo Output chaque seconde. Si la réponse est correcte, le pilote envoie un message (ACK) au serveur de confirmation de réception et ensuite "s'auto-detruit".  Si la réponse du serveur n'est pas correcte, le pilote envoie un message (NAK) pour demander au serveur de renvoyer l'ATIS et continue d'attendre la réponse.
 		
-\chapter{Détails et élements techniques spécifiques}
+\chapter{Détails et éléments techniques spécifiques}
 
 	\section{Spécificités techniques de l'application}
 
 		%TO DEVELOP
-		- Ecoute des évènements sur les file descriptors via #poll#
+		- Écoute des événements sur les files descriptors via poll
 
 	\section{Makefile et fichiers de configurations}
 
@@ -166,13 +166,13 @@
 		Nous avons pris le parti d'appuyer, et ce dès les premières lignes de code, notre projet sur le système de versionning "Git" associé
 		à un repository en ligne sur le site "Github".
 		Cette méthode de travail nous a permis de développer en toute circonstance, en restant à tout moment conscient des nouveaux éléments 
-		implémentés par nos pairs et de les prendre immédiatement en considèration.
-		Le projet a été lançé aux alentours du 13 Novembre 2014, dans la foulée de l'obtention des consignes de ce travail par Madame Masson.
+		implémentés par nos pairs et de les prendre immédiatement en considération.
+		Le projet a été lancé aux alentours du 13 Novembre 2014, dans la foulée de l'obtention des consignes de ce travail par Madame Masson.
 
 		Le projet entier, de ses balbutiements à son aboutissement, est disponible à cette adresse : \url{https://github.com/yrmt/OS}
 
 		Concernant le rapport que vous tenez actuellement entre vos mains, nous avons opté pour une rédaction en Latex.
-		Nous étions tous trois peu initiés à ce "langage", mais prendre ce parti nous a également permis d'intègrer le rapport
+		Nous étions tous trois peu initiés à ce "langage", mais prendre ce parti nous a également permis d’intégrer le rapport
 		dans le versionning et ainsi le soumettre aux modifications et améliorations rapides connues sur le projet en lui-même, mais de plus
 		ceci nous a permis de prendre de l'expérience avec Latex, atout non-négligeable.
 
@@ -181,7 +181,7 @@
 	\section{Difficultés rencontrées}
 
 		%TO DEVELOP
-		- Mise en place de l'écoute des évènement sur l'écoute des fichiers
+		- Mise en place de l'écoute des événements sur l'écoute des fichiers
 
 	\section{Solutions apportées aux problèmes}
 
