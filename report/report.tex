@@ -119,15 +119,27 @@
 
 	\section{server.c}
 
-		Après l'ouverture du serveur Meteo, nous lançons la tour de contrôle(server.c) , c'est-à-dire le serveur qui prendra en charge les demandes des pilotes.
-		Ce serveur fait divers opérations au lancement, il va : 
+		Après l'ouverture du serveur Meteo, nous lançons la tour de contrôle(server.c) ,c'est-à-dire le serveur qui prendra en charge les demandes des pilotes.
+		Ce serveur fait divers opérations au lancement, il va notamment : 
 
-		- Créer les deux fichiers fifo : watchtower\_send.fifo (fifo Output) et watchtower\_listen.fifo (fifo Input).
+		- Créer les deux fichiers fifo : watchtower_send.fifo (fifo Output) et watchtower_listen.fifo (fifo Input).
+		Ces deux fichiers sont en fait des points d'entrée et de sortie pour le serveur, l'entrée Input sera celle sur laquelle les pilotes viendront placer leurs requêtes.
+		Tandis que la sortie Output sera celle destinée aux envois des réponses à destination des pilotes.
 
-		- Ouvrir ensuite les deux fichiers fifo.
+		- Après création, le serveur va ouvrir ces fichiers.
 
-		- Si la création et l'ouverture des fifo est un succès, le serveur peut lancer les opérations. C'est-à-dire prendre en charge les différents pilotes grâce à une boucle.
-		Chaque seconde le serveur lit le fichier fifo Input où les pilotes écrivent leur demande. Si il y a une demande ATIS d'un pilote, le serveur lit le fichier meteo.txt qui contient l'ATIS correspondant. Il écrit ensuite cet ATIS sur le fichier fifo Output à l'attention du pilote. Si le fichier meteo.txt est occupé par le serveur Meteo ou qu'il n'existe pas, le serveur renverra un message d'erreur correspondant au pilote qui pourra reformuler sa demande.
+		- Si la création et l'ouverture des fifo est un succès, le serveur peut lancer les opérations. C'est-à-dire prendre en charge les différents pilotes grâce à une boucle de fonctionnement qui va constituer le point principal de la vie du serveur.
+		Chaque seconde le serveur lit le fichier fifo Input où les pilotes écrivent leur demande.
+
+		- Les messages pilotes sont traités selon trois cas : requête, confirmation d'acquisition, message invalide.
+
+		- Dans le cas d'une requête ATIS, le serveur lit le fichier meteo.txt qui contient l'ATIS correspondant. Il écrit ensuite cet ATIS sur le fichier fifo Output à l'attention du pilote. 
+		Si le fichier meteo.txt est occupé par le serveur Meteo ou qu'il n'existe pas, le serveur renverra un message d'erreur correspondant au pilote qui pourra ensuite reformuler sa demande.
+
+		- Dans le cas d'une confirmation d'acquisiton, le serveur affiche un message signalant qu'un pilote a bien réceptionné sa donnée ATIS, et continue son écoute.
+
+		- Dernier cas, le message est invalide, provoquant une erreur.
+ 
 
 	\section{pilot.c}
 		
