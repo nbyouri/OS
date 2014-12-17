@@ -180,10 +180,18 @@
 	
 	\section{Difficultés rencontrées}
 
-		%TO DEVELOP
+		- Problèmes mineurs concernants la lecture, et l'écriture et écrasement d'un ATIS précédent de meteo.txt.
+
 		- Mise en place de l'écoute des événements sur l'écoute des fichiers
 
+		- Gestion des plages de temps pour la simulation
+
+
 	\section{Solutions apportées aux problèmes}
+
+		- Concernant les problèmes au niveau de l'écriture du fichier meteo.txt, celui-ci a tout simplement été résolu en utilisant un mode d'ouverture en troncature, ce qui a pour effet de supprimer les éléments présents dans les fichier avant d'écrire sur celui-ci.
+
+		Au niveau de la lecture, nous avions également un problème avec un tableau simple, où la lecture était effectuée d'office sur 4 bytes de part la nature même d'un tableau. Ce problème a été résolu via l'utilisation d'un tableau en deux dimensions.
 
 	\section{Pistes d'améliorations}
 
