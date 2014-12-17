@@ -97,6 +97,7 @@ void operations(void) {
                 requests = xrealloc(requests, (size_t)nb+1, MSG_SIZE);
                 requests[nb] = xmalloc(MSG_SIZE);
                 memcpy(requests[nb], requestPacket, packet);
+                //If the message is a request
                 if ((memcmp(requests[nb], PILOT_REQUEST,
                                 sizeof(PILOT_REQUEST)) == 0) ||
                         (memcmp(requests[nb], NAK, sizeof(NAK)) ==0)) {
@@ -111,6 +112,7 @@ void operations(void) {
                         fatal("Bytes read have not been correctly written...\n");
                     }
                     nb++;
+                //Else the message is an acknowledgement or an unvalid message
                 } else if(memcmp(requests[nb], ACK, sizeof(ACK)) ==0) {
                     printf(GRN"A pilot just acknwoledged the reception ! \n"NOR);
                 } else {
