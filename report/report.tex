@@ -237,7 +237,13 @@ Fin tantque
 
 		- Problèmes mineurs concernants la lecture, et l'écriture et écrasement d'un ATIS précédent de meteo.txt.
 
+		Lors de l'ouverture en écriture par la météo sur le tableau de fichiers ATIS, nous avions un problème quant à l'écriture d'une nouvelle ligne ATIS sans conserver la précédente (en l'écrasant donc).
+
+		Au niveau de la lecture, nous recevions systématiquement 4 bytes seulement de la donnée ATIS lue.
+
 		- Mise en place de l'écoute des événements sur les fichiers
+
+		
 
 		- Gestion des plages de temps pour la simulation
 
