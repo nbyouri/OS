@@ -187,6 +187,19 @@
 
 	\section{Pistes d'améliorations}
 
+		- Vérification d'intégrité
+
+		La première piste d'amélioration que nous pourrions pointer, et vers laquelle nous avons pensé nous diriger au départ est la vérification d'intégrité des informations ATIS reçues, par exemple nous aurions pu mettre en place un système de vérification d'erreurs de type FCS/CRC afin que toute la transmission soit exempte de perte ou de modification indésirable.
+		
+		- Lier exactement un pilote à une information ATIS donnée
+
+		Ensuite, il serait intéressant d'implémenter le fait qu'un pilote donné, selon son identifiant de processus, reçoive une réponse qui lui est uniquement destinée, et s'assurer que les envois se fassent vers le bon pilote. Et à défaut, qu'un pilote refuse un message non-destiné et réinsère une demande dans le flux.
+
+		- Simuler un envoi d'ATIS 
+
+		Enfin, après avoir mis en place le système précédent, nous pourrions simuler un système de localisation des pilotes.
+		Dans ce cas-ci un pilote donné, selon sa destination, demanderait un fichier ATIS spécial qui corresponderait à son plan de vol.
+
 	\section{Pour terminer}
 
 \begin{appendices}
