@@ -116,10 +116,24 @@
 		- Si l'ouverture est un succès, météo écrit l'ATIS généré précédemment sur le fichier, ceci en troncature de manière à éliminer une autre information ATIS qui est le résultat d'une opération précédente. Cette écriture va durer une seconde, seconde définie par nos soins.
 
 		- Si l'écriture s'est bien déroulée, météo supprime le fichier de verrouillage "lock" pour spécifier à l'environnement que l'écriture est terminée et que "meteo.txt" est accessible, et termine la boucle après un repos défini de deux secondes.
+\clearpage
+\textbf{Pseudo-code}
+
+\begin{lstlisting}[language=C]
+Tantque NonArret
+		Texte ATIS = ChoixATISAleatoire
+		CreationFichierVerrouillage
+		OuvrirFicherMeteo
+		EcrireMeteoATIS
+		FermerFichierMeteo
+		DestructionFichierVerrouillage
+		AttendreUneSeconde
+Fin tantque 
+\end{lstlisting}
 
 	\section{server.c}
 
-		Après l'ouverture du contrôleur météo, nous lançons la tour de contrôle(server.c) ,c'est-à-dire le serveur qui prendra en charge les demandes des pilotes.
+		Après l'ouverture du contrôleur météo, nous lançons la tour de contrôle(server.c), c'est-à-dire le serveur qui prendra en charge les demandes des pilotes.
 		Ce serveur fait divers opérations au lancement, il va notamment : 
 
 		- Créer les deux fichiers fifo : watchtower\_send.fifo (fifo Output) et watchtower\_listen.fifo (fifo Input).
@@ -139,11 +153,31 @@
 		- Dans le cas d'une confirmation d’acquisition, le serveur affiche un message signalant qu'un pilote a bien réceptionné sa donnée ATIS, et continue son écoute.
 
 		- Dernier cas, le message est invalide, provoquant une erreur.
- 
+  \newline
+	
+ \textbf{Pseudo-code}
+
+ \begin{lstlisting}[language=C]
+CreationFifoIn
+CreationFifoOut
+OuvertureFifoIn
+OuvertureFifoOut
+  Tantque NonArret
+	LectureFifoIn
+	Si UneDemande Alors 
+		 LectureFichierMeteo
+		 Si FichierMeteoLock Alors
+		 	  EcritureFifoOutErreur
+		 Sinon
+			 EcritureFifoOutATIS
+		 Fin si
+	Fin si
+ Fin tantque 
+  \end{lstlisting}
 
 	\section{pilot.c}
 		
-		Quand le contrôleur météo et le serveur de la tour de contrôle sont lancés, nous exécutons un certain nombre de pilote qui feront leur demande ATIS à la tour de contrôle.
+ Quand le contrôleur météo et le serveur de la tour de contrôle sont lancés, nous exécutons un certain nombre de pilote qui feront leur demande ATIS à la tour de contrôle.
 		Chaque pilote va : 
 		
 		- Vérifier si le serveur et l'écriture du fifo Input est accessible.
@@ -151,7 +185,28 @@
 		- Après la vérification, écrire sa demande ATIS sur le fifo Input à l'attention de la tour de contrôle.
 		
 		- Attendre ensuite la réponse du serveur en lisant le fichier fifo Output chaque seconde. Si la réponse est correcte, le pilote envoie un message (ACK) au serveur de confirmation de réception et ensuite "s'auto-detruit".  Si la réponse du serveur n'est pas correcte, le pilote envoie un message (NAK) pour demander au serveur de renvoyer l'ATIS et continue d'attendre la réponse.
-		
+\newline
+
+\textbf{Pseudo-code}
+
+\begin{lstlisting}[language=C]
+Tantque NonArret
+	VerificationServer
+	VerificationFifo
+	EcritureDemandeFifoIn
+	Tantque non ATISrecu
+		LireFichierFifoOut
+		Si ReponseCorrect Alors
+			EcrireFifoInACK
+			ATISrecu = Vrai 
+		Sinon
+		 EcrireFifoInNAK
+		Fin si
+	Fin tantque
+	AutoDestruction
+Fin tantque 
+\end{lstlisting}
+
 \chapter{Détails et éléments techniques spécifiques}
 
 	\section{Spécificités techniques de l'application}
