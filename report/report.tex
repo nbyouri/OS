@@ -217,18 +217,18 @@ Fin tantque
 
 		\subsection{Configure}
 
-			Afin de pouvoir porter ce programme sur tout système d'exploitation basé UNIX, un programme configure a été réalisé.
-			Celui-ci, à lancer avant le Make, effectue une batterie de 
+			Afin de pouvoir porter ce programme sur tout système d'exploitation basé UNIX sur lequel l'application a été testée (FreeBSD, MacOS 10, Minix, Linux), un GNU Configure a été réalisé, mais son code est ommis volontairement du projet.
 
 		\subsection{Makefile}
 
 			Afin de faciliter grandement la compilation de nos trois programmes en ligne de commande, nous avons réalisé un fichier décrivant les
-			relations entre fichiers au sein de notre programme, ce fichier est appelé "Makefile".
+			relations entre fichiers au sein de notre programme, ce fichier est appelé "Makefile". \cite{localUserCommands}
 
 			Ensuite, la commande utilisateur Make se servant de notre Makefile va lancer la compilation de nos trois programmes.
 
 			Ceci a permis une recompilation rapide sans perdre du temps à recompiler chaque programme séparémenttout au long du développement,
 			et permet encore à ce stade de tester très rapidement l'application.
+
 
 	\section{Organisation du travail}
 
