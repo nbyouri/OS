@@ -134,7 +134,7 @@ Tantque NonArret
 		FermerFichierMeteo
 		DestructionFichierVerrouillage
 		AttendreUneSeconde
-Fin tantque 
+FinTantque 
 \end{lstlisting}
 
 	\section{server.c}
@@ -176,9 +176,9 @@ OuvertureFifoOut
 		 	  EcritureFifoOutErreur
 		 Sinon
 			 EcritureFifoOutATIS
-		 Fin si
-	Fin si
- Fin tantque 
+		 FinSi
+	FinSi
+ FinTantque 
   \end{lstlisting}
 
 	\section{pilot.c}
@@ -207,10 +207,10 @@ Tantque NonArret
 			ATISrecu = Vrai 
 		Sinon
 		 EcrireFifoInNAK
-		Fin si
-	Fin tantque
+		FinSi
+	FinTantque
 	AutoDestruction
-Fin tantque 
+FinTantque 
 \end{lstlisting}
 
 \chapter{Détails et éléments techniques spécifiques}
