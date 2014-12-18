@@ -11,7 +11,7 @@
 \usepackage{titlesec}
 \usepackage{color}
 \usepackage[toc, page]{appendix}
-\usepackage{hyperref}
+\usepackage{url}
 
 \definecolor{xcodekw}{rgb}{0.75, 0.22, 0.60}
 \definecolor{xcodestr}{rgb}{0.89, 0.27, 0.30}
@@ -56,6 +56,10 @@
 \begin{document}
 
 \maketitle
+
+\newpage
+\thispagestyle{empty}
+\mbox{}
 
 \tableofcontents
 
@@ -219,7 +223,7 @@ Fin tantque
 
 		\subsection{Configure}
 
-			Afin de pouvoir porter ce programme sur tout système d'exploitation basé UNIX sur lequel l'application a été testée (FreeBSD, MacOS 10, Minix, Linux), un GNU Configure a été réalisé, mais son code est ommis volontairement du projet.
+			Afin de pouvoir tester ce programme sur tout système d'exploitation basé UNIX sur lequel l'application a été testée (NetBSD, FreeBSD, MacOS X, Minix, GNU/Linux), un GNU Configure a été généré, mais son code à volontairement été ommis du projet.
 
 		\subsection{Makefile}
 
@@ -228,8 +232,10 @@ Fin tantque
 
 			Ensuite, la commande utilisateur Make se servant de notre Makefile va lancer la compilation de nos trois programmes.
 
-			Ceci a permis une recompilation rapide sans perdre du temps à recompiler chaque programme séparémenttout au long du développement,
+			Ceci a permis une recompilation rapide sans perdre du temps à recompiler chaque programme séparément tout au long du développement,
 			et permet encore à ce stade de tester très rapidement l'application.
+
+                        Le rapport est automatiquement généré grâce à l'utilisation de ce Makefile.
 
 
 	\section{Organisation du travail}
@@ -240,12 +246,12 @@ Fin tantque
 		implémentés par nos pairs et de les prendre immédiatement en considération.
 		Le projet a été lancé aux alentours du 13 Novembre 2014, dans la foulée de l'obtention des consignes de ce travail par Madame Masson.
 
-		Le projet entier, de ses balbutiements à son aboutissement, est disponible à cette adresse : \url{https://github.com/yrmt/OS}
+		Le projet entier, de ses balbutiements à son aboutissement, est disponible à cette adresse : \color{blue}\url{https://github.com/yrmt/OS}\color{black}.
 
-		Concernant le rapport que vous tenez actuellement entre vos mains, nous avons opté pour une rédaction en Latex.
+		Concernant le rapport que vous tenez actuellement entre vos mains, nous avons opté pour une rédaction en LaTex.
 		Nous étions tous trois peu initiés à ce "langage", mais prendre ce parti nous a également permis d’intégrer le rapport
 		dans le versionning et ainsi le soumettre aux modifications et améliorations rapides connues sur le projet en lui-même, mais de plus
-		ceci nous a permis de prendre de l'expérience avec Latex, atout non-négligeable.
+		ceci nous a permis de prendre de l'expérience avec LaTex, atout non-négligeable.
 
 \chapter{Conclusion}
 	
@@ -281,7 +287,7 @@ Fin tantque
 
 		\subsection{Ecoute des évènements}
 
-			La solution que nous avons trouvée passe par l'appel système poll(), qui examine une série de descripteurs de fichiers pour vérifier si ceux-si sont prêts pour Input/Output ou si certains évènements ont eu lieu sur eux. \cite{sysCalls} 
+			La solution que nous avons trouvée passe par l'appel système poll(), qui examine une série de descripteurs de fichiers pour vérifier si ceux-si sont prêts pour Input/Output ou si certains évènements ont eu lieu sur eux. \cite{sysCalls} \cite{pollArticle}
 
 		\subsection{Gestion des plages de temps}
 
@@ -314,8 +320,6 @@ Fin tantque
 			Dans ce cas-ci un pilote donné, selon sa destination, demanderait un fichier ATIS spécial qui corresponderait à son plan de vol.
 
 			Ceci serait assez simple à mettre en place, via par exemple l'implémentation d'un alphabet ATIS commun aux pilotes et au serveur, l'envoi de requête plus sophistiquées par les pilotes, et le traitement de ces requêtes par le serveur avec construction de l'ATIS sur base des infos reçues.
-
-	\section{Pour terminer}
 
 \begin{appendices}
 
