@@ -219,23 +219,27 @@ FinTantque
 
 		\subsection{poll()}
 
+                        Nous avons choisi d'utiliser poll\cite{sysCalls}, un appel système qui permet d'écouter des évènements spécifiés sur des descripteurs de fichiers de manière synchrone, en un temps donné, dans notre cas une seconde.
+
+                        Les évènements que nous écoutons avec poll sont POLLIN, qui permet de détecter des données qui peuvent être lues et POLLHUP qui permet de détecter la déconnexion d'un client.
+
 	\section{Makefile et configure}
 
 		\subsection{Configure}
 
-			Afin de pouvoir tester ce programme sur tout système d'exploitation basé UNIX sur lequel l'application a été testée (NetBSD, FreeBSD, MacOS X, Minix, GNU/Linux), un GNU Configure a été généré, mais son code à volontairement été ommis du projet.
+			Afin de pouvoir tester ce programme sur tout système d'exploitation basé UNIX sur lequel l'application a été testée (GNU/Linux, *BSD, Minix), un script GNU Configure\cite{configure} a été généré, mais son code à volontairement été omis du projet.
 
 		\subsection{Makefile}
 
 			Afin de faciliter grandement la compilation de nos trois programmes en ligne de commande, nous avons réalisé un fichier décrivant les
 			relations entre fichiers au sein de notre programme, ce fichier est appelé "Makefile".
 
-			Ensuite, la commande utilisateur Make se servant de notre Makefile va lancer la compilation de nos trois programmes.
+			Ensuite, la commande utilisateur make\cite{makeMan} se servant de notre Makefile va lancer la compilation de nos trois programmes.
 
 			Ceci a permis une recompilation rapide sans perdre du temps à recompiler chaque programme séparément tout au long du développement,
 			et permet encore à ce stade de tester très rapidement l'application.
 
-                        Le rapport est automatiquement généré grâce à l'utilisation de ce Makefile.
+                        Le rapport est automatiquement généré depuis ce Makefile.
 
 
 	\section{Organisation du travail}
@@ -283,11 +287,11 @@ FinTantque
 
 			Concernant les problèmes au niveau de l'écriture du fichier meteo.txt, celui-ci a tout simplement été résolu en utilisant un mode d'ouverture en troncature, ce qui a pour effet de supprimer les éléments présents dans les fichier avant d'écrire sur celui-ci.
 
-			Au niveau de la lecture, nous avions également un problème avec un tableau simple, où la lecture était effectuée d'office sur 4 bytes de part la nature même d'un tableau. Ce problème a été résolu via l'utilisation d'un tableau en deux dimensions.
+			Au niveau de la lecture, nous avions également un problème avec un tableau statique de pointeurs, où la lecture était effectuée d'office sur 8 bytes de part la nature même d'un tableau. Ce problème a été résolu via l'utilisation d'un tableau statique à deux dimensions.
 
 		\subsection{Ecoute des évènements}
 
-			La solution que nous avons trouvée passe par l'appel système poll(), qui examine une série de descripteurs de fichiers pour vérifier si ceux-si sont prêts pour Input/Output ou si certains évènements ont eu lieu sur eux. \cite{sysCalls} \cite{pollArticle}
+			La solution que nous avons trouvée passe par l'appel système poll(), qui examine une série de descripteurs de fichiers pour détecter des évènements sur eux. \cite{sysCalls} \cite{pollArticle}
 
 		\subsection{Gestion des plages de temps}
 

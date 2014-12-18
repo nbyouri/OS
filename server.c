@@ -100,7 +100,7 @@ void operations(void) {
                 //If the message is a request
                 if ((memcmp(requests[nb], PILOT_REQUEST,
                                 sizeof(PILOT_REQUEST)) == 0) ||
-                        (memcmp(requests[nb], NAK, sizeof(NAK)) ==0)) {
+                        (memcmp(requests[nb], NAK, sizeof(NAK)) == 0)) {
                     printf("< Got Request nr. %d\n", nb);
                     size_t tailleMsg = (size_t)atis(atisMsg);
                     printf("> Sending ATIS \"%s\" to %d\n", atisMsg, nb);
@@ -113,7 +113,7 @@ void operations(void) {
                     }
                     nb++;
                 //Else the message is an acknowledgement or an unvalid message
-                } else if(memcmp(requests[nb], ACK, sizeof(ACK)) ==0) {
+                } else if(memcmp(requests[nb], ACK, sizeof(ACK)) == 0) {
                     printf(GRN"A pilot just acknwoledged the reception ! \n"NOR);
                 } else {
                     fatal("No valid messages intercepted\n");
@@ -126,7 +126,7 @@ void operations(void) {
 int main(void) {
     // setup signal, so if programs gets 
     // interrupted, files can still be 
-    // cleaned up and FIFOs removed.
+    // cleaned up and FIFOs be removed.
     signal(SIGINT, &cleanup);
     createFifos();
     openFifos();
