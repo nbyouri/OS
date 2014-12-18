@@ -57,10 +57,11 @@
 
 \maketitle
 
+\tableofcontents
+
 \chapter{Introduction}
 
 	\section{Introduction}
-
 		Le projet qui fait l'objet de ce rapport est un travail de programmation
 		en C système sous UNIX, dans le but d'exploiter de manière pratique les connaissances théoriques acquises au cours de Mme. Masson.
 		\newline
@@ -223,7 +224,7 @@ Fin tantque
 		\subsection{Makefile}
 
 			Afin de faciliter grandement la compilation de nos trois programmes en ligne de commande, nous avons réalisé un fichier décrivant les
-			relations entre fichiers au sein de notre programme, ce fichier est appelé "Makefile". \cite{localUserCommands}
+			relations entre fichiers au sein de notre programme, ce fichier est appelé "Makefile".
 
 			Ensuite, la commande utilisateur Make se servant de notre Makefile va lancer la compilation de nos trois programmes.
 
@@ -280,7 +281,7 @@ Fin tantque
 
 		\subsection{Ecoute des évènements}
 
-			La solution que nous avons trouvée passe par l'appel système poll(), qui examine une série de descripteurs de fichiers pour vérifier si ceux-si sont prêts pour Input/Output ou si certains évènements ont eu lieu sur eux. \cite{bsdSysCalls} 
+			La solution que nous avons trouvée passe par l'appel système poll(), qui examine une série de descripteurs de fichiers pour vérifier si ceux-si sont prêts pour Input/Output ou si certains évènements ont eu lieu sur eux. \cite{sysCalls} 
 
 		\subsection{Gestion des plages de temps}
 
@@ -346,7 +347,5 @@ Fin tantque
 	\bibliography{bibliography}
 
 \end{appendices}
-
-\tableofcontents
 
 \end{document}
