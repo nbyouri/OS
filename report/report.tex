@@ -211,8 +211,7 @@ Fin tantque
 
 	\section{Spécificités techniques de l'application}
 
-		%TO DEVELOP
-		- Écoute des événements sur les files descriptors via poll
+		\subsection{poll()}
 
 	\section{Makefile et fichiers de configurations}
 
@@ -235,48 +234,60 @@ Fin tantque
 	
 	\section{Difficultés rencontrées}
 
-		- Problèmes mineurs concernants la lecture, et l'écriture et écrasement d'un ATIS précédent de meteo.txt.
+		\subsection{Problèmes mineurs de lecture/écriture sur meteo.txt}
 
-		Lors de l'ouverture en écriture par la météo sur le tableau de fichiers ATIS, nous avions un problème quant à l'écriture d'une nouvelle ligne ATIS sans conserver la précédente (en l'écrasant donc).
+			Lors de l'ouverture en écriture par la météo sur le tableau de fichiers ATIS, nous avions un problème quant à l'écriture d'une nouvelle ligne ATIS sans conserver la précédente (en l'écrasant donc).
 
-		Au niveau de la lecture, nous recevions systématiquement 4 bytes seulement de la donnée ATIS lue.
+			Au niveau de la lecture, nous recevions systématiquement 4 bytes seulement de la donnée ATIS lue.
 
-		- Mise en place de l'écoute des événements
+		\subsection{Mise en place de l'écoute des événements}
 
-		Le défi était de mettre en place un système d'arrêt propre au niveau du serveur et du contrôleur météo, c'est-à-dire autoriser une interruption des programmes sans que ceux-ci laissent derrière eux tout les fichiers générés pour le fonctionnement de l'application.
-		Associée à cela, nous avons aussi été confrontés à l'implémentation d'une écoute correcte du serveur vis-à-vis du point d'entrée de requête, qu'il fallait forcément mettre en relation avec ce système d'arrêt propre.
+			Le défi était de mettre en place un système d'arrêt propre au niveau du serveur et du contrôleur météo, c'est-à-dire autoriser une interruption des programmes sans que ceux-ci laissent derrière eux tout les fichiers générés pour le fonctionnement de l'application.
+			Associée à cela, nous avons aussi été confrontés à l'implémentation d'une écoute correcte du serveur vis-à-vis du point d'entrée de requête, qu'il fallait forcément mettre en relation avec ce système d'arrêt propre.
 
 
-		- Gestion des plages de temps pour la simulation
+		\subsection{Gestion des plages de temps pour la simulation}
 
-		Une série de temps morts et temps d'attente via la fonction "sleep()"est implémentée notamment au niveau de meteo pour simuler un traitement, au niveau du pilote pour temporiser la réinsersion de demandes sur le flux.
+			Une série de temps morts et temps d'attente via la fonction "sleep()"est implémentée notamment au niveau de meteo pour simuler un traitement, au niveau du pilote pour temporiser la réinsersion de demandes sur le flux.
 
-		Ces temps de sleep, se sont révélés assez difficiles à mettre en place correctement car ils peuvent facilement créér des conflits entre les différents processus.
+			Ces temps de sleep, se sont révélés assez difficiles à mettre en place correctement car ils peuvent facilement créér des conflits entre les différents processus.
 
-		Par exemple le pilote qui resterait trop longtemps en attente de retransmission et se trouverait à renvoyer une demande à chaque fois que le serveur ne peut pas lire meteo.txt, en résulte l'incapacité totale du pilote à récupèrer une information ATIS.
+			Par exemple le pilote qui resterait trop longtemps en attente de retransmission et se trouverait à renvoyer une demande à chaque fois que le serveur ne peut pas lire meteo.txt, en résulte l'incapacité totale du pilote à récupèrer une information ATIS.
 
 	\section{Solutions apportées aux problèmes}
 
-		- Concernant les problèmes au niveau de l'écriture du fichier meteo.txt, celui-ci a tout simplement été résolu en utilisant un mode d'ouverture en troncature, ce qui a pour effet de supprimer les éléments présents dans les fichier avant d'écrire sur celui-ci.
+		\subsection{Lecture et écrite sur meteo.txt}
 
-		Au niveau de la lecture, nous avions également un problème avec un tableau simple, où la lecture était effectuée d'office sur 4 bytes de part la nature même d'un tableau. Ce problème a été résolu via l'utilisation d'un tableau en deux dimensions.
+			Concernant les problèmes au niveau de l'écriture du fichier meteo.txt, celui-ci a tout simplement été résolu en utilisant un mode d'ouverture en troncature, ce qui a pour effet de supprimer les éléments présents dans les fichier avant d'écrire sur celui-ci.
 
-		\# Gestion des plages de temps
+			Au niveau de la lecture, nous avions également un problème avec un tableau simple, où la lecture était effectuée d'office sur 4 bytes de part la nature même d'un tableau. Ce problème a été résolu via l'utilisation d'un tableau en deux dimensions.
+
+		\subsection{Ecoute des évènements}
+
+			La solution que nous avons trouvée passe par l'appel système poll(), qui examine une série de descripteurs de fichiers pour vérifier si ceux-si sont prêts pour Input/Output ou si certains évènements ont eu lieu sur eux. \cite{bsdSysCalls} 
+
+		\subsection{Gestion des plages de temps}
+
+			Ce problème n'a pas été totalement "corrigé", ceci est purement lié à notre volonté de réduire le court normal de l'exécution des programmes pour obtenir quelque chose de plus visible, forcer les pilotes à rencontrer des cas où la météo est inaccessible par le serveur, etc...
+
+			Nous avons juste pu trouver des plages temps concordantes pour qu'une simulation ralentie soit apréciable visuellement.
 
 	\section{Pistes d'améliorations}
 
-		- Vérification d'intégrité
+		\subsection{Vérification d'intégrité}
 
-		La première piste d'amélioration que nous pourrions pointer, et vers laquelle nous avons pensé nous diriger au départ est la vérification d'intégrité des informations ATIS reçues, par exemple nous aurions pu mettre en place un système de vérification d'erreurs de type FCS/CRC afin que toute la transmission soit exempte de perte ou de modification indésirable.
-		
-		- Lier exactement un pilote à une information ATIS donnée
+			La première piste d'amélioration que nous pourrions pointer, et vers laquelle nous avons pensé nous diriger au départ est la vérification 
+			d'intégrité des informations ATIS reçues, par exemple nous aurions pu mettre en place un système de vérification d'erreurs de type FCS/CRC
+			afin que toute la transmission soit exempte de perte ou de modification indésirable.
+			
+		\subsection{Lier exactement un pilote à une information ATIS donnée}
 
-		Ensuite, il serait intéressant d'implémenter le fait qu'un pilote donné, selon son identifiant de processus, reçoive une réponse qui lui est uniquement destinée, et s'assurer que les envois se fassent vers le bon pilote. Et à défaut, qu'un pilote refuse un message non-destiné et réinsère une demande dans le flux.
+			Ensuite, il serait intéressant d'implémenter le fait qu'un pilote donné, selon son identifiant de processus, reçoive une réponse qui lui est uniquement destinée, et s'assurer que les envois se fassent vers le bon pilote. Et à défaut, qu'un pilote refuse un message non-destiné et réinsère une demande dans le flux.
 
-		- Simuler un envoi d'ATIS 
+		\subsection{Simulation d'un envoi localisé d'ATIS}
 
-		Enfin, après avoir mis en place le système précédent, nous pourrions simuler un système de localisation des pilotes.
-		Dans ce cas-ci un pilote donné, selon sa destination, demanderait un fichier ATIS spécial qui corresponderait à son plan de vol.
+			Enfin, après avoir mis en place le système précédent, nous pourrions simuler un système de localisation des pilotes.
+			Dans ce cas-ci un pilote donné, selon sa destination, demanderait un fichier ATIS spécial qui corresponderait à son plan de vol.
 
 	\section{Pour terminer}
 
@@ -303,6 +314,11 @@ Fin tantque
 	\section{tools.c}
 	 	\lstinputlisting[language=C]{../tools.c}
 	 	\clearpage
+
+\chaper{Bibliographie}
+
+	\bibliographystyle{plain}
+	\bibliography{bibliography}
 
 \end{appendices}
 
