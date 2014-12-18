@@ -279,15 +279,24 @@ Fin tantque
 			La première piste d'amélioration que nous pourrions pointer, et vers laquelle nous avons pensé nous diriger au départ est la vérification 
 			d'intégrité des informations ATIS reçues, par exemple nous aurions pu mettre en place un système de vérification d'erreurs de type FCS/CRC
 			afin que toute la transmission soit exempte de perte ou de modification indésirable.
+
+			Ceci aurait pu être mis en place via, par exemple, l'envoi d'une structure sur les fifos qui comporterait le message ATIS, la longueur de la chaîne de caractère et un frame check sequence calculé par le serveur au moment de la création de la structure pour envoi.
+
+			Le pilote aurait alors des outils pour vérifier l'intégrité du message, via la correspondance au niveau longueur de la chaîne recue, ainsi que sur l'intégrité de la chaîne en elle-même via une vérification cyclique redondante.
 			
 		\subsection{Lier exactement un pilote à une information ATIS donnée}
 
 			Ensuite, il serait intéressant d'implémenter le fait qu'un pilote donné, selon son identifiant de processus, reçoive une réponse qui lui est uniquement destinée, et s'assurer que les envois se fassent vers le bon pilote. Et à défaut, qu'un pilote refuse un message non-destiné et réinsère une demande dans le flux.
 
+			La difficulté de cette amélioration, puisque notre application ne possède qu'un seul fifo de sortie au niveau du serveur, serait de s'assurer que les pilotes vont suivre un ordre assez correct dans la lecture sur ce fifo, afin de ne pas devoir gèrer une quantité énorme de réception érronée et donc de très nombreuses retransmission, sans de nouveau être sûr que le pilote recevra son propre message.
+
 		\subsection{Simulation d'un envoi localisé d'ATIS}
 
-			Enfin, après avoir mis en place le système précédent, nous pourrions simuler un système de localisation des pilotes.
+			Enfin, après avoir mis en place le système précédent qui serait indispensable dans cette amélioration, nous pourrions simuler un système de localisation des pilotes.
+			
 			Dans ce cas-ci un pilote donné, selon sa destination, demanderait un fichier ATIS spécial qui corresponderait à son plan de vol.
+
+			Ceci serait assez simple à mettre en place, via par exemple l'implémentation d'un alphabet ATIS commun aux pilotes et au serveur, l'envoi de requête plus sophistiquées par les pilotes, et le traitement de ces requêtes par le serveur avec construction de l'ATIS sur base des infos reçues.
 
 	\section{Pour terminer}
 
