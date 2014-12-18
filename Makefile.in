@@ -1,5 +1,5 @@
 CC=		@CC@ -std=c99
-
+DOC_SRC=	report
 SERVER_SRCS=	server.c tools.c
 SERVER_OUT=	server
 METEO_SRCS=	meteo.c tools.c
@@ -15,6 +15,9 @@ all:
 	@${CC} ${SERVER_SRCS} -o ${SERVER_OUT}
 	> meteo
 	@${CC} ${METEO_SRCS} -o ${METEO_OUT}
+
+doc:
+	cd ${DOC_SRC} && make
 
 clean: delete_objs
 
