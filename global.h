@@ -39,12 +39,12 @@
 #define SIZE_T_MAX (~((size_t) 0))
 #endif
 
-// servers and state
+/* servers and state */
 extern bool listen;
 extern int  input;
 extern int  output;
 
-// requests and number of requests
+/* requests and number of requests */
 extern int  nb;
 extern char **requests;
 

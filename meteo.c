@@ -84,8 +84,8 @@ static int genAtis(void){
         if (write(meteo, ATIS[msg], sizeof(ATIS[msg])) == FAIL) {
             return EXIT_FAILURE;
         }
-        // virtual write wait time, to make the 
-        // meteo transmission latency more realistic :)
+        /* virtual write wait time, to make the 
+           meteo transmission latency more realistic */
         sleep(WRITE_TIME);
         closeLock();
         delete(FICHIERLOCK);
