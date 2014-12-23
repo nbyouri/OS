@@ -287,7 +287,7 @@ FinTantque
 
 			Concernant les problèmes au niveau de l'écriture du fichier meteo.txt, celui-ci a tout simplement été résolu en utilisant un mode d'ouverture en troncature, ce qui a pour effet de supprimer les éléments présents dans les fichier avant d'écrire sur celui-ci.
 
-			Au niveau de la lecture, nous avions également un problème avec un tableau statique de pointeurs, où la lecture était effectuée d'office sur 8 bytes de part la nature même d'un tableau. Ce problème a été résolu via l'utilisation d'un tableau statique à deux dimensions.
+			Au niveau de la lecture, nous avions également un problème avec un tableau statique de pointeurs, où la lecture était effectuée d'office sur 8 bytes (car sur GNU/Linux 64bit, un pointeur pèse 8 bytes). Ce problème a été résolu via l'utilisation d'un tableau statique à deux dimensions.
 
 		\subsection{Ecoute des évènements}
 
